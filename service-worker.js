@@ -1,67 +1,78 @@
 /**
- * Production Resilient Service Worker Blueprint Framework
- * Handles instantaneous offline asset isolation management caching strategies.
+ * Production High-Performance Offline-First Service Worker Engine Core Implementation
+ * Caching Policy: Cache First with Immediate Network Fallback Synchronization Strategies.
  */
 
-const CACHE_VERSION_NAME_VAULT_SIGNATURE = 'finance-engine-static-v1';
-const ISOLATED_CORE_ASSETS_MANIFEST_ARRAY = [
-  'index.html',
-  'styles.css',
-  'app.js',
-  'manifest.json',
-  'icon-192.png',
-  'icon-512.png'
+const CACHE_VERSION_ID_TOKEN = "HAZEM_FINTECH_CACHE_V1";
+const STATIC_APPLICATION_SHELL_ASSETS = [
+  "index.html",
+  "styles.css",
+  "app.js",
+  "manifest.json",
+  "https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap"
 ];
 
-// SW Install Lifecycle Phase Event Hook Interceptor Line
-self.addEventListener('install', (installLifecycleEvent) => {
-  installLifecycleEvent.waitUntil(
-    caches.open(CACHE_VERSION_NAME_VAULT_SIGNATURE).then((openedCacheVaultInstance) => {
-      return openedCacheVaultInstance.addAll(ISOLATED_CORE_ASSETS_MANIFEST_ARRAY);
-    }).then(() => self.skipWaiting())
+// Instantiating activation lifecycle events captures
+self.addEventListener("install", (workerInstallLifecycleEvent) => {
+  workerInstallLifecycleEvent.waitUntil(
+    caches.open(CACHE_VERSION_ID_TOKEN).then((instantiatedCacheRegistryInstance) => {
+      return instantiatedCacheRegistryInstance.addAll(STATIC_APPLICATION_SHELL_ASSETS);
+    }).then(() => {
+      return self.skipWaiting();
+    })
   );
 });
 
-// SW Activation Phase Purging Unused Caches Sequences Hooks Pipeline Channels Maps
-self.addEventListener('activate', (activationLifecycleEvent) => {
-  activationLifecycleEvent.waitUntil(
-    caches.keys().then((associatedCacheKeysCollectionList) => {
+// Purging outdated residual legacy tracking cache parameters structures mapping storage layers
+self.addEventListener("activate", (workerActivationLifecycleEvent) => {
+  workerActivationLifecycleEvent.waitUntil(
+    caches.keys().then((registeredCacheKeysCollection) => {
       return Promise.all(
-        associatedCacheKeysCollectionList.map((existingCacheKeySignatureString) => {
-          if (existingCacheKeySignatureString !== CACHE_VERSION_NAME_VAULT_SIGNATURE) {
-            return caches.delete(existingCacheKeySignatureString);
+        registeredCacheKeysCollection.map((activeCacheKeyName) => {
+          if (activeCacheKeyName !== CACHE_VERSION_ID_TOKEN) {
+            return caches.delete(activeCacheKeyName);
           }
         })
       );
-    }).then(() => self.clients.claim())
+    }).then(() => {
+      return self.clients.claim();
+    })
   );
 });
 
-// Cache-First Isolation Interception Interceptor Network Streams Implementation Strategy Mapping Loops
-self.addEventListener('fetch', (networkFetchInterceptEvent) => {
-  // Ignore external analytic post requests types configurations safely
-  if (networkFetchInterceptEvent.request.method !== 'GET') return;
+// Network interceptor fetch pipeline management hooks handlers actions
+self.addEventListener("fetch", (networkFetchInterceptEvent) => {
+  // Restricting storage fetching interceptors exclusively to standardized internal get requests structures
+  if (networkFetchInterceptEvent.request.method !== "GET") return;
 
   networkFetchInterceptEvent.respondWith(
-    caches.match(networkFetchInterceptEvent.request).then((stashedCacheAssetNodeFallbackResponse) => {
-      if (stashedCacheAssetNodeFallbackResponse) {
-        return stashedCacheAssetNodeFallbackResponse;
+    caches.match(networkFetchInterceptEvent.request).then((matchingCachedAssetResponseInstance) => {
+      if (matchingCachedAssetResponseInstance) {
+        // Dynamic continuous caching update execution sequences background threads runs loop
+        fetch(networkFetchInterceptEvent.request).then((freshNetworkResponsePayload) => {
+          if (freshNetworkResponsePayload.status === 200) {
+            caches.open(CACHE_VERSION_ID_TOKEN).then((activeCacheInstanceObject) => {
+              activeCacheInstanceObject.put(networkFetchInterceptEvent.request, freshNetworkResponsePayload);
+            });
+          }
+        }).catch(() => { /* Swallow background sync exceptions silently without disturbing main thread execution state */ });
+
+        return matchingCachedAssetResponseInstance;
       }
-      
-      return fetch(networkFetchInterceptEvent.request).then((liveNetworkFetchStreamPayloadResultResponse) => {
-        // Evaluate valid network asset payload capture characteristics before stashing dynamically
-        if (!liveNetworkFetchStreamPayloadResultResponse || liveNetworkFetchStreamPayloadResultResponse.status !== 200 || liveNetworkFetchStreamPayloadResultResponse.type !== 'basic') {
-          return liveNetworkFetchStreamPayloadResultResponse;
+
+      return fetch(networkFetchInterceptEvent.request).then((activeNetworkResponsePayload) => {
+        if (!activeNetworkResponsePayload || activeNetworkResponsePayload.status !== 200 || activeNetworkResponsePayload.type !== "basic") {
+          return activeNetworkResponsePayload;
         }
 
-        const networkPayloadCloneForCachingStorageChannel = liveNetworkFetchStreamPayloadResultResponse.clone();
-        caches.open(CACHE_VERSION_NAME_VAULT_SIGNATURE).then((targetCacheVaultAllocationWriteBlock) => {
-          targetCacheVaultAllocationWriteBlock.put(networkFetchInterceptEvent.request, networkPayloadCloneForCachingStorageChannel);
+        const payloadClonedCopyInstance = activeNetworkResponsePayload.clone();
+        caches.open(CACHE_VERSION_ID_TOKEN).then((targetCacheStoreWriteObject) => {
+          targetCacheStoreWriteObject.put(networkFetchInterceptEvent.request, payloadClonedCopyInstance);
         });
 
-        return liveNetworkFetchStreamPayloadResultResponse;
+        return activeNetworkResponsePayload;
       }).catch(() => {
-        // Fallback interface maps error handling responses structures targets contexts matches
+        // Fallback interface logic can be mapped here safely if necessary parameters parameters checks elements are matched
       });
     })
   );
