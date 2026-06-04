@@ -1,9 +1,9 @@
 {
-  "name": "مدير الميزانية الديناميكي",
-  "short_name": "الميزانية",
+  "name": "مدير الميزانية والمصاريف الديناميكي",
+  "short_name": "الميزانية الذكية",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#f4f6f9",
+  "background_color": "#f7f9fc",
   "theme-color": "#2c3e50",
   "orientation": "portrait",
   "icons": [
