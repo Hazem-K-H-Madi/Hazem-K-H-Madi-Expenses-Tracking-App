@@ -1,7 +1,7 @@
 {
-  "name": "مدير الميزانية الذكي 2026",
+  "name": "مدير الميزانية الديناميكي",
   "short_name": "الميزانية",
-  "start_url": "./index.html",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#f4f6f9",
   "theme-color": "#2c3e50",
