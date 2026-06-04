@@ -3,279 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>مستشار المالية الذكي | PWA</title>
+    <title>المستشار المالي الذكي | PWA</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="ماليتي">
-    <meta name="theme-color" content="#ffffff" id="theme-meta">
+    <meta name="apple-mobile-web-app-title" content="محفظتي">
+    <meta name="theme-color" id="theme-meta" content="#ffffff">
+    
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
-
-    <link rel="stylesheet" href="styles.css">
     
-    </head>
+    <link rel="stylesheet" href="styles.css">
+</head>
 <body>
 
-    <div id="app-shell" class="app-container">
+    <div class="app-container">
         
         <header class="app-header">
-            <div class="header-top">
-                <div class="brand-zone">
-                    <h1>المستشار المالي <span class="badge-beta">محترف</span></h1>
-                    <p class="date-subtitle" id="current-date-view"></p>
+            <div class="header-brand">
+                <div class="brand-logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
                 </div>
-                <div class="action-zone">
-                    <button id="theme-toggle-btn" class="btn-icon" aria-label="تبديل المظهر" title="تبديل المظهر">
-                        <svg class="sun-icon" viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-                        <svg class="moon-icon" viewBox="0 0 24 24" width="24" height="24" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                    </button>
-                    <button id="about-trigger-btn" class="btn-icon" aria-label="المطور" title="عن المطور">ℹ️</button>
-                </div>
+                <h1>الخازن الذكي</h1>
             </div>
-
-            <nav class="context-navigator" aria-label="نطاق الميزانية">
-                <div class="tab-slider-bg"></div>
-                <button class="nav-tab active" data-context="personal" id="tab-personal">
-                    <span>المصروفات الشخصية</span>
+            <div class="header-actions">
+                <button id="theme-toggle" class="btn-icon" aria-label="تبديل المظهر">
+                    <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.72" x2="5.64" y2="18.30"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                 </button>
-                <button class="nav-tab" data-context="family" id="tab-family">
-                    <span>مصروفات المنزل والعائلة</span>
+                <button id="settings-trigger" class="btn-icon" aria-label="الإعدادات">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                 </button>
-            </nav>
+            </div>
         </header>
 
-        <main class="app-main-content">
-            
-            <section class="dashboard-summary-card">
-                <div class="balance-display-group">
-                    <span class="label-muted">الرصيد المتاح الحالي النفاذ</span>
-                    <h2 class="dynamic-balance-counter" id="main-balance-view">0.00 <span class="currency-label">ج.م</span></h2>
-                </div>
-                
-                <div class="dashboard-metrics-grid">
-                    <div class="metric-tile">
-                        <span class="tile-label">معدل الحرق اليومي</span>
-                        <strong class="tile-value text-warning" id="burn-rate-view">0.00 ج.م</strong>
-                    </div>
-                    <div class="metric-tile">
-                        <span class="tile-label">توقع نفاد الرصيد</span>
-                        <strong class="tile-value" id="run-out-date-view">—</strong>
-                    </div>
-                </div>
+        <nav class="segment-navigator" role="tablist">
+            <button id="tab-personal" class="segment-btn active" role="tab" aria-selected="true" data-tab="personal">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span>المصروفات الشخصية</span>
+            </button>
+            <button id="tab-family" class="segment-btn" role="tab" aria-selected="false" data-tab="family">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span>مصروفات المنزل والعائلة</span>
+            </button>
+        </nav>
 
-                <div class="budget-progress-container">
-                    <div class="progress-bar-track">
-                        <div class="progress-bar-fill" id="budget-progress-fill" style="width: 100%"></div>
+        <main class="app-main">
+            
+            <section class="balance-card">
+                <div class="balance-label">الرصيد المتبقي المتاح</div>
+                <div class="balance-amount-wrapper">
+                    <span id="balance-counter" class="balance-value">0</span>
+                    <span class="currency-label">ج.م</span>
+                </div>
+                <div class="balance-meta-grid">
+                    <div class="meta-item text-success">
+                        <span class="meta-label">إجمالي الدخل المخصص</span>
+                        <span id="allocated-income-display">0</span> ج.م
                     </div>
-                    <div class="progress-labels">
-                        <span id="progress-percentage-label">100% متبقي</span>
-                        <span id="progress-spent-label">منفق: 0.00 ج.م</span>
+                    <div class="meta-item text-danger">
+                        <span class="meta-label">إجمالي المصاريف</span>
+                        <span id="total-expenses-display">0</span> ج.م
                     </div>
                 </div>
             </section>
 
-            <section class="collapsible-section card-wrapper">
-                <header class="section-trigger-header" id="income-splitter-toggle">
-                    <h3>🎯 وحدة توزيع وجدولة الدخل المتعدد</h3>
-                    <span class="toggle-icon">▼</span>
-                </header>
-                <div class="section-content-collapsible hidden" id="income-splitter-content">
+            <section class="dashboard-grid">
+                
+                <div class="card panel-income-splitter">
+                    <h2 class="panel-title">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                        موزع التدفقات المالية الذكي
+                    </h2>
                     <form id="income-splitter-form" class="form-grid">
-                        <div class="form-group">
+                        <div class="input-group">
                             <label for="income-salary">الراتب الأساسي</label>
-                            <input type="number" id="income-salary" min="0" step="any" placeholder="0.00" value="0">
+                            <input type="number" id="income-salary" min="0" placeholder="0.00" class="form-input">
                         </div>
-                        <div class="form-group">
-                            <label for="income-freelance">العمل الحر / إضافي</label>
-                            <input type="number" id="income-freelance" min="0" step="any" placeholder="0.00" value="0">
+                        <div class="input-group">
+                            <label for="income-freelance">العمل الحر والمشاريع</label>
+                            <input type="number" id="income-freelance" min="0" placeholder="0.00" class="form-input">
                         </div>
-                        <div class="form-group">
-                            <label for="income-passive">عوائد استثمارية ثانوية</label>
-                            <input type="number" id="income-passive" min="0" step="any" placeholder="0.00" value="0">
+                        <div class="input-group">
+                            <label for="income-passive">عوائد أخرى / سلبية</label>
+                            <input type="number" id="income-passive" min="0" placeholder="0.00" class="form-input">
                         </div>
-                        
-                        <div class="form-group full-width-span">
-                            <div class="range-slider-container">
-                                <div class="slider-labels">
-                                    <span>شخصي: <strong id="split-personal-label">50%</strong></span>
-                                    <span>عائلي: <strong id="split-family-label">50%</strong></span>
-                                </div>
-                                <input type="range" id="income-split-range" min="0" max="100" value="50" class="premium-range-slider">
+                        <div class="slider-allocation-wrapper">
+                            <div class="slider-header">
+                                <span>نسبة توزيع السيولة</span>
+                                <span id="allocation-ratio-label" class="ratio-badge">50% شخصي / 50% عائلي</span>
                             </div>
+                            <input type="range" id="allocation-slider" min="0" max="100" value="50" class="form-range">
                         </div>
-
-                        <button type="submit" class="btn-primary full-width-span">تأكيد التوزيع وضخ الميزانية</button>
+                        <button type="submit" class="btn btn-primary btn-block">تحديث وتوزيع المحفظة</button>
                     </form>
                 </div>
-            </section>
 
-            <section class="card-wrapper analytics-wrapper">
-                <div class="analytics-header">
-                    <h3>📊 التوزيع الهيكلي للمصروفات</h3>
-                </div>
-                <div class="analytics-body-layout">
-                    <div class="chart-visualization-frame">
-                        <svg viewBox="0 0 36 36" class="circular-svg-chart" id="svg-donut-chart">
-                            <path class="chart-bg-circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                            <g id="chart-segments-group"></g>
-                        </svg>
-                        <div class="chart-center-overlay">
-                            <span class="overlay-title">الإجمالي</span>
-                            <span class="overlay-value" id="chart-total-text">0</span>
+                <div class="card panel-insights">
+                    <h2 class="panel-title">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                        التحليلات والمؤشرات التنبؤية
+                    </h2>
+                    <div class="insight-metric-row">
+                        <div class="insight-node">
+                            <span class="node-title">معدل الحرق اليومي الحالي (Burn-Rate)</span>
+                            <div class="node-value text-warning"><span id="burn-rate-value">0</span> <small>ج.م / يوم</small></div>
+                        </div>
+                        <div class="insight-node">
+                            <span class="node-title">تاريخ النفاذ المتوقع للسيولة</span>
+                            <div class="node-value text-danger" id="runway-prediction-value">مستقر ومتزن</div>
                         </div>
                     </div>
-                    <div class="chart-legend-container" id="chart-legend-list">
+                    
+                    <div class="analytics-chart-container">
+                        <div class="chart-wrapper" id="svg-chart-wrapper">
+                            </div>
+                        <div class="chart-legend" id="chart-legend-container"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="transaction-management">
+                <div class="action-header">
+                    <h2 class="section-heading">سجل العمليات والتدفقات الصادرة</h2>
+                    <div class="action-buttons-group">
+                        <button id="btn-export-statement" class="btn btn-secondary">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            تصدير كشف حساب رسمي
+                        </button>
+                        <button id="btn-open-add-modal" class="btn btn-primary">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            إضافة مصروف جديد
+                        </button>
+                    </div>
+                </div>
+
+                <div class="filter-toolbar">
+                    <div class="search-box">
+                        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="search-input" placeholder="بحث في الملاحظات أو الكلمات الدلالية...">
+                    </div>
+                    <div class="filter-chips-wrapper" id="category-filter-chips">
                         </div>
                 </div>
-            </section>
 
-            <section class="card-wrapper">
-                <h3>✍️ قيد معاملة مالية جديدة</h3>
-                <form id="transaction-entry-form" class="form-grid">
-                    <div class="form-group">
-                        <label for="tx-amount">المبلغ القيمة (ج.م) *</label>
-                        <input type="number" id="tx-amount" min="0.01" step="any" required placeholder="0.00">
+                <div class="recurring-bar-notice hidden" id="recurring-billing-zone">
+                    <div class="notice-text">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+                        <span>توجد التزامات وفواتير دورية مستحقة اليوم.</span>
                     </div>
-                    <div class="form-group">
-                        <label for="tx-category">التصنيف الفئوي *</label>
-                        <select id="tx-category" required>
-                            <option value="غذاء">غذائيات ومطاعم</option>
-                            <option value="فواتير">فواتير والتزامات دورية</option>
-                            <option value="صحة">رعاية صحية وطبية</option>
-                            <option value="مواصلات">نقل ومواصلات</option>
-                            <option value="ترفيه">ترفيه وتسوق</option>
-                            <option value="أخرى">مصاريف أخرى طارئة</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="tx-date">التاريخ والوقت</label>
-                        <input type="datetime-local" id="tx-date">
-                    </div>
-                    <div class="form-group">
-                        <label class="checkbox-label-wrapper">
-                            <input type="checkbox" id="tx-recurring">
-                            <span class="custom-checkbox"></span>
-                            <span class="label-text">التزام شهري متكرر تلقائياً</span>
-                        </label>
-                    </div>
-                    <div class="form-group full-width-span">
-                        <label for="tx-notes">ملاحظات البيان والشرح</label>
-                        <input type="text" id="tx-notes" placeholder="تفاصيل المعاملة السريعة...">
-                    </div>
-                    <button type="submit" class="btn-success full-width-span">حفظ المعاملة الفوري والمزامنة</button>
-                </form>
-            </section>
+                    <button id="btn-trigger-recurring" class="btn btn-sm btn-accent">خصم وتمرير الفواتير الدورية</button>
+                </div>
 
-            <section class="filter-control-matrix">
-                <div class="search-input-wrapper">
-                    <input type="text" id="tx-search-filter" placeholder="بحث مخصص في البيانات والملاحظات...">
-                </div>
-                <div class="filter-chips-scroll" id="category-filter-chips">
-                    <button class="chip active" data-cat="all">الكل</button>
-                    <button class="chip" data-cat="غذاء">غذاء</button>
-                    <button class="chip" data-cat="فواتير">فواتير</button>
-                    <button class="chip" data-cat="صحة">صحة</button>
-                    <button class="chip" data-cat="مواصلات">مواصلات</button>
-                    <button class="chip" data-cat="ترفيه">ترفيه</button>
-                    <button class="chip" data-cat="أخرى">أخرى</button>
-                </div>
-                <div class="quick-utilities-row">
-                    <button id="trigger-recurring-clear-btn" class="btn-secondary-danger">تنظيف الفواتير المتكررة</button>
-                    <button id="trigger-export-btn" class="btn-secondary">تصدير كشف حساب رسمي</button>
+                <div class="ledger-container">
+                    <div id="skeleton-loader" class="skeleton-wrapper hidden">
+                        <div class="skeleton-row-shimmer"></div>
+                        <div class="skeleton-row-shimmer"></div>
+                        <div class="skeleton-row-shimmer"></div>
+                    </div>
+                    <div id="empty-state-view" class="empty-state-box hidden">
+                        <div class="empty-illustration">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                        </div>
+                        <h3>لا توجد قيود مسجلة حتى الآن</h3>
+                        <p>قم بإضافة عملياتك الاستهلاكية أو فواتيرك لبناء تحليلاتك المالية الدقيقة.</p>
+                    </div>
+                    <ul id="transaction-list-root" class="transaction-list-element">
+                        </ul>
                 </div>
             </section>
-
-            <section class="ledger-records-stream-container">
-                <div class="ledger-header-summary">
-                    <h4>سجل المعاملات المحدث المباشر</h4>
-                    <span class="count-badge" id="ledger-count-indicator">0 معاملات</span>
-                </div>
-                
-                <div class="ledger-scroll-zone" id="ledger-records-target">
-                    </div>
-            </section>
-
         </main>
 
-        <footer class="app-sticky-footer">
-            <div class="attribution-card-mini">
-                <p dir="ltr" class="credit-text-line">Built by <strong>Hazem K H Madi</strong> - Senior Product Designer</p>
-                <div class="links-cluster">
-                    <a href="https://drive.google.com/file/d/1C7BT9_FOkAysydVqegpxGoWfrv-A7SVR/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">Credentials Verification</a>
-                    <span class="divider">|</span>
-                    <a href="https://hazemkhmadi.framer.ai" target="_blank" rel="noopener noreferrer">Portfolio</a>
-                    <span class="divider">|</span>
-                    <a href="https://www.linkedin.com/in/hazem-k-h-madi" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <footer class="app-footer-credit">
+            <div class="creator-card">
+                <span class="credit-label">Built by Hazem K H Madi - Senior Product Designer</span>
+                <div class="creator-links">
+                    <a href="https://drive.google.com/file/d/1C7BT9_FOkAysydVqegpxGoWfrv-A7SVR/view?usp=drivesdk" target="_blank" rel="noopener noreferrer" class="footer-link">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        Credentials
+                    </a>
+                    <span class="bullet-separator">•</span>
+                    <a href="https://hazemkhmadi.framer.ai" target="_blank" rel="noopener noreferrer" class="footer-link">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                        Portfolio
+                    </a>
+                    <span class="bullet-separator">•</span>
+                    <a href="https://www.linkedin.com/in/hazem-k-h-madi" target="_blank" rel="noopener noreferrer" class="footer-link">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                        LinkedIn
+                    </a>
                 </div>
             </div>
         </footer>
     </div>
 
-    <div class="backdrop-blur-overlay hidden" id="about-panel-backdrop">
-        <aside class="slide-over-panel-container" id="about-panel-container">
-            <div class="slide-panel-header">
-                <h3>عن المنصة المهندس المصمم</h3>
-                <button class="btn-close-panel" id="about-close-btn" aria-label="إغلاق">✕</button>
-            </div>
-            <div class="slide-panel-body" dir="rtl">
-                <div class="designer-profile-large">
-                    <div class="avatar-placeholder">HK</div>
-                    <h4>حازم خليل محمد ماضي</h4>
-                    <p class="profile-title">Senior Product Designer & UI/UX Architect</p>
+    <div id="transaction-modal" class="modal-portal-overlay hidden" aria-hidden="true">
+        <div class="modal-surface-container" role="dialog" aria-modal="true">
+            <header class="modal-header">
+                <h3 id="modal-title-intent">إضافة معاملة جديدة</h3>
+                <button id="btn-close-modal" class="btn-icon" aria-label="إغلاق النافذة">&times;</button>
+            </header>
+            <form id="transaction-mutation-form" class="modal-body-form">
+                <input type="hidden" id="mutation-target-id">
+                
+                <div class="input-group">
+                    <label for="tx-amount">القيمة المالية (ج.م) *</label>
+                    <input type="number" id="tx-amount" step="0.01" min="0.01" required placeholder="0.00" class="form-input text-large">
                 </div>
-                <hr class="separator-line">
-                <h5>مواصفات النظام والتشغيل</h5>
-                <p>تطبيق مالي فائق الأداء والسرعة، مصمم ليعمل كـ PWA مع خوادم محلية معزولة تماماً تضمن تشغيل غير منقطع بنسبة 100% دون الحاجة لشبكة إنترنت وبمعدل تحديث سلس 120fps للميكرو-أنيميشن.</p>
-                <div class="pwa-install-zone" id="pwa-install-cta-wrapper">
-                    <button class="btn-primary-accent full-width-span" id="pwa-install-action-btn">تثبيت التطبيق كـ PWA على الجهاز</button>
-                    <div class="ios-instructions-block hidden" id="ios-safari-instructions">
-                        <p class="ios-alert-text">💡 لتثبيت التطبيق على جهاز iOS (Safari): اضغط على زر <strong>مشاركة (Share)</strong> ثم اختر <strong>إضافة إلى الشاشة الرئيسية (Add to Home Screen)</strong>.</p>
-                    </div>
-                </div>
-            </div>
-        </aside>
-    </div>
 
-    <div class="backdrop-blur-overlay hidden" id="edit-portal-backdrop">
-        <div class="bottom-sheet-modal-container" id="edit-portal-container">
-            <div class="sheet-header">
-                <h3>تعديل بيانات المعاملة السابقة</h3>
-                <button class="btn-close-panel" id="edit-close-btn">✕</button>
-            </div>
-            <form id="edit-transaction-form" class="form-grid">
-                <input type="hidden" id="edit-tx-id">
-                <div class="form-group">
-                    <label for="edit-tx-amount">المبلغ المعدل (ج.م)</label>
-                    <input type="number" id="edit-tx-amount" min="0.01" step="any" required>
-                </div>
-                <div class="form-group">
-                    <label for="edit-tx-category">تغيير الفئة</label>
-                    <select id="edit-tx-category" required>
-                        <option value="غذاء">غذائيات ومطاعم</option>
-                        <option value="فواتير">فواتير والتزامات دورية</option>
-                        <option value="صحة">رعاية صحية وطبية</option>
-                        <option value="مواصلات">نقل ومواصلات</option>
-                        <option value="ترفيه">ترفيه وتسوق</option>
-                        <option value="أخرى">مصاريف أخرى طارئة</option>
+                <div class="input-group">
+                    <label for="tx-category">التصنيف الهيكلي للمعاملة *</label>
+                    <select id="tx-category" required class="form-input">
+                        <option value="غذاء وتطوير">غذاء وتطوير</option>
+                        <option value="فواتير والتزامات">فواتير والتزامات</option>
+                        <option value="صحة ورعاية">صحة ورعاية</option>
+                        <option value="تعليم ونمو">تعليم ونمو</option>
+                        <option value="ترفيه ونمط حياة">ترفيه ونمط حياة</option>
+                        <option value="أخرى">أخرى</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="edit-tx-date">تغيير الوقت</label>
-                    <input type="datetime-local" id="edit-tx-date" required>
+
+                <div class="input-group">
+                    <label for="tx-timestamp">التاريخ والوقت التشغيلي *</label>
+                    <input type="datetime-local" id="tx-timestamp" required class="form-input">
                 </div>
-                <div class="form-group full-width-span">
-                    <label for="edit-tx-notes">تعديل الشرح والملاحظات</label>
-                    <input type="text" id="edit-tx-notes">
+
+                <div class="input-group checkbox-row">
+                    <input type="checkbox" id="tx-recurring" class="form-checkbox">
+                    <label for="tx-recurring">اعتبار المعاملة التزام دوري شهري تلقائي</label>
                 </div>
-                <button type="submit" class="btn-success full-width-span">تحديث وحفظ التغييرات الهيكلية</button>
+
+                <div class="input-group">
+                    <label for="tx-notes">ملاحظات البيان والشرح</label>
+                    <textarea id="tx-notes" rows="3" placeholder="اكتب تفاصيل إضافية لمساعدتك في التحليل..." class="form-input"></textarea>
+                </div>
+
+                <div class="modal-actions-footer">
+                    <button type="button" id="btn-cancel-modal" class="btn btn-secondary">إلغاء الأمر</button>
+                    <button type="submit" id="btn-submit-modal" class="btn btn-primary">حفظ وتأكيد العملية</button>
+                </div>
             </form>
         </div>
     </div>
 
-    <div class="toast-broadcaster-container" id="toast-carrier-zone"></div>
+    <div id="settings-slideover" class="modal-portal-overlay hidden" aria-hidden="true">
+        <div class="slideover-surface-container" role="dialog" aria-modal="true">
+            <header class="modal-header">
+                <h3>إعدادات المنظومة وتثبيت التطبيق</h3>
+                <button id="btn-close-settings" class="btn-icon" aria-label="إغلاق">&times;</button>
+            </header>
+            <div class="slideover-body">
+                <section class="settings-section">
+                    <h4>تثبيت التطبيق على الجهاز (PWA)</h4>
+                    <p class="section-description">استمتع بتجربة أداء فائقة السرعة وعمل كامل دون الحاجة للاتصال بالإنترنت مباشرة من شاشتك الرئيسية.</p>
+                    <button id="btn-pwa-install" class="btn btn-primary btn-block hidden">تثبيت التطبيق كـ PWA</button>
+                    
+                    <div id="ios-safari-guide" class="ios-instructions hidden">
+                        <h5>خطوات التثبيت على أنظمة iOS (Safari):</h5>
+                        <ol>
+                            <li>اضغط على زر المشاركة <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg> في شريط المتصفح السفلي.</li>
+                            <li>اختر من القائمة المنسدلة <strong>"إضافة إلى الشاشة الرئيسية"</strong>.</li>
+                            <li>اضغط <strong>"إضافة"</strong> في الزاوية العلوية لتأكيد العملية.</li>
+                        </ol>
+                    </div>
+                </section>
+                <section class="settings-section">
+                    <h4>التحكم في سلامة ومزامنة البيانات Local Storage</h4>
+                    <p class="section-description">يتم تخزين بياناتك محلياً بشكل فوري على متصفحك أو جهازك لضمان أعلى مستويات الخصوصية والسرعة الفائقة.</p>
+                    <button id="btn-clear-all-data" class="btn btn-danger btn-block">مسح كافة البيانات وإعادة التعيين</button>
+                </section>
+            </div>
+        </div>
+    </div>
 
-    <div id="print-administrative-shadow-dom" class="print-only"></div>
+    <div id="toast-notification-hub" class="toast-hub-viewport"></div>
 
+    <div id="hidden-print-canvas" class="print-only-canvas"></div>
+
+    <script src="app.js"></script>
 </body>
 </html>
