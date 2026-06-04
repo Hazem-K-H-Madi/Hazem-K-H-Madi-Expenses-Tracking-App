@@ -1,0 +1,982 @@
+/* ==========================================================================
+   Fintech System Variables & Complex Theming Architecture
+   ========================================================================== */
+:root {
+    /* Base Font Sizing & Typography */
+    font-size: 16px;
+    --font-sans: 'Cairo', system-ui, -apple-system, sans-serif;
+    
+    /* System Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    
+    /* Elevation Drop Shadows */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    
+    /* Default Layout Border Radius */
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1.25rem;
+    --radius-full: 9999px;
+}
+
+/* Color Scheme Matrices (Dark Mode Default) */
+html[data-theme="dark"] {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-surface: rgba(30, 41, 59, 0.7);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-focus: rgba(255, 255, 255, 0.2);
+    
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    
+    --glass-bg: rgba(15, 23, 42, 0.6);
+    --glass-blur: blur(16px);
+    
+    --card-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+html[data-theme="light"] {
+    --bg-primary: #f8fafc;
+    --bg-secondary: #ffffff;
+    --bg-surface: rgba(255, 255, 255, 0.7);
+    --border-color: rgba(0, 0, 0, 0.06);
+    --border-focus: rgba(0, 0, 0, 0.15);
+    
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-blur: blur(12px);
+    
+    --card-gradient: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+}
+
+/* Accent Color Variations Matrix mapping */
+html[data-accent="emerald"] {
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --accent-light: rgba(16, 185, 129, 0.15);
+    --accent-glow: rgba(16, 185, 129, 0.3);
+}
+html[data-accent="ocean"] {
+    --accent: #0284c7;
+    --accent-hover: #0369a1;
+    --accent-light: rgba(2, 132, 199, 0.15);
+    --accent-glow: rgba(2, 132, 199, 0.3);
+}
+html[data-accent="sunset"] {
+    --accent: #f97316;
+    --accent-hover: #ea580c;
+    --accent-light: rgba(249, 115, 22, 0.15);
+    --accent-glow: rgba(249, 115, 22, 0.3);
+}
+
+/* Global Native & Normalization Resets */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* App Containers Layout Structure */
+.app-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* ==========================================================================
+   Header & Layout Brand Typography Components
+   ========================================================================== */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo-icon {
+    width: 48px;
+    height: 48px;
+    background-color: var(--accent);
+    color: #ffffff;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 0 15px var(--accent-glow);
+    transition: var(--transition-bounce);
+}
+
+.logo-icon:hover {
+    transform: rotate(10deg) scale(1.05);
+}
+
+.brand-text h1 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+.brand-text .version {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    display: block;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* ==========================================================================
+   Interactive Action Buttons & Form Controls System
+   ========================================================================== */
+.icon-button {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: var(--transition-smooth);
+}
+
+.icon-button:hover {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.btn-primary {
+    background-color: var(--accent);
+    color: #ffffff;
+    border: none;
+    padding: 0.85rem 1.5rem;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 12px var(--accent-glow);
+    transition: var(--transition-smooth);
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px var(--accent-glow);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 0.85rem 1.5rem;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: var(--transition-smooth);
+}
+
+.btn-secondary:hover {
+    background-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+.w-100 { width: 100%; }
+.mt-3 { margin-top: 1rem; }
+
+/* Custom Form Element Inputs styling */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+input[type="number"],
+input[type="text"],
+input[type="date"],
+select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    border-radius: var(--radius-md);
+    outline: none;
+    transition: var(--transition-smooth);
+}
+
+input:focus, select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-icon i {
+    position: absolute;
+    right: 1rem;
+    color: var(--text-muted);
+    font-size: 1rem;
+    pointer-events: none;
+}
+
+.input-with-icon input {
+    padding-right: 2.75rem;
+}
+
+/* ==========================================================================
+   Cards Component Framework & Grid Containers
+   ========================================================================== */
+.card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+}
+
+.card-header h2, .card-header h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.badge {
+    background-color: var(--accent-light);
+    color: var(--accent);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   Advanced Allocation Engine Mechanics
+   ========================================================================== */
+.income-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 968px) {
+    .income-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-group-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
+}
+
+.total-income-display {
+    margin-top: 1.25rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-right: 4px solid var(--accent);
+}
+
+.total-income-display strong {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--accent);
+}
+
+.slider-container {
+    margin: 1.5rem 0;
+}
+
+.slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+/* Custom Webkit/Moz Slider Configuration track overrides */
+.custom-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: var(--bg-secondary);
+    outline: none;
+}
+
+.custom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 0 10px var(--accent-glow);
+    transition: var(--transition-smooth);
+}
+
+.custom-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+}
+
+.allocation-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.alloc-card {
+    background: var(--bg-secondary);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.alloc-card.personal { border-top: 3px solid var(--accent); }
+.alloc-card.family { border-top: 3px solid #6366f1; }
+
+.alloc-title {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.alloc-amount {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   Tab Navigation & Multi-Tracking Dashboard Ecosystem
+   ========================================================================== */
+.tab-system-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.tab-navigation {
+    display: flex;
+    background: var(--bg-secondary);
+    padding: 0.35rem;
+    border-radius: var(--radius-md);
+    gap: 0.25rem;
+    border: 1px solid var(--border-color);
+}
+
+.tab-button {
+    flex: 1;
+    padding: 0.85rem 1rem;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: var(--transition-smooth);
+}
+
+.tab-button.active {
+    background-color: var(--accent);
+    color: #ffffff;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Metrics Dashboard Cards Grid */
+.dashboard-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    background: var(--card-gradient);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.stat-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--accent);
+    border: 1px solid var(--border-color);
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin: 0.15rem 0;
+}
+
+.stat-unit {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+/* Critical Budget Drops Warning Visual Layer */
+.stat-card.remaining.low-budget {
+    border: 1px solid #ef4444;
+    animation: pulse-border 2s infinite alternate;
+}
+
+.stat-card.remaining.low-budget .stat-icon {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.budget-alert {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 0.2rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+}
+
+@keyframes pulse-border {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+    100% { box-shadow: 0 0 12px 4px rgba(239, 68, 68, 0.2); }
+}
+
+/* ==========================================================================
+   Ledger Transaction Ledger Processing Workspace Layout
+   ========================================================================== */
+.ledger-workspace {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+    .ledger-workspace {
+        grid-template-columns: 1fr;
+    }
+}
+
+.analytics-history-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.chart-wrapper {
+    position: relative;
+    height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Ledger List Elements Processing View */
+.ledger-container {
+    max-height: 380px;
+    overflow-y: auto;
+    padding-left: 0.25rem;
+}
+
+.ledger-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.ledger-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition-smooth);
+    animation: slide-in 0.3s ease-out;
+}
+
+.ledger-item:hover {
+    transform: translateX(-4px);
+    border-color: var(--border-focus);
+}
+
+.ledger-item-right {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.category-icon-tag {
+    width: 38px;
+    height: 38px;
+    background: var(--bg-primary);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.item-details h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.item-details span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.ledger-item-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.item-amount-badge {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #ef4444;
+}
+
+.btn-reverse-transaction {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.95rem;
+    padding: 0.25rem;
+    transition: var(--transition-smooth);
+}
+
+.btn-reverse-transaction:hover {
+    color: #ef4444;
+    transform: scale(1.1);
+}
+
+/* Empty State Styling Elements placeholder */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted);
+}
+
+.empty-state i {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    opacity: 0.6;
+}
+
+.empty-state p {
+    font-size: 0.85rem;
+    max-width: 280px;
+}
+
+/* ==========================================================================
+   Export Engine Template & Platform Framework Styling
+   ========================================================================== */
+.export-platform-card {
+    background: linear-gradient(to left, var(--bg-secondary), var(--glass-bg));
+}
+
+.export-actions-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.export-notice {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+}
+
+.export-buttons {
+    display: flex;
+    gap: 0.75rem;
+}
+
+@media (max-width: 640px) {
+    .export-actions-row { flex-direction: column; align-items: stretch; }
+    .export-buttons { flex-direction: column; }
+}
+
+/* HIDDEN ARCHITECTURE REPORT GENERATION PRINT PLATFORM LAYOUT */
+.hidden-print-container {
+    position: absolute;
+    top: -99999px;
+    left: -99999px;
+    width: 850px;
+    background-color: #ffffff;
+    color: #1e293b;
+    padding: 40px;
+    font-family: 'Cairo', sans-serif;
+    direction: rtl;
+}
+
+.print-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.print-brand h1 { font-size: 1.6rem; color: #0f172a; font-weight: 900; }
+.print-brand p { font-size: 0.85rem; color: #64748b; }
+.print-meta { text-align: left; font-size: 0.8rem; color: #475569; }
+
+.print-divider {
+    margin: 25px 0;
+    border: 0;
+    border-top: 2px dashed #e2e8f0;
+}
+
+.print-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.print-summary-box {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+}
+
+.print-summary-box h4 { font-size: 0.75rem; color: #64748b; margin-bottom: 5px; }
+.print-summary-box p { font-size: 1.15rem; font-weight: 800; color: #0f172a; }
+
+.print-details-section h3 { font-size: 1.1rem; color: #0f172a; margin-bottom: 12px; border-right: 4px solid #10b981; padding-right: 8px; }
+
+.print-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+}
+
+.print-table th {
+    background-color: #f1f5f9;
+    color: #334155;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 12px;
+    text-align: right;
+    border-bottom: 2px solid #cbd5e1;
+}
+
+.print-table td {
+    padding: 12px;
+    font-size: 0.85rem;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+}
+
+.print-footer-branding {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 20px;
+}
+
+.print-footer-branding .en-credit { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: bold; color: #0f172a; font-size: 0.85rem; }
+.print-footer-branding .links-credit { font-size: 0.75rem; color: #64748b; margin-top: 2px; }
+.stamp-placeholder { border: 2px double #10b981; color: #10b981; padding: 5px 15px; font-weight: 700; font-size: 0.75rem; border-radius: 4px; transform: rotate(-3deg); display: inline-block; }
+
+/* ==========================================================================
+   Modals, Floating Toast Notifications & Base System Loaders
+   ========================================================================== */
+.drawer {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.drawer-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.drawer-content {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    background: var(--bg-secondary);
+    height: 100%;
+    box-shadow: var(--shadow-lg);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    animation: slide-drawer 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slide-drawer {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+.drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.close-button {
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.setting-group { margin-bottom: 1.75rem; }
+.setting-label { font-size: 0.9rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 0.75rem; }
+
+.theme-switch-container { display: flex; gap: 0.5rem; background: var(--bg-primary); padding: 0.25rem; border-radius: var(--radius-md); }
+.theme-btn { flex: 1; padding: 0.6rem; border: none; font-family: var(--font-sans); background: transparent; color: var(--text-secondary); border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem; transition: var(--transition-smooth); }
+.theme-btn.active { background: var(--accent); color: white; }
+
+.accent-picker { display: flex; gap: 1rem; }
+.accent-dot { width: 32px; height: 32px; border-radius: 50%; border: 3px solid transparent; cursor: pointer; transition: var(--transition-smooth); }
+.accent-dot.emerald { background-color: #10b981; }
+.accent-dot.ocean { background-color: #0284c7; }
+.accent-dot.sunset { background-color: #f97316; }
+.accent-dot.active { border-color: var(--text-primary); transform: scale(1.1); }
+
+/* Custom Native Install App PWA Banner Styling */
+.install-banner {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--bg-secondary);
+    border: 1px solid var(--accent);
+    box-shadow: var(--shadow-lg), 0 0 20px var(--accent-glow);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    z-index: 999;
+}
+
+.install-content { display: flex; align-items: center; gap: 1rem; }
+.install-icon { font-size: 2rem; color: var(--accent); }
+.install-text h3 { font-size: 1rem; font-weight: 700; }
+.install-text p { font-size: 0.8rem; color: var(--text-secondary); }
+.install-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+.btn-primary-sm, .btn-secondary-sm { padding: 0.5rem 1rem; font-family: var(--font-sans); font-size: 0.8rem; font-weight: 600; border-radius: var(--radius-sm); cursor: pointer; border: none; }
+.btn-primary-sm { background: var(--accent); color: white; }
+.btn-secondary-sm { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-color); }
+.btn-install-shortcut { background: var(--accent-light); color: var(--accent); border: 1px solid var(--accent); padding: 0.5rem 1rem; border-radius: var(--radius-md); font-family: var(--font-sans); font-weight: 600; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; transition: var(--transition-smooth); }
+.btn-install-shortcut:hover { background: var(--accent); color: white; }
+
+/* Toast System Framework Engines layout setup */
+.toast-container { position: fixed; top: 1.5rem; left: 1.5rem; z-index: 10000; display: flex; flex-direction: column; gap: 0.5rem; pointer-events: none; }
+.toast { background: #1e293b; color: white; border-right: 4px solid var(--accent); padding: 1rem 1.5rem; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); font-size: 0.9rem; font-weight: 600; min-width: 280px; display: flex; align-items: center; gap: 0.75rem; transform: translateX(-120%); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.25); pointer-events: auto; }
+.toast.show { transform: translateX(0); }
+.toast.error { border-right-color: #ef4444; }
+
+/* Universal Keyframes Global Utilities Elements */
+.app-loader { position: fixed; top: 0; bottom: 0; left: 0; right: 0; background: #0f172a; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; color: white; transition: opacity 0.4s ease; }
+.spinner { width: 50px; height: 50px; border: 4px solid rgba(255, 255, 255, 0.1); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes slide-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.hidden { display: none !important; }
+.animate-pulse { animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+/* ==========================================================================
+   Enterprise App Institutional Brand Footer Style Context
+   ========================================================================== */
+.app-footer {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+}
+
+.footer-attribution {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.credit-text {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+}
+
+.footer-links {
+    display: flex;
+    gap: 1.25rem;
+}
+
+.footer-link-item {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: var(--transition-smooth);
+}
+
+.footer-link-item:hover {
+    color: var(--accent);
+}
