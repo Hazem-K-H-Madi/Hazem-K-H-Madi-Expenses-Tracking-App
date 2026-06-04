@@ -1,79 +1,86 @@
 /**
- * Production High-Performance Offline-First Service Worker Engine Core Implementation
- * Caching Policy: Cache First with Immediate Network Fallback Synchronization Strategies.
+ * محرك التشغيل المستقل وعازل الموارد والشبكة (Service Worker)
+ * المطور: Hazem K H Madi - Senior Product Designer
+ * إدارة حزم التخزين المؤقت الفائقة والعمل المستمر بلا اتصال بالإنترنت 100%.
  */
 
-const CACHE_VERSION_ID_TOKEN = "HAZEM_FINTECH_CACHE_V1";
-const STATIC_APPLICATION_SHELL_ASSETS = [
-  "index.html",
-  "styles.css",
-  "app.js",
-  "manifest.json",
-  "https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap"
+const CACHE_NAME = 'smart-financier-v1';
+const ASSETS_TO_CACHE = [
+    './',
+    './index.html',
+    './style.css',
+    './app.js',
+    './manifest.json',
+    'https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap',
+    'https://cdn-icons-png.flaticon.com/512/2489/2489756.png'
 ];
 
-// Instantiating activation lifecycle events captures
-self.addEventListener("install", (workerInstallLifecycleEvent) => {
-  workerInstallLifecycleEvent.waitUntil(
-    caches.open(CACHE_VERSION_ID_TOKEN).then((instantiatedCacheRegistryInstance) => {
-      return instantiatedCacheRegistryInstance.addAll(STATIC_APPLICATION_SHELL_ASSETS);
-    }).then(() => {
-      return self.skipWaiting();
-    })
-  );
+// 1. مرحلة التثبيت الأولي: حجز وضخ الموارد والملفات الأساسية في الذاكرة الصلبة للمتصفح
+self.addEventListener('install', (event) => {
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then((cache) => {
+                console.log('[Service Worker] تم حصر وتخزين الهيكل البنيوي والملفات بنجاح.');
+                return cache.addAll(ASSETS_TO_CACHE);
+            })
+            .then(() => self.skipWaiting()) // تفعيل فوري دون انتظار إغلاق التبويبات المفتوحة مسبقاً
+    );
 });
 
-// Purging outdated residual legacy tracking cache parameters structures mapping storage layers
-self.addEventListener("activate", (workerActivationLifecycleEvent) => {
-  workerActivationLifecycleEvent.waitUntil(
-    caches.keys().then((registeredCacheKeysCollection) => {
-      return Promise.all(
-        registeredCacheKeysCollection.map((activeCacheKeyName) => {
-          if (activeCacheKeyName !== CACHE_VERSION_ID_TOKEN) {
-            return caches.delete(activeCacheKeyName);
-          }
-        })
-      );
-    }).then(() => {
-      return self.clients.claim();
-    })
-  );
+// 2. مرحلة التنشيط: تطهير حزم التخزين القديمة والمستهلكة تلقائياً عند تحديث النظام
+self.addEventListener('activate', (event) => {
+    event.waitUntil(
+        caches.keys().then((cacheNames) => {
+            return Promise.all(
+                cacheNames.map((cache) => {
+                    if (cache !== CACHE_NAME) {
+                        console.log('[Service Worker] يتم الآن تدمير وتطهير حزمة التخزين القديمة:', cache);
+                        return caches.delete(cache);
+                    }
+                })
+            );
+        }).then(() => self.clients.claim())
+    );
 });
 
-// Network interceptor fetch pipeline management hooks handlers actions
-self.addEventListener("fetch", (networkFetchInterceptEvent) => {
-  // Restricting storage fetching interceptors exclusively to standardized internal get requests structures
-  if (networkFetchInterceptEvent.request.method !== "GET") return;
+// 3. استراتيجية اعتراض ومعالجة الطلبات الشبكية الذكية (Stale-While-Revalidate Strategy)
+// توفر تجربة فتح فورية للمستخدم عن طريق جلب البيانات من الكاش أولاً، وتحديثها من الشبكة في الخلفية
+self.addEventListener('fetch', (event) => {
+    // استثناء طلبات البيانات الخارجية غير القابلة للتخزين (مثل بروتوكولات معينة أو تتبع خارجي)
+    if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin) && !event.request.url.startsWith('https://fonts.googleapis.com')) {
+        return;
+    }
 
-  networkFetchInterceptEvent.respondWith(
-    caches.match(networkFetchInterceptEvent.request).then((matchingCachedAssetResponseInstance) => {
-      if (matchingCachedAssetResponseInstance) {
-        // Dynamic continuous caching update execution sequences background threads runs loop
-        fetch(networkFetchInterceptEvent.request).then((freshNetworkResponsePayload) => {
-          if (freshNetworkResponsePayload.status === 200) {
-            caches.open(CACHE_VERSION_ID_TOKEN).then((activeCacheInstanceObject) => {
-              activeCacheInstanceObject.put(networkFetchInterceptEvent.request, freshNetworkResponsePayload);
+    event.respondWith(
+        caches.match(event.request).then((cachedResponse) => {
+            if (cachedResponse) {
+                // إرسال النسخة المخزنة فوراً لإنعاش الشاشة، ثم جلب وتحديث الملف في الخلفية للزيارة القادمة
+                fetch(event.request)
+                    .then((networkResponse) => {
+                        if (networkResponse && networkResponse.status === 200) {
+                            caches.open(CACHE_NAME).then((cache) => {
+                                cache.put(event.request, networkResponse);
+                            });
+                        }
+                    })
+                    .catch(() => { /* صامت - الشبكة مقطوعة والملف المخزن كافٍ */ });
+                    
+                return cachedResponse;
+            }
+
+            // في حال عدم توفر المورد في الكاش، يتم جلبه من الشبكة مباشرة كحالة افتراضية
+            return fetch(event.request).then((networkResponse) => {
+                if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+                    return networkResponse;
+                }
+                
+                const responseToCache = networkResponse.clone();
+                caches.open(CACHE_NAME).then((cache) => {
+                    cache.put(event.request, responseToCache);
+                });
+                
+                return networkResponse;
             });
-          }
-        }).catch(() => { /* Swallow background sync exceptions silently without disturbing main thread execution state */ });
-
-        return matchingCachedAssetResponseInstance;
-      }
-
-      return fetch(networkFetchInterceptEvent.request).then((activeNetworkResponsePayload) => {
-        if (!activeNetworkResponsePayload || activeNetworkResponsePayload.status !== 200 || activeNetworkResponsePayload.type !== "basic") {
-          return activeNetworkResponsePayload;
-        }
-
-        const payloadClonedCopyInstance = activeNetworkResponsePayload.clone();
-        caches.open(CACHE_VERSION_ID_TOKEN).then((targetCacheStoreWriteObject) => {
-          targetCacheStoreWriteObject.put(networkFetchInterceptEvent.request, payloadClonedCopyInstance);
-        });
-
-        return activeNetworkResponsePayload;
-      }).catch(() => {
-        // Fallback interface logic can be mapped here safely if necessary parameters parameters checks elements are matched
-      });
-    })
-  );
+        })
+    );
 });
