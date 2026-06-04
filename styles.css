@@ -1,168 +1,229 @@
 /* ==========================================================================
-   Smart Wallet Pro - Premium Purple & Glassmorphic Neo-Brutalism Engine
-   Inspired by Hazem K H Madi Design System | Pure UI/UX Architectural Code
+   Smart Wallet Pro - Premium Light Neo-Glassmorphism Engine (v6.0)
+   Inspired by Hazem K H Madi Design System & Personal Identity Branding
+   Default Mode: Light Premium | Micro-Interactions & Fluid Architecture
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&display=swap');
 
+/* 1. نظام الألوان والهوية البصرية الشاملة (Default Light Mode) */
 :root {
   --font-main: 'Cairo', sans-serif;
   
-  /* لوحة ألوان الهوية الشخصية الفاخرة (Inspired by Personal Banner) */
-  --bg-primary: #f0f2f9;
-  --bg-secondary: rgba(255, 255, 255, 0.8);
-  --bg-card: #ffffff;
-  --border-color: rgba(99, 102, 241, 0.12);
+  /* لوحة ألوان البانر والهوية الشخصية المحدثة */
+  --bg-primary: #f5f4fa;
+  --bg-canvas: linear-gradient(135deg, #f5f4fa 0%, #eef0fc 100%);
+  --bg-card: rgba(255, 255, 255, 0.85);
+  --border-color: rgba(90, 70, 250, 0.08);
   --text-primary: #1e1b4b;
-  --text-secondary: #6b7280;
+  --text-secondary: #6b698a;
   
-  /* التدرجات واللمسات البنفسجية الملكية */
-  --accent: #6366f1;
-  --accent-light: rgba(99, 102, 241, 0.08);
-  --accent-gradient: linear-gradient(135deg, #4f46e5 0%, #818cf8 100%);
-  --accent-glow: rgba(99, 102, 241, 0.2);
+  /* تدرجات الأرجواني والبنفسجي الفاخر */
+  --accent: #5a46fa;
+  --accent-light: rgba(90, 70, 250, 0.06);
+  --accent-gradient: linear-gradient(135deg, #5a46fa 0%, #7d6eff 100%);
+  --accent-glow: rgba(90, 70, 250, 0.15);
   
-  /* إعدادات العناصر والظلال العائمة */
+  /* إعدادات العناصر والهياكل */
+  --radius-pill: 50px;
   --radius-lg: 24px;
   --radius-md: 16px;
   --radius-sm: 12px;
+  
   --transition-premium: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  --shadow-premium: 0 20px 40px -10px rgba(99, 102, 241, 0.08);
+  --shadow-premium: 0 20px 40px -10px rgba(90, 70, 250, 0.06), 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
-/* محرك التبديل التلقائي للمظهر المظلم عند الطلب */
+/* نمط المظهر المظلم الاختياري التكميلي */
 [data-theme="dark"] {
-  --bg-primary: #0b0f19;
-  --bg-secondary: rgba(20, 27, 45, 0.75);
-  --bg-card: #151c2c;
+  --bg-primary: #0b0d19;
+  --bg-canvas: linear-gradient(135deg, #0b0d19 0%, #06070c 100%);
+  --bg-card: rgba(20, 24, 46, 0.7);
   --border-color: rgba(255, 255, 255, 0.06);
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --shadow-premium: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+  --text-primary: #f1f3f9;
+  --text-secondary: #8a8da3;
+  --shadow-premium: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-/* تصفير الإعدادات وتهيئة أبعاد الصفحة لمنع الالتصاق */
+/* 2. تصفير الـ CSS ومعالجة تهيئة الحاويات */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  font-family: var(--fontMain, var(--font-main));
-  background-color: var(--bg-primary);
+  font-family: var(--font-main);
+  background: var(--bg-canvas);
   color: var(--text-primary);
   min-height: 100vh;
   line-height: 1.6;
-  padding: 1rem 0 3rem 0;
+  padding-bottom: 4rem;
   overflow-x: hidden;
-  transition: background-color 0.4s ease;
+  transition: background 0.4s ease, color 0.4s ease;
 }
 
-/* حاوية التطبيق المركزية الموزعة هندسياً */
+/* 3. حاوية حماية محرك التطبيق وشاشات الانتظار */
 .app-container {
   width: 100%;
   max-width: 100%;
-  padding: 0 1rem;
+  padding: 1.25rem;
   box-sizing: border-box;
   animation: appEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* شاشة التحميل الاحترافية الدائرية السلسة */
 .app-loader {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: var(--bg-primary);
+  background: var(--bg-canvas);
   z-index: 999999;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .spinner {
-  width: 56px;
-  height: 56px;
-  border: 4px solid var(--border-color);
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--accent-light);
   border-top: 4px solid var(--accent);
   border-radius: 50%;
-  animation: spinSpeed 0.7s linear infinite;
+  animation: loaderRotation 0.7s linear infinite;
 }
 
 .app-loader p {
   font-weight: 700;
-  color: var(--text-primary);
-  font-size: 1rem;
+  color: var(--accent);
+  font-size: 0.95rem;
 }
 
+/* الفئة الحرجة والمسؤولة عن إخفاء لودر التحمل وسجلات السحب */
 .hidden {
   display: none !important;
   opacity: 0 !important;
   visibility: hidden !important;
+  pointer-events: none;
 }
 
-/* الهيدر العلوي العائم بتأثير زجاجي فخم */
+/* 4. الهيدر العائم الفاخر (Premium Floating Header) */
 .app-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.25rem 1.5rem;
-  background: var(--bg-secondary);
+  padding: 1.25rem 1.75rem;
+  background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   box-shadow: var(--shadow-premium);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 1rem;
 }
 
 .logo-icon {
-  width: 46px;
-  height: 46px;
+  width: 52px;
+  height: 52px;
   background: var(--accent-gradient);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
-  color: #ffffff;
-  box-shadow: 0 8px 20px var(--accent-glow);
+  font-size: 1.4rem;
+  color: #fff;
+  box-shadow: 0 10px 25px var(--accent-glow);
 }
 
 .brand-text h1 {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 900;
   color: var(--text-primary);
+  letter-spacing: -0.5px;
 }
 
 .brand-text .version {
   font-size: 0.72rem;
   color: var(--text-secondary);
-  font-weight: 600;
-  display: block;
+  font-weight: 700;
+  background: var(--accent-light);
+  padding: 0.1rem 0.5rem;
+  border-radius: var(--radius-pill);
+  display: inline-block;
+  margin-top: 0.15rem;
 }
 
-/* شريط تبديل المحافظ الذكي (تصميم كبسولة عائمة تفاعلية) */
+/* 5. شريط التبديل الاستراتيجي ثنائي الهوية (Wallet Hub Switcher) */
 .wallet-selector-bar {
   display: flex;
-  background: var(--bg-secondary);
+  background: var(--bg-card);
   border: 1px solid var(--border-color);
-  padding: 0.4rem;
+  padding: 0.45rem;
   border-radius: var(--radius-md);
-  gap: 0.4rem;
-  margin-bottom: 1.5rem;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
   box-shadow: var(--shadow-premium);
+  backdrop-filter: blur(20px);
 }
 
 .wallet-tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 0.95rem;
+  font-family: var(--font-main);
+  font-weight: 700;
+  font-size: 0.92rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  transition: var(--transition-premium);
+}
+
+.wallet-tab-btn:hover {
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
+.wallet-tab-btn.active {
+  background: #fff !important;
+  color: var(--accent) !important;
+  border: 1px solid rgba(90, 70, 250, 0.15) !important;
+  box-shadow: 0 10px 25px -5px rgba(90, 70, 250, 0.12);
+}
+
+/* انتقال دراماتيكي للهوية البصرية الفاخرة عند تفعيل محفظة المنزل والعائلة */
+.wallet-tab-btn#switchToFamilyBtn.active {
+  color: #7c3aed !important;
+}
+[data-theme="light"] #switchToFamilyBtn.active {
+  border-color: rgba(124, 58, 237, 0.2) !important;
+  box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.15);
+}
+
+/* 6. تبويبات الملاحة الداخلية للـ Dashboard */
+.tab-navigation {
+  display: flex;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 0.35rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.75rem;
+}
+
+.tab-button {
   flex: 1;
   background: transparent;
   border: none;
@@ -180,72 +241,29 @@ body {
   transition: var(--transition-premium);
 }
 
-.wallet-tab-btn:hover {
-  color: var(--text-primary);
-  background: rgba(99, 102, 241, 0.04);
-}
-
-.wallet-tab-btn.active {
-  background: var(--bg-card) !important;
-  color: var(--accent) !important;
-  border: 1px solid var(--border-color) !important;
-  box-shadow: var(--shadow-premium);
-}
-
-/* تغيير لون التطبيق بالكامل عند اختيار محفظة العائلة ليعطي شعور بالفصل التام */
-#switchToFamilyBtn.active {
-  color: #a855f7 !important;
-}
-
-/* الملاحة الداخلية للتبويبات */
-.tab-navigation {
-  display: flex;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  padding: 0.3rem;
-  border-radius: var(--radius-md);
-  margin-bottom: 1.5rem;
-}
-
-.tab-button {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  padding: 0.75rem;
-  font-family: var(--font-main);
-  font-weight: 700;
-  font-size: 0.85rem;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  transition: var(--transition-premium);
-}
-
 .tab-button.active {
   background: var(--accent-gradient);
-  color: #ffffff;
+  color: #fff;
   box-shadow: 0 8px 20px var(--accent-glow);
 }
 
-/* الكروت الرأسية المتطورة (Cards Space Mechanics) */
+/* 7. تصميم كروت التوزيع والبيانات (Neo-Glassmorphic Cards) */
 .card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
+  padding: 1.75rem;
+  margin-bottom: 1.75rem;
   box-shadow: var(--shadow-premium);
-  transition: var(--transition-premium);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 30px 60px -15px rgba(99, 102, 241, 0.15);
-  border-color: rgba(99, 102, 241, 0.25);
+  transform: translateY(-5px);
+  border-color: rgba(90, 70, 250, 0.18);
+  box-shadow: 0 30px 60px -15px rgba(90, 70, 250, 0.1);
 }
 
 .card-header {
@@ -254,78 +272,80 @@ body {
   justify-content: space-between;
   margin-bottom: 1.5rem;
   border-bottom: 1px solid var(--border-color);
-  padding-bottom: 0.75rem;
+  padding-bottom: 0.85rem;
 }
 
 .card-header h2, .card-header h3 {
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   font-weight: 800;
+  color: var(--text-primary);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.65rem;
 }
 
-/* الحقول والنوافذ الاستمارية الموزعة بعناية */
+/* 8. عناصر النماذج وحقول المدخلات الفاخرة */
 .form-group {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-group label {
   display: block;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: var(--text-secondary);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
   font-weight: 700;
 }
 
 .form-group input, .form-group select {
   width: 100%;
-  background: var(--bg-primary);
+  background: rgba(255, 255, 255, 0.6);
   border: 1px solid var(--border-color);
-  padding: 0.85rem 1.25rem;
+  padding: 0.95rem 1.25rem;
   font-family: var(--font-main);
   color: var(--text-primary);
   border-radius: var(--radius-sm);
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   transition: var(--transition-premium);
 }
 
 .form-group input:focus, .form-group select:focus {
+  background: #fff;
   border-color: var(--accent);
-  box-shadow: 0 0 0 4px var(--accent-light);
-  background: var(--bg-card);
+  box-shadow: 0 0 0 4px rgba(90, 70, 250, 0.12);
 }
 
-/* أزرار الإجراءات التفاعلية الفخمة */
+/* الأزرار وأنظمة التحكم الاحترافية */
 .btn-primary {
   width: 100%;
   background: var(--accent-gradient);
-  color: #ffffff;
+  color: #fff;
   border: none;
-  padding: 0.95rem;
+  padding: 1rem;
   font-family: var(--font-main);
   font-weight: 800;
-  font-size: 0.95rem;
+  font-size: 1rem;
   border-radius: var(--radius-sm);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  box-shadow: 0 6px 20px var(--accent-glow);
+  gap: 0.6rem;
+  box-shadow: 0 10px 28px var(--accent-glow);
   transition: var(--transition-premium);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px var(--accent-glow);
+  box-shadow: 0 15px 32px var(--accent-glow);
+  filter: brightness(1.05);
 }
 
 .btn-secondary {
-  background: rgba(99, 102, 241, 0.04);
+  background: #fff;
   color: var(--text-primary);
   border: 1px solid var(--border-color);
-  padding: 0.85rem 1.5rem;
+  padding: 0.9rem 1.5rem;
   font-family: var(--font-main);
   font-weight: 700;
   font-size: 0.9rem;
@@ -335,42 +355,46 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  box-shadow: var(--shadow-premium);
   transition: var(--transition-premium);
 }
 
 .btn-secondary:hover {
-  background: rgba(99, 102, 241, 0.08);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .icon-button {
-  background: var(--bg-primary);
+  background: #fff;
   border: 1px solid var(--border-color);
   color: var(--text-primary);
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
   border-radius: var(--radius-sm);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: var(--transition-premium);
+  box-shadow: var(--shadow-premium);
 }
 
 .icon-button:hover {
-  background: var(--accent-gradient);
-  color: #ffffff;
-  box-shadow: 0 6px 16px var(--accent-glow);
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 8px 20px var(--accent-glow);
+  border-color: var(--accent);
 }
 
-/* السلايدر ومحرك توزيع الميزانيات الذكي */
+/* 9. شريط التمرير (Slider) وموزع السيولة الذكي */
 .custom-slider {
   -webkit-appearance: none;
   width: 100%;
   height: 8px;
-  border-radius: 10px;
-  background: var(--border-color);
+  border-radius: var(--radius-pill);
+  background: rgba(90, 70, 250, 0.08);
   outline: none;
-  margin: 1.25rem 0;
+  margin: 1.5rem 0;
 }
 
 .custom-slider::-webkit-slider-thumb {
@@ -379,67 +403,74 @@ body {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: var(--accent-gradient);
+  background: var(--accent);
   cursor: pointer;
-  box-shadow: 0 4px 12px var(--accent-glow);
-  transition: transform 0.15s ease;
+  box-shadow: 0 0 15px var(--accent-glow);
+  border: 2px solid #fff;
+  transition: transform 0.2s ease;
 }
 
 .custom-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
+  transform: scale(1.25);
 }
 
 .total-income-display {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1.25rem;
-  background: var(--bg-primary);
+  padding: 1.1rem 1.5rem;
+  background: rgba(90, 70, 250, 0.03);
   border-radius: var(--radius-md);
-  margin-top: 1.25rem;
-  border: 1px solid var(--border-color);
+  margin-top: 1.5rem;
+  border: 1px dashed rgba(90, 70, 250, 0.2);
 }
 
 .allocation-cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 .alloc-card {
-  padding: 1rem;
-  background: var(--bg-primary);
+  padding: 1.25rem;
+  background: #fff;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
+  box-shadow: var(--shadow-premium);
   border-top: 4px solid var(--accent);
 }
 
+.alloc-card.family {
+  border-top-color: #7c3aed;
+}
+
 .alloc-title {
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   color: var(--text-secondary);
   font-weight: 700;
   display: block;
 }
 
 .alloc-amount {
-  font-weight: 800;
-  margin-top: 0.35rem;
-  font-size: 1.15rem;
+  font-weight: 900;
+  margin-top: 0.4rem;
+  font-size: 1.3rem;
+  color: var(--text-primary);
 }
 
-/* شبكة الإحصاءات السريعة والمستقرة (Dashboard Cards Grid) */
+/* 10. شبكة إحصاءات وحالة الحساب الحالية (Stats Dash) */
 .dashboard-stats-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
 }
 
 .stat-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 1.25rem;
+  padding: 1.5rem;
   display: flex;
   align-items: center;
   gap: 1.25rem;
@@ -447,14 +478,14 @@ body {
 }
 
 .stat-icon {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   border-radius: var(--radius-sm);
   background: var(--accent-light);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.35rem;
+  font-size: 1.4rem;
   color: var(--accent);
 }
 
@@ -464,26 +495,28 @@ body {
 }
 
 .stat-label {
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   color: var(--text-secondary);
   font-weight: 700;
 }
 
 .stat-value {
-  font-size: 1.35rem;
+  font-size: 1.5rem;
   font-weight: 900;
-  margin-top: 0.15rem;
+  margin-top: 0.2rem;
+  color: var(--text-primary);
 }
 
-/* حالة الطوارئ وانخفاض الميزانية */
+/* حالة الطوارئ عند نفاد الميزانية المحددة */
 .low-budget {
-  border-right: 4px solid #ef4444 !important;
+  border-left: 5px solid #ef4444 !important;
   background: rgba(239, 68, 68, 0.02) !important;
+  animation: criticalPulse 2s infinite ease-in-out;
 }
 
-/* سجل القيود التاريخية النظيف والمعزول بالكامل */
+/* 11. سجل القيود المعزول (Premium Isolated Ledger) */
 .ledger-container {
-  max-height: 400px;
+  max-height: 440px;
   overflow-y: auto;
 }
 
@@ -495,61 +528,66 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  background: var(--bg-primary);
+  padding: 1.1rem;
+  background: #fff;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  margin-bottom: 0.65rem;
+  margin-bottom: 0.75rem;
+  box-shadow: var(--shadow-premium);
   transition: var(--transition-premium);
 }
 
 .ledger-item:hover {
-  transform: translateX(-4px);
-  border-color: var(--accent);
+  transform: translateY(-2px);
+  border-color: rgba(90, 70, 250, 0.2);
+  box-shadow: 0 15px 30px -10px rgba(90, 70, 250, 0.08);
 }
 
 .ledger-item-right {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.1rem;
 }
 
 .category-icon-tag {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-sm);
-  background: var(--bg-card);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.15rem;
-  border: 1px solid var(--border-color);
+  font-size: 1.2rem;
+  background: var(--bg-primary);
 }
 
 .item-details h4 {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 700;
+  color: var(--text-primary);
 }
 
 .item-details span {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
+  display: block;
+  margin-top: 0.15rem;
 }
 
 .item-amount-badge {
-  background: var(--bg-card);
-  padding: 0.45rem 0.85rem;
-  border-radius: 10px;
+  background: var(--bg-primary);
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--radius-sm);
   font-weight: 800;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   border: 1px solid var(--border-color);
+  margin-left: 0.75rem;
 }
 
-/* الأدراج واللوحات المنبثقة للتحكم بالاعدادات */
+/* 12. درج الإعدادات والتخصيص الجانبي (Side Drawer) */
 .drawer {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  z-index: 100000;
+  z-index: 200000;
   display: flex;
   justify-content: flex-end;
 }
@@ -557,7 +595,7 @@ body {
 .drawer-overlay {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(30, 27, 75, 0.4);
+  background: rgba(30, 27, 75, 0.3);
   backdrop-filter: blur(8px);
 }
 
@@ -566,12 +604,12 @@ body {
   width: 100%;
   max-width: 380px;
   height: 100%;
-  background: var(--bg-card);
-  border-left: 1px solid var(--border-color);
-  padding: 2rem 1.5rem;
+  background: #fff;
+  padding: 2.5rem 2rem;
   display: flex;
   flex-direction: column;
-  box-shadow: -15px 0 40px rgba(0, 0, 0, 0.1);
+  box-shadow: -20px 0 50px rgba(90, 70, 250, 0.08);
+  animation: drawerSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .drawer-header {
@@ -579,15 +617,15 @@ body {
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--border-color);
-  padding-bottom: 1.25rem;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .theme-switch-container {
   display: flex;
   background: var(--bg-primary);
-  padding: 0.3rem;
+  padding: 0.35rem;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--border-color);
 }
 
 .theme-btn {
@@ -595,7 +633,7 @@ body {
   background: transparent;
   border: none;
   color: var(--text-secondary);
-  padding: 0.6rem;
+  padding: 0.65rem;
   font-family: var(--font-main);
   font-size: 0.85rem;
   font-weight: 700;
@@ -604,35 +642,35 @@ body {
 }
 
 .theme-btn.active {
-  background: var(--bg-card);
+  background: #fff;
   color: var(--accent);
   box-shadow: var(--shadow-premium);
 }
 
-/* نظام التنبيهات الفوري (Toasts Notification Engine) */
+/* 13. التنبيهات والإشعارات الفورية (Toasts Node) */
 .toast-container {
   position: fixed;
-  bottom: 2rem; left: 1.5rem; right: 1.5rem;
-  z-index: 200000;
+  bottom: 2rem; left: 2rem; right: 2rem;
+  z-index: 9999999;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
   pointer-events: none;
 }
 
 .toast {
-  background: var(--bg-card);
+  background: #fff;
   border: 1px solid var(--accent);
   color: var(--text-primary);
-  padding: 1rem 1.5rem;
+  padding: 1.1rem 1.5rem;
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-premium);
   display: flex;
   align-items: center;
-  gap: 0.85rem;
-  font-size: 0.9rem;
+  gap: 1rem;
+  font-size: 0.92rem;
+  box-shadow: 0 20px 40px rgba(90, 70, 250, 0.12);
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(30px);
   transition: var(--transition-premium);
 }
 
@@ -642,28 +680,32 @@ body {
 }
 
 .toast.error { border-color: #ef4444; }
+.toast.error i { color: #ef4444; }
+.toast i { color: var(--accent); }
 
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 4rem 1.5rem;
+  padding: 4rem 2rem;
+  text-align: center;
   color: var(--text-secondary);
 }
 
 .empty-state i {
-  font-size: 2.5rem;
+  font-size: 3rem;
   margin-bottom: 1rem;
-  opacity: 0.3;
+  color: var(--accent);
+  opacity: 0.25;
 }
 
-/* الفوتر وحقوق الملكية للمطور */
+/* 14. فوتر النظام الرسمي للمطور */
 .app-footer {
   text-align: center;
-  padding: 2.5rem 0 1rem 0;
+  padding: 2.5rem 0;
   color: var(--text-secondary);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   border-top: 1px solid var(--border-color);
   margin-top: 3rem;
 }
@@ -672,26 +714,29 @@ body {
   display: flex;
   justify-content: center;
   gap: 1.5rem;
-  margin-top: 0.5rem;
+  margin-top: 0.6rem;
 }
 
 .footer-link-item {
-  color: var(--accent);
+  color: var(--text-secondary);
   text-decoration: none;
   font-weight: 700;
 }
 
+.footer-link-item:hover {
+  color: var(--accent);
+}
+
 /* ==========================================================================
-   قواعد التوزيع التفاعلية للشاشات والأجهزة المتعددة (Responsive Grid Node)
+   15. التجاوب الكامل وشبكة العرض للموبايل والتابلت واللابتوب (Pro Grid System)
    ========================================================================== */
 @media (min-width: 768px) {
   .app-container {
-    max-width: 980px;
+    max-width: 1040px;
     margin: 0 auto;
-    padding: 2rem 1.5rem;
+    padding: 3rem 2rem;
   }
   
-  /* تقسيم حقول الدخل والمحرك وسجل القيود بالتساوي لمنع الانهيار الطولي */
   .income-grid, .ledger-workspace {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -701,33 +746,53 @@ body {
   
   .dashboard-stats-grid {
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 1.25rem;
+    gap: 1.5rem;
   }
   
   .wallet-selector-bar {
-    max-width: 480px;
-    margin: 0 auto 2rem auto;
+    max-width: 540px;
+    margin: 0 auto 2.5rem auto;
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1400px) {
   .app-container {
-    max-width: 1180px;
+    max-width: 1280px;
   }
 }
 
-/* مفاتيح الأنيميشن والحركة الدقيقة */
-@keyframes spinSpeed {
+/* 16. تأثيرات الأنيميشن وميكانيكا التدوير الحركي (Keyframes) */
+@keyframes loaderRotation {
   to { transform: rotate(360deg); }
 }
 
 @keyframes appEntrance {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* تخصيص الـ Scrollbar للمتصفحات */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.15); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+@keyframes drawerSlideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes criticalPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.2); }
+  50% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+}
+
+/* تخصيص المسارات ومؤشر التمرير */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(90, 70, 250, 0.1);
+  border-radius: 20px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
