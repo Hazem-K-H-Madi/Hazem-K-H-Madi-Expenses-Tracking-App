@@ -1,11 +1,10 @@
 /**
- * Smart Wallet - Advanced Core Engine
- * Architectural Enhancements: Cryptographic Storage, Memory Management, & Haptic UX
+ * Smart Wallet - Ultimate Fintech Core Engine (v3.0)
+ * Architecture: Cryptographic Storage, Offline Support, Auto-Lock Security, & Data Portability
  */
 
 // 1. إدارة الحالة والنظام الأمني للمنتج
 const SecurityEngine = {
-    // تشفير خفيف وسريع للبيانات المالية المحلية لحمايتها من المتطفلين
     encrypt: (data) => {
         try {
             const str = JSON.stringify(data);
@@ -21,27 +20,28 @@ const SecurityEngine = {
             const str = decodeURIComponent(atob(cipherText));
             return JSON.parse(str);
         } catch (e) {
-            console.error("Decryption failed - Data might be corrupted or raw", e);
-            return null; // التعامل مع البيانات القديمة غير المشفرة
+            console.error("Decryption failed", e);
+            return null;
         }
     }
 };
 
-// الحالات العامة للتطبيق
 let appState = {
     income: { basic: 0, freelance: 0, investments: 0 },
-    allocationRatio: 50, // 50% شخصي، 50% منزلي
+    allocationRatio: 50,
     ledger: [],
     activeTab: 'register',
     theme: 'dark',
-    accent: 'emerald'
+    accent: 'emerald',
+    securePIN: null // حفظ رمز القفل إذا تم تفعيله
 };
 
-// متغير الاحتفاظ بمرجع الرسم البياني لمنع الـ Memory Leaks
 let financialChartInstance = null;
 let transactionToDeleteIndex = null;
+let autoLockTimeout = null;
+const LOCK_TIME_LIMIT = 5 * 60 * 1000; // 5 دقائق خمول قبل القفل التلقائي
 
-// 2. محرك التنبيهات والاهتزاز (Haptic & Feedback UX)
+// 2. محرك التنبيهات والاهتزاز
 const FeedbackManager = {
     showToast: (message, type = 'success') => {
         const container = document.getElementById('toastContainer');
@@ -54,13 +54,8 @@ const FeedbackManager = {
         container.appendChild(toast);
         setTimeout(() => toast.classList.add('show'), 50);
 
-        // تفعيل الاهتزاز التفاعلي للهواتف الذكية
         if (navigator.vibrate) {
-            if (type === 'error') {
-                navigator.vibrate([100, 50, 100]); // اهتزاز مزدوج للخطأ
-            } else {
-                navigator.vibrate(15); // اهتزاز خفيف جداً للنجاح
-            }
+            type === 'error' ? navigator.vibrate([100, 50, 100]) : navigator.vibrate(15);
         }
 
         setTimeout(() => {
@@ -70,47 +65,122 @@ const FeedbackManager = {
     }
 };
 
-// 3. إدارة البيانات والتخزين المستقر (Persistence Layer)
+// 3. محرك الأمان التلقائي وقفل التطبيق (Auto-Lock Shield)
+const LockManager = {
+    resetTimer: () => {
+        if (!appState.securePIN) return;
+        clearTimeout(autoLockTimeout);
+        autoLockTimeout = setTimeout(LockManager.lockApp, LOCK_TIME_LIMIT);
+    },
+    lockApp: () => {
+        if (!appState.securePIN) return;
+        const screen = document.getElementById('securityLockScreen');
+        if (screen) {
+            screen.classList.remove('hidden');
+            document.getElementById('pinInput').value = '';
+            document.getElementById('pinInput').focus();
+        }
+    },
+    unlockApp: () => {
+        const enteredPIN = document.getElementById('pinInput').value;
+        if (enteredPIN === appState.securePIN) {
+            document.getElementById('securityLockScreen').classList.add('hidden');
+            LockManager.resetTimer();
+        } else {
+            FeedbackManager.showToast("رمز القفل غير صحيح، حاول مجدداً", 'error');
+            document.getElementById('pinInput').value = '';
+        }
+    },
+    setupPIN: () => {
+        const newPIN = prompt("أدخل رمز PIN الجديد المكون من 4 أرقام لحماية محفظتك:");
+        if (newPIN && newPIN.length === 4 && !isNaN(newPIN)) {
+            appState.securePIN = newPIN;
+            StorageManager.saveData();
+            FeedbackManager.showToast("تم تفعيل قفل الأمان الذكي بنجاح");
+            LockManager.resetTimer();
+        } else if (newPIN) {
+            FeedbackManager.showToast("خطأ: يجب أن يتكون الرمز من 4 أرقام فقط", 'error');
+        }
+    },
+    removePIN: () => {
+        const confirmPIN = prompt("أدخل رمز PIN الحالي لإلغاء القفل:");
+        if (confirmPIN === appState.securePIN) {
+            appState.securePIN = null;
+            StorageManager.saveData();
+            clearTimeout(autoLockTimeout);
+            FeedbackManager.showToast("تم إلغاء قفل الأمان بنجاح");
+        } else if (confirmPIN) {
+            FeedbackManager.showToast("الرمز غير صحيح، لم يتم إلغاء القفل", 'error');
+        }
+    }
+};
+
+// 4. إدارة البيانات والنسخ الاحتياطي (Data Portability Hub)
 const StorageManager = {
     saveData: () => {
         const encryptedData = SecurityEngine.encrypt(appState);
-        if (encryptedData) {
-            localStorage.setItem('smart_wallet_secure_data', encryptedData);
-        }
+        if (encryptedData) localStorage.setItem('smart_wallet_secure_data', encryptedData);
     },
     loadData: () => {
         const rawData = localStorage.getItem('smart_wallet_secure_data');
         if (rawData) {
             const decrypted = SecurityEngine.decrypt(rawData);
-            if (decrypted) {
-                appState = { ...appState, ...decrypted };
-                return;
-            }
+            if (decrypted) appState = { ...appState, ...decrypted };
         }
-        
-        // المحاولة الاحتياطية لقراءة البيانات القديمة غير المشفرة إذا وجدت أثناء الترقية
-        const legacyData = localStorage.getItem('smart_wallet_data');
-        if (legacyData) {
+    },
+    exportBackup: () => {
+        try {
+            const dataStr = SecurityEngine.encrypt(appState);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(JSON.stringify({ backup: dataStr, timestamp: new Date().toISOString() }));
+            
+            const exportFileDefaultName = `smart_wallet_backup_${new Date().toISOString().split('T')[0]}.json`;
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            FeedbackManager.showToast("تم تصدير النسخة الاحتياطية بنجاح");
+        } catch (e) {
+            FeedbackManager.showToast("فشل تصدير البيانات", 'error');
+        }
+    },
+    importBackup: (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
             try {
-                appState = { ...appState, ...JSON.parse(legacyData) };
-                StorageManager.saveData(); // تشفيرها فوراً للمستقبل
-                localStorage.removeItem('smart_wallet_data'); // حذف القديمة النظيفة
-            } catch(e) { console.error("Legacy migration failed", e); }
-        }
+                const parsed = JSON.parse(e.target.result);
+                if (parsed.backup) {
+                    const decrypted = SecurityEngine.decrypt(parsed.backup);
+                    if (decrypted && decrypted.ledger) {
+                        appState = decrypted;
+                        StorageManager.saveData();
+                        AppEngine.applyThemeAndAccent();
+                        AppEngine.updateUI();
+                        FeedbackManager.showToast("تم استيراد البيانات ومزامنة محفظتك بنجاح");
+                        if (appState.securePIN) LockManager.lockApp();
+                    } else {
+                        throw new Error();
+                    }
+                }
+            } catch (err) {
+                FeedbackManager.showToast("الملف تالف أو غير متوافق مع نظام التشفير", 'error');
+            }
+        };
+        reader.readAsText(file);
     }
 };
 
-// 4. إدارة النوافذ المنبثقة والتأكيدات (Modals UI)
+// 5. إدارة النوافذ المنبثقة والتأكيدات
 const ModalManager = {
     openDeleteConfirmation: (index) => {
         transactionToDeleteIndex = index;
-        const modal = document.getElementById('deleteConfirmationModal');
-        if (modal) modal.classList.remove('hidden');
+        document.getElementById('deleteConfirmationModal')?.classList.remove('hidden');
     },
     closeDeleteConfirmation: () => {
         transactionToDeleteIndex = null;
-        const modal = document.getElementById('deleteConfirmationModal');
-        if (modal) modal.classList.add('hidden');
+        document.getElementById('deleteConfirmationModal')?.classList.add('hidden');
     },
     confirmDelete: () => {
         if (transactionToDeleteIndex !== null) {
@@ -123,12 +193,11 @@ const ModalManager = {
     }
 };
 
-// 5. محرك الحسابات والتحديثات الديناميكية (Core Engine)
+// 6. محرك التطبيق الأساسي والتحديثات
 const AppEngine = {
     init: () => {
         StorageManager.loadData();
         
-        // استعادة التبويب النشط الأخير من الـ sessionStorage لتحسين الـ UX
         const savedTab = sessionStorage.getItem('activeTab');
         if (savedTab) appState.activeTab = savedTab;
 
@@ -136,39 +205,46 @@ const AppEngine = {
         AppEngine.bindEvents();
         AppEngine.updateUI();
         
-        // إخفاء شاشة التحميل
-        const loader = document.getElementById('appLoader');
-        if (loader) loader.classList.add('hidden');
+        // تفعيل مؤقت الأمان التلقائي ورصد حركة المستخدم
+        if (appState.securePIN) {
+            LockManager.lockApp();
+            ['click', 'mousemove', 'keypress', 'touchstart'].forEach(evt => {
+                window.addEventListener(evt, LockManager.resetTimer);
+            });
+        }
+
+        document.getElementById('appLoader')?.classList.add('hidden');
     },
 
     bindEvents: () => {
-        // حقول الدخل
         ['basicIncome', 'freelanceIncome', 'investmentsIncome'].forEach(id => {
             document.getElementById(id)?.addEventListener('input', AppEngine.handleIncomeChange);
         });
 
-        // السلايدر
-        const slider = document.getElementById('allocationSlider');
-        slider?.addEventListener('input', (e) => {
+        document.getElementById('allocationSlider')?.addEventListener('input', (e) => {
             appState.allocationRatio = parseInt(e.target.value);
             AppEngine.updateUI();
         });
-        slider?.addEventListener('change', () => StorageManager.saveData());
+        document.getElementById('allocationSlider')?.addEventListener('change', () => StorageManager.saveData());
 
-        // التبويبات
         document.querySelectorAll('.tab-button').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const tabId = e.currentTarget.getAttribute('data-tab');
-                AppEngine.switchTab(tabId);
+                AppEngine.switchTab(e.currentTarget.getAttribute('data-tab'));
             });
         });
 
-        // نموذج إضافة معاملة
         document.getElementById('transactionForm')?.addEventListener('submit', AppEngine.handleTransactionSubmit);
-
-        // أزرار الحذف والتأكيد في المودال
         document.getElementById('confirmDeleteBtn')?.addEventListener('click', ModalManager.confirmDelete);
         document.getElementById('cancelDeleteBtn')?.addEventListener('click', ModalManager.closeDeleteConfirmation);
+        
+        // أزرار الحماية المضافة والنسخ الاحتياطي
+        document.getElementById('btnUnlockApp')?.addEventListener('click', LockManager.unlockApp);
+        document.getElementById('pinInput')?.addEventListener('keypress', (e) => { if(e.key === 'Enter') LockManager.unlockApp(); });
+        document.getElementById('btnExportBackup')?.addEventListener('click', StorageManager.exportBackup);
+        document.getElementById('btnImportBackup')?.addEventListener('change', StorageManager.importBackup);
+        document.getElementById('btnToggleSecurity')?.addEventListener('click', () => {
+            appState.securePIN ? LockManager.removePIN() : LockManager.setupPIN();
+        });
     },
 
     handleIncomeChange: () => {
@@ -191,11 +267,9 @@ const AppEngine = {
             return;
         }
 
-        // إضافة المعاملة في أول المصفوفة لتبدو الأحدث في الأعلى
         appState.ledger.unshift({ amount, category, description, date });
         StorageManager.saveData();
         
-        // إعادة تهيئة حقول الإدخال
         document.getElementById('txAmount').value = '';
         document.getElementById('txDescription').value = '';
         
@@ -205,7 +279,7 @@ const AppEngine = {
 
     switchTab: (tabId) => {
         appState.activeTab = tabId;
-        sessionStorage.setItem('activeTab', tabId); // حفظ التبويب لمنع الضياع عند الريفرش
+        sessionStorage.setItem('activeTab', tabId);
         
         document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
@@ -213,10 +287,7 @@ const AppEngine = {
         document.querySelector(`.tab-button[data-tab="${tabId}"]`)?.classList.add('active');
         document.getElementById(`${tabId}Pane`)?.classList.remove('hidden');
 
-        if (tabId === 'analytics') {
-            // إعادة بناء الرسم البياني بدقة عند الانتقال للتبويب
-            setTimeout(() => AppEngine.renderAnalyticsChart(), 50);
-        }
+        if (tabId === 'analytics') setTimeout(() => AppEngine.renderAnalyticsChart(), 50);
     },
 
     applyThemeAndAccent: () => {
@@ -225,13 +296,11 @@ const AppEngine = {
     },
 
     updateUI: () => {
-        // تحديث قيم حقول الإدخال لتطابق الـ State الحالية
         if(document.getElementById('basicIncome')) document.getElementById('basicIncome').value = appState.income.basic || '';
         if(document.getElementById('freelanceIncome')) document.getElementById('freelanceIncome').value = appState.income.freelance || '';
         if(document.getElementById('investmentsIncome')) document.getElementById('investmentsIncome').value = appState.income.investments || '';
         if(document.getElementById('allocationSlider')) document.getElementById('allocationSlider').value = appState.allocationRatio;
 
-        // الحسابات الرياضية للمحرك الذكي
         const totalIncome = appState.income.basic + appState.income.freelance + appState.income.investments;
         const personalBudget = (totalIncome * appState.allocationRatio) / 100;
         const familyBudget = totalIncome - personalBudget;
@@ -239,7 +308,6 @@ const AppEngine = {
         const totalExpenses = appState.ledger.reduce((sum, item) => sum + item.amount, 0);
         const remainingBudget = totalIncome - totalExpenses;
 
-        // تحديث النصوص في الواجهة
         document.getElementById('totalIncomeText').innerText = totalIncome.toFixed(2);
         document.getElementById('personalAllocText').innerText = personalBudget.toFixed(2);
         document.getElementById('familyAllocText').innerText = familyBudget.toFixed(2);
@@ -248,11 +316,9 @@ const AppEngine = {
         document.getElementById('dashboardExpenses').innerText = totalExpenses.toFixed(2);
         document.getElementById('dashboardRemaining').innerText = remainingBudget.toFixed(2);
 
-        // تحديث نِسب السلايدر النصية
         document.getElementById('personalRatioLabel').innerText = `${appState.allocationRatio}%`;
         document.getElementById('familyRatioLabel').innerText = `${100 - appState.allocationRatio}%`;
 
-        // مؤشر التحذير المتقدم من انخفاض الميزانية المتوفرة لـ UX الفينتك
         const remainingCard = document.getElementById('remainingCard');
         const alertBanner = document.getElementById('budgetAlertBanner');
         
@@ -264,13 +330,18 @@ const AppEngine = {
             alertBanner?.classList.add('hidden');
         }
 
-        // تحديث سجل قيد العمليات
-        AppEngine.renderLedger();
-        
-        // تحديث الرسم البياني إذا كان تبويب التحليل نشطاً
-        if (appState.activeTab === 'analytics') {
-            AppEngine.renderAnalyticsChart();
+        // تحديث حالة زر القفل في الإعدادات الجانبية للـ UI
+        const secureBtn = document.getElementById('btnToggleSecurity');
+        if (secureBtn) {
+            secureBtn.innerHTML = appState.securePIN ? 
+                '<i class="fas fa-shield-alt"></i> إلغاء قفل الأمان فعال' : 
+                '<i class="fas fa-lock"></i> تفعيل قفل PIN سري';
+            secureBtn.style.background = appState.securePIN ? 'rgba(239, 68, 68, 0.15)' : 'var(--accent-light)';
+            secureBtn.style.color = appState.securePIN ? '#ef4444' : 'var(--accent)';
         }
+
+        AppEngine.renderLedger();
+        if (appState.activeTab === 'analytics') AppEngine.renderAnalyticsChart();
     },
 
     renderLedger: () => {
@@ -281,12 +352,11 @@ const AppEngine = {
             container.innerHTML = `
                 <div class="empty-state">
                     <i class="fas fa-receipt"></i>
-                    <p>السجل المالي نظيف تماماً! لم يتم رصد أي عمليات صرف مالي على هذه المحفظة بعد.</p>
+                    <p>السجل المالي نظيف تماماً! لم يتم رصد أي عمليات صرف مالي بعد.</p>
                 </div>`;
             return;
         }
 
-        // خريطة الأيقونات المخصصة للفئات
         const categoryIcons = {
             housing: 'fa-home', food: 'fa-utensils', transport: 'fa-car',
             bills: 'fa-file-invoice-dollar', health: 'fa-heartbeat',
@@ -300,14 +370,11 @@ const AppEngine = {
         appState.ledger.forEach((item, index) => {
             const li = document.createElement('li');
             li.className = 'ledger-item';
-            
             const iconClass = categoryIcons[item.category] || 'fa-money-bill';
 
             li.innerHTML = `
                 <div class="ledger-item-right">
-                    <div class="category-icon-tag">
-                        <i class="fas ${iconClass}"></i>
-                    </div>
+                    <div class="category-icon-tag"><i class="fas ${iconClass}"></i></div>
                     <div class="item-details">
                         <h4>${item.description}</h4>
                         <span>${item.date}</span>
@@ -315,14 +382,13 @@ const AppEngine = {
                 </div>
                 <div class="ledger-item-left">
                     <span class="item-amount-badge">${item.amount.toFixed(2)} ج.م</span>
-                    <button class="btn-reverse-transaction" onclick="ModalManager.openDeleteConfirmation(${index})" title="حذف القيد المالي">
+                    <button class="btn-reverse-transaction" onclick="ModalManager.openDeleteConfirmation(${index})">
                         <i class="fas fa-trash-alt"></i>
                     </button>
                 </div>
             `;
             list.appendChild(li);
         });
-
         container.appendChild(list);
     },
 
@@ -330,29 +396,13 @@ const AppEngine = {
         const ctx = document.getElementById('analyticsChart')?.getContext('2d');
         if (!ctx) return;
 
-        // تجميع المصاريف حسب الفئة لتغذية الـ Chart
-        const categoriesData = {
-            housing: 0, food: 0, transport: 0, bills: 0, health: 0, entertainment: 0, shopping: 0, other: 0
-        };
-        
-        appState.ledger.forEach(item => {
-            if (categoriesData[item.category] !== undefined) {
-                categoriesData[item.category] += item.amount;
-            } else {
-                categoriesData.other += item.amount;
-            }
-        });
+        const categoriesData = { housing: 0, food: 0, transport: 0, bills: 0, health: 0, entertainment: 0, shopping: 0, other: 0 };
+        appState.ledger.forEach(item => { if (categoriesData[item.category] !== undefined) categoriesData[item.category] += item.amount; });
 
         const dataValues = Object.values(categoriesData);
-        const hasExpenses = dataValues.some(v => v > 0);
+        if (financialChartInstance) financialChartInstance.destroy();
 
-        // حل مشكلة تسريب الذاكرة وتضارب الرسوم (Crucial Memory Management Fixed)
-        if (financialChartInstance) {
-            financialChartInstance.destroy();
-        }
-
-        if (!hasExpenses) {
-            // إظهار نص بديل إذا لم يكن هناك مصاريف لعرضها
+        if (!dataValues.some(v => v > 0)) {
             document.getElementById('chartEmptyState').classList.remove('hidden');
             document.getElementById('analyticsChart').classList.add('hidden');
             return;
@@ -361,19 +411,13 @@ const AppEngine = {
         document.getElementById('chartEmptyState').classList.add('hidden');
         document.getElementById('analyticsChart').classList.remove('hidden');
 
-        // جلب لون السمات للحصول على رسم متناسق مع الـ Accent Color الحالي
-        const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#10b981';
-
         financialChartInstance = new Chart(ctx, {
             type: 'doughnut',
             data: {
                 labels: ['سكن/مرافق', 'طعام/شراب', 'مواصلات', 'فواتير', 'صحة', 'ترفيه', 'تسوّق', 'أخرى'],
                 datasets: [{
                     data: dataValues,
-                    backgroundColor: [
-                        '#ef4444', '#f97316', '#eab308', '#06b6d4', 
-                        '#10b981', '#6366f1', '#a855f7', '#64748b'
-                    ],
+                    backgroundColor: ['#ef4444', '#f97316', '#eab308', '#06b6d4', '#10b981', '#6366f1', '#a855f7', '#64748b'],
                     borderWidth: 2,
                     borderColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-secondary').trim() || '#1e293b'
                 }]
@@ -381,20 +425,11 @@ const AppEngine = {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            font: { family: 'Cairo', size: 11 },
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim() || '#94a3b8'
-                        }
-                    }
-                },
+                plugins: { legend: { position: 'bottom', labels: { font: { family: 'Cairo', size: 11 }, color: '#94a3b8' } } },
                 cutout: '70%'
             }
         });
     }
 };
 
-// تشغيل التطبيق بمجرد تحميل الشجرة الهيكلية
 document.addEventListener('DOMContentLoaded', AppEngine.init);
