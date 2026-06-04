@@ -2,142 +2,148 @@
 <html lang="ar" dir="rtl" data-theme="dark" data-accent="emerald">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المحفظة الذكية | Smart Wallet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>المحفظة الذكية المتميزة | Smart Wallet Pro</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css?v=3.1">
+    <link rel="stylesheet" href="styles.css?v=4.0">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-    <div id="securityLockScreen" class="app-loader hidden" style="background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(20px); z-index: 999999; position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center;">
-        <div class="card" style="width: 90%; max-width: 340px; text-align: center; border: 1px solid var(--border-color); background: var(--bg-secondary); padding: 1.5rem;">
-            <div class="logo-icon" style="margin: 0 auto 1rem; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-shield-alt"></i></div>
-            <h3 style="font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary);">المحفظة مغلقة بأمان</h3>
-            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1.5rem;">يرجى إدخال الرمز السري الشخصي لفتح المحفظة واستعراض البيانات المالية</p>
+    <div id="securityLockScreen" class="app-loader hidden" style="background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(24px); z-index: 999999; position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center;">
+        <div class="card" style="width: 92%; max-width: 350px; text-align: center; border: 1px solid var(--border-color); background: var(--bg-secondary); padding: 2rem; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+            <div class="logo-icon" style="margin: 0 auto 1.25rem; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; background: var(--accent-light); color: var(--accent); border-radius: 50%; font-size: 1.5rem;"><i class="fas fa-shield-alt"></i></div>
+            <h3 style="font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary); font-size: 1.3rem;">المحفظة مغلقة بأمان</h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.75rem;">يرجى إدخال الرمز السري الشخصي لفتح المحفظة واستعراض البيانات المالية</p>
             <div class="form-group">
-                <input type="password" id="pinInput" placeholder="••••" maxlength="4" style="text-align: center; font-size: 1.8rem; letter-spacing: 0.5rem; padding: 0.5rem; background: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 8px;" inputmode="numeric">
+                <input type="password" id="pinInput" placeholder="••••" maxlength="4" style="text-align: center; font-size: 2rem; letter-spacing: 0.75rem; padding: 0.6rem; background: var(--bg-primary); color: var(--text-primary); border: 2px solid var(--border-color); border-radius: 14px; width: 100%; box-sizing: border-box;" inputmode="numeric">
             </div>
-            <button id="btnUnlockApp" class="btn-primary w-100 mt-3" style="font-weight: bold;">إلغاء قفل الواجهة</button>
+            <button id="btnUnlockApp" class="btn-primary w-100 mt-4" style="font-weight: bold; padding: 0.85rem; border-radius: 14px;">إلغاء قفل الواجهة</button>
         </div>
     </div>
 
     <div id="appLoader" class="app-loader">
         <div class="spinner"></div>
-        <p style="font-family: 'Cairo', sans-serif; font-weight: 600;">جاري تحميل النظام المالي الذكي...</p>
+        <p style="font-family: 'Cairo', sans-serif; font-weight: 600; margin-top: 1rem; letter-spacing: 0.5px;">جاري تحميل النظام المالي الذكي...</p>
     </div>
 
     <div class="app-container">
         
-        <header class="app-header">
+        <header class="app-header" style="border-radius: 0 0 24px 24px; padding: 1.25rem 1.5rem; background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(30, 41, 59, 0.7) 100%); backdrop-filter: blur(12px);">
             <div class="brand">
-                <div class="logo-icon"><i class="fas fa-wallet"></i></div>
+                <div class="logo-icon" style="background: var(--accent-gradient); color: #fff; box-shadow: 0 8px 20px var(--accent-glow);"><i class="fas fa-vault"></i></div>
                 <div class="brand-text">
-                    <h1>المحفظة الذكية</h1>
-                    <span class="version">إصدار التميّز المطور v3.0</span>
+                    <h1 style="font-size: 1.4rem; font-weight: 800;">المحفظة الذكية <span style="color: var(--accent); font-weight: 900;">PRO</span></h1>
+                    <span class="version">النظام المالي المزدوج v4.0</span>
                 </div>
             </div>
-            <div class="header-actions">
-                <button class="icon-button" id="openSettingsBtn" title="إعدادات وتخصيص المظهر">
+            <div class="header-actions" style="display: flex; gap: 0.75rem;">
+                <button class="icon-button" id="openSettingsBtn" title="إعدادات وتخصيص المظهر" style="border-radius: 12px; width: 44px; height: 44px;">
                     <i class="fas fa-sliders-h"></i>
                 </button>
             </div>
         </header>
 
-        <div id="budgetAlertBanner" class="toast error hidden" style="position: static; transform: none; width: 100%; box-sizing: border-box; margin-bottom: 0.5rem;">
+        <div class="wallet-selector-bar" style="margin: 1.25rem 0; display: flex; background: var(--bg-secondary); padding: 0.4rem; border-radius: 16px; border: 1px solid var(--border-color); gap: 0.4rem;">
+            <button id="switchToPersonalBtn" class="wallet-tab-btn active" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem; border-radius: 12px; font-family: 'Cairo'; font-weight: 700; font-size: 0.9rem; border: none; cursor: pointer; transition: all 0.25s ease;">
+                <i class="fas fa-user-shield"></i> المصروفات الشخصية (فردي)
+            </button>
+            <button id="switchToFamilyBtn" class="wallet-tab-btn" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem; border-radius: 12px; font-family: 'Cairo'; font-weight: 700; font-size: 0.9rem; border: none; cursor: pointer; transition: all 0.25s ease;">
+                <i class="fas fa-home-user"></i> مصروفات المنزل والعائلة
+            </button>
+        </div>
+
+        <div id="budgetAlertBanner" class="toast error hidden" style="position: static; transform: none; width: 100%; box-sizing: border-box; margin-bottom: 1rem; border-radius: 16px;">
             <i class="fas fa-exclamation-triangle"></i>
-            <span>تنبيّه فني حرج: تجاوزت معدلات الصرف الحالية 85% من إجمالي ميزانيتك المتوفرة!</span>
+            <span>تنبيه مالي: تجاوزت معدلات الصرف الحالية 85% من الميزانية المحددة لهذه المحفظة!</span>
         </div>
 
         <div class="tab-system-container">
-            <nav class="tab-navigation">
-                <button class="tab-button active" data-tab="register">
+            <nav class="tab-navigation" style="margin-bottom: 1.25rem; background: var(--bg-secondary); border-radius: 14px; padding: 0.25rem;">
+                <button class="tab-button active" data-tab="register" style="border-radius: 12px; padding: 0.75rem 1rem;">
                     <i class="fas fa-cash-register"></i> إدارة الدخل والقيود
                 </button>
-                <button class="tab-button" data-tab="analytics">
+                <button class="tab-button" data-tab="analytics" style="border-radius: 12px; padding: 0.75rem 1rem;">
                     <i class="fas fa-chart-pie"></i> التحليل المالي والتقارير
                 </button>
             </nav>
 
             <main id="registerPane" class="tab-pane">
                 <div class="income-grid">
-                    <section class="card">
+                    
+                    <section class="card" style="border-radius: 20px;">
                         <div class="card-header">
-                            <h2><i class="fas fa-coins" style="color: var(--accent);"></i> وحدة إدارة الدخل وتخصيص الميزانية</h2>
+                            <h2><i class="fas fa-coins" style="color: var(--accent);"></i> الموارد المالية ومحرك التقسيم الذكي</h2>
                         </div>
                         
                         <div class="form-group">
                             <label>الراتب الأساسي الثابت (ج.م)</label>
-                            <input type="number" id="basicIncome" placeholder="0.00" min="0">
+                            <input type="number" id="basicIncome" placeholder="0.00" min="0" style="border-radius: 12px; padding: 0.75rem;">
                         </div>
                         <div class="form-group">
                             <label>العمل الحر / الإضافي (ج.م)</label>
-                            <input type="number" id="freelanceIncome" placeholder="0.00" min="0">
+                            <input type="number" id="freelanceIncome" placeholder="0.00" min="0" style="border-radius: 12px; padding: 0.75rem;">
                         </div>
                         <div class="form-group">
                             <label>الاستثمارات / العوائد (ج.م)</label>
-                            <input type="number" id="investmentsIncome" placeholder="0.00" min="0">
+                            <input type="number" id="investmentsIncome" placeholder="0.00" min="0" style="border-radius: 12px; padding: 0.75rem;">
                         </div>
 
-                        <div class="total-income-display">
+                        <div class="total-income-display" style="border-radius: 14px; background: linear-gradient(45deg, var(--bg-primary) 0%, var(--bg-secondary) 100%); padding: 1rem 1.25rem;">
                             <span>إجمالي الدخل المتوفر الحالي:</span>
-                            <span><strong id="totalIncomeText">0.00</strong> ج.م</span>
+                            <span><strong id="totalIncomeText" style="color: var(--accent); font-size: 1.3rem;">0.00</strong> ج.م</span>
                         </div>
 
-                        <div class="slider-container" style="margin-top: 1.5rem;">
-                            <div class="slider-labels">
-                                <span>المصروفات الشخصية: <span id="personalRatioLabel">50%</span></span>
-                                <span>مصروفات المنزل والعائلة: <span id="familyRatioLabel">50%</span></span>
+                        <div class="slider-container" style="margin-top: 1.75rem; background: var(--bg-primary); padding: 1.25rem; border-radius: 16px; border: 1px solid var(--border-color);">
+                            <div class="slider-labels" style="margin-bottom: 0.75rem;">
+                                <span style="font-weight: 600;">المصروفات الشخصية: <span id="personalRatioLabel" style="color: var(--accent); font-weight: 800;">50%</span></span>
+                                <span style="font-weight: 600;">مصروفات العائلة: <span id="familyRatioLabel" style="color: #6366f1; font-weight: 800;">50%</span></span>
                             </div>
                             <input type="range" id="allocationSlider" min="0" max="100" value="50" class="custom-slider">
+                            <p style="font-size: 0.75rem; color: var(--text-secondary); text-align: center; margin-top: 0.75rem; line-height: 1.4;"><i class="fas fa-info-circle"></i> يحدد السلايدر السقف المالي المستهدف لكل محفظة بشكل منفصل ومستقل.</p>
                         </div>
 
-                        <div class="allocation-cards">
-                            <div class="alloc-card personal">
-                                <span class="alloc-title">حصتك الشخصية المتاحة</span>
-                                <div class="alloc-amount"><span id="personalAllocText">0.00</span> <small style="font-size: 0.6rem;">ج.م</small></div>
+                        <div class="allocation-cards" style="gap: 0.75rem; margin-top: 1.25rem;">
+                            <div class="alloc-card personal" style="border-radius: 14px; border-right: 4px solid var(--accent); background: rgba(16, 185, 129, 0.04);">
+                                <span class="alloc-title">سقف الميزانية الشخصية المتاح</span>
+                                <div class="alloc-amount" style="font-size: 1.25rem;"><span id="personalAllocText">0.00</span> <small style="font-size: 0.65rem; color: var(--text-secondary);">ج.م</small></div>
                             </div>
-                            <div class="alloc-card family">
-                                <span class="alloc-title">حصة المنزل والعائلة المتاحة</span>
-                                <div class="alloc-amount"><span id="familyAllocText">0.00</span> <small style="font-size: 0.6rem;">ج.m</small></div>
+                            <div class="alloc-card family" style="border-radius: 14px; border-right: 4px solid #6366f1; background: rgba(99, 102, 241, 0.04);">
+                                <span class="alloc-title">سقف ميزانية المنزل والعائلة المتاح</span>
+                                <div class="alloc-amount" style="font-size: 1.25rem; color: #6366f1;"><span id="familyAllocText">0.00</span> <small style="font-size: 0.65rem; color: var(--text-secondary);">ج.م</small></div>
                             </div>
                         </div>
                     </section>
 
-                    <section class="card">
+                    <section class="card" style="border-radius: 20px;">
                         <div class="card-header">
-                            <h2><i class="fas fa-plus-circle" style="color: var(--accent);"></i> تسجيل عملية مالية جديدة</h2>
+                            <h2>
+                                <i class="fas fa-plus-circle" style="color: var(--accent);"></i> 
+                                تسجيل عملية في <span id="txFormWalletName" style="color: var(--accent); font-weight: 800;">المحفظة الشخصية</span>
+                            </h2>
                         </div>
                         <form id="transactionForm">
                             <div class="form-group">
                                 <label>قيمة المبلغ المالي المصروف (ج.م) *</label>
-                                <input type="number" id="txAmount" placeholder="0.00" step="0.01" required>
+                                <input type="number" id="txAmount" placeholder="0.00" step="0.01" required style="border-radius: 12px; padding: 0.75rem;">
                             </div>
                             <div class="form-group">
                                 <label>تصنيف وفئة المصروف *</label>
-                                <select id="txCategory" required>
-                                    <option value="housing">سكن ومرافق ومستلزمات منزلية</option>
-                                    <option value="food">طعام وشراب ومشتريات بقالة</option>
-                                    <option value="transport">مواصلات وتنقّل ومصاريف سيارة</option>
-                                    <option value="bills">فواتير (إنترنت، كهرباء، غاز، اتصالات)</option>
-                                    <option value="health">رعاية صحية، أدوية، عيادات وطوارئ</option>
-                                    <option value="entertainment">ترفيه، خروجات، ثقافة واشتراكات</option>
-                                    <option value="shopping">تسوق، ملابس، إلكترونيات وأدوات شخصية</option>
-                                    <option value="other">أوجه صرف أخرى غير مصنفة</option>
-                                </select>
+                                <select id="txCategory" required style="border-radius: 12px; padding: 0.75rem;">
+                                    </select>
                             </div>
                             <div class="form-group">
                                 <label>البيان / الوصف التفصيلي</label>
-                                <input type="text" id="txDescription" placeholder="مثال: شراء مستلزمات السوبرماركت">
+                                <input type="text" id="txDescription" placeholder="مثال: شراء مستلزمات أو أدوات شخصية" style="border-radius: 12px; padding: 0.75rem;">
                             </div>
                             <div class="form-group">
                                 <label>تاريخ القيد المالي</label>
-                                <input type="date" id="txDate">
+                                <input type="date" id="txDate" style="border-radius: 12px; padding: 0.75rem;">
                             </div>
-                            <button type="submit" class="btn-primary w-100 mt-3">
+                            <button type="submit" class="btn-primary w-100 mt-3" style="border-radius: 12px; padding: 0.85rem; font-weight: 700; box-shadow: 0 8px 20px var(--accent-glow);">
                                 <i class="fas fa-save"></i> ترحيل وقيد العملية المالية
                             </button>
                         </form>
@@ -146,59 +152,60 @@
             </main>
 
             <main id="analyticsPane" class="tab-pane hidden">
-                <div class="dashboard-stats-grid" style="margin-bottom: 1.5rem;">
-                    <div class="stat-card">
-                        <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+                
+                <div class="dashboard-stats-grid" style="margin-bottom: 1.5rem; gap: 0.75rem;">
+                    <div class="stat-card" style="border-radius: 16px; background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(30,41,59,0.3) 100%);">
+                        <div class="stat-icon" id="dashIncomeIcon"><i class="fas fa-wallet"></i></div>
                         <div class="stat-info">
-                            <span class="stat-label">إجمالي الدخل المجمع</span>
+                            <span class="stat-label" id="dashIncomeLabel">الميزانية المستهدفة للمحفظة</span>
                             <div class="stat-value"><span id="dashboardTotalIncome">0.00</span> <span class="stat-unit">ج.م</span></div>
                         </div>
                     </div>
-                    <div class="stat-card" style="border-right: 4px solid #ef4444;">
+                    <div class="stat-card" style="border-radius: 16px; border-right: 4px solid #ef4444; background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(239,68,68,0.02) 100%);">
                         <div class="stat-icon" style="color: #ef4444;"><i class="fas fa-hand-holding-usd"></i></div>
                         <div class="stat-info">
-                            <span class="stat-label">المبالغ المصروفة</span>
-                            <div class="stat-value" style="color: #ef4444;"><span id="dashboardExpenses">0.00</span> <span class="stat-unit">ج.م</span></div>
+                            <span class="stat-label">المبالغ المصروفة فعلياً</span>
+                            <div class="stat-value" style="color: #ef4444;"><span id="dashboardExpenses">0.00</span> <span class="stat-unit">ج.m</span></div>
                         </div>
                     </div>
-                    <div id="remainingCard" class="stat-card" style="border-right: 4px solid var(--accent);">
+                    <div id="remainingCard" class="stat-card" style="border-radius: 16px; border-right: 4px solid var(--accent); background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(16,185,129,0.02) 100%);">
                         <div class="stat-icon"><i class="fas fa-piggy-bank"></i></div>
                         <div class="stat-info">
-                            <span class="stat-label">الرصيد المتبقي المتاح</span>
+                            <span class="stat-label">المتبقي المتاح بالخزنة</span>
                             <div class="stat-value" style="color: var(--accent);"><span id="dashboardRemaining">0.00</span> <span class="stat-unit">ج.م</span></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="ledger-workspace">
-                    <section class="card">
+                    <section class="card" style="border-radius: 20px;">
                         <div class="card-header">
-                            <h3><i class="fas fa-chart-pie"></i> الهيكل الموزع للمصروفات</h3>
+                            <h3><i class="fas fa-chart-pie"></i> الهيكل الموزع لمصروفات <span id="chartWalletName" style="color: var(--accent);">المحفظة النشطة</span></h3>
                         </div>
-                        <div class="chart-wrapper">
+                        <div class="chart-wrapper" style="min-height: 240px; position: relative;">
                             <canvas id="analyticsChart"></canvas>
                             <div id="chartEmptyState" class="empty-state">
-                                <i class="fas fa-chart-bar" style="font-size: 1.5rem; opacity: 0.5;"></i>
-                                <p style="font-size: 0.8rem;">لا توجد بيانات كافية لرسم الهيكل البياني؛ يرجى إضافة عمليات أولاً.</p>
+                                <i class="fas fa-chart-bar" style="font-size: 2rem; opacity: 0.3; margin-bottom: 0.5rem;"></i>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary);">لا توجد قيود مصروفات في هذه المحفظة حالياً لتوليد الرسم البياني.</p>
                             </div>
                         </div>
                     </section>
 
-                    <section class="card">
+                    <section class="card" style="border-radius: 20px;">
                         <div class="card-header">
-                            <h3><i class="fas fa-list-ul"></i> السجل التاريخي للعمليات المُرَحّلة</h3>
+                            <h3><i class="fas fa-list-ul"></i> بيان العمليات التفصيلي لـ <span id="ledgerWalletName" style="color: var(--accent);">المحفظة النشطة</span></h3>
                         </div>
-                        <div id="ledgerListContainer" class="ledger-container">
+                        <div id="ledgerListContainer" class="ledger-container" style="max-height: 400px; overflow-y: auto; padding-right: 0.25rem;">
                             </div>
                     </section>
                 </div>
             </main>
         </div>
 
-        <footer class="app-footer">
+        <footer class="app-footer" style="margin-top: 2.5rem; padding: 1.5rem 0; border-top: 1px solid var(--border-color);">
             <div class="footer-attribution">
-                <span class="credit-text">Built by Hazem K H Madi - Senior Product Designer</span>
-                <div class="footer-links">
+                <span class="credit-text" style="font-weight: 600; opacity: 0.85;">Built by Hazem K H Madi - Senior Product Designer</span>
+                <div class="footer-links" style="margin-top: 0.5rem; gap: 1rem;">
                     <a href="https://hazemkhmadi.framer.ai" target="_blank" class="footer-link-item"><i class="fas fa-globe"></i> Portfolio</a>
                     <a href="https://linkedin.com/in/hazem-k-h-madi" target="_blank" class="footer-link-item"><i class="fab fa-linkedin"></i> LinkedIn</a>
                 </div>
@@ -207,41 +214,41 @@
 
     </div> <div id="settingsDrawer" class="drawer hidden">
         <div class="drawer-overlay" id="closeSettingsOverlay"></div>
-        <div class="drawer-content">
-            <div class="drawer-header">
-                <h3 style="font-weight: 700;"><i class="fas fa-sliders-h"></i> نظام التخصيص والمظهر</h3>
-                <button class="close-button" id="closeSettingsBtn">&times;</button>
+        <div class="drawer-content" style="border-radius: 24px 0 0 24px; padding: 1.75rem;">
+            <div class="drawer-header" style="margin-bottom: 1.5rem;">
+                <h3 style="font-weight: 700; font-size: 1.15rem;"><i class="fas fa-sliders-h" style="color: var(--accent);"></i> لوحة التحكم والتخصيص</h3>
+                <button class="close-button" id="closeSettingsBtn" style="font-size: 1.75rem;">&times;</button>
             </div>
             
-            <div class="setting-group">
-                <span class="setting-label">نمط الإضاءة العام</span>
-                <div class="theme-switch-container">
-                    <button class="theme-btn active" id="themeDarkBtn"><i class="fas fa-moon"></i> داكن</button>
-                    <button class="theme-btn" id="themeLightBtn"><i class="fas fa-sun"></i> مضيء</button>
+            <div class="setting-group" style="margin-bottom: 1.25rem;">
+                <span class="setting-label">نمط المظهر العام</span>
+                <div class="theme-switch-container" style="border-radius: 12px; padding: 0.25rem;">
+                    <button class="theme-btn active" id="themeDarkBtn" style="border-radius: 10px;"><i class="fas fa-moon"></i> داكن</button>
+                    <button class="theme-btn" id="themeLightBtn" style="border-radius: 10px;"><i class="fas fa-sun"></i> مضيء</button>
                 </div>
             </div>
 
-            <div class="setting-group">
-                <span class="setting-label">اللون الرئيسي للنظام (Accent Color)</span>
-                <div class="accent-picker">
+            <div class="setting-group" style="margin-bottom: 1.5rem;">
+                <span class="setting-label">اللون الرئيسي للهوية الرقمية</span>
+                <div class="accent-picker" style="gap: 0.75rem; margin-top: 0.5rem;">
                     <div class="accent-dot emerald active" data-accent="emerald" title="زمردي"></div>
                     <div class="accent-dot ocean" data-accent="ocean" title="محيطي"></div>
                     <div class="accent-dot sunset" data-accent="sunset" title="غروبي"></div>
                 </div>
             </div>
 
-            <div class="setting-group" style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1.25rem;">
-                <span class="setting-label">أمان الخصوصية وقفل الشاشة</span>
-                <button id="btnToggleSecurity" class="btn-secondary w-100" style="margin-bottom: 0.75rem; font-size: 0.8rem; justify-content: flex-start; gap: 0.5rem; padding: 0.75rem;">
+            <div class="setting-group" style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+                <span class="setting-label">أمان البيانات والخصوصية المحمية</span>
+                <button id="btnToggleSecurity" class="btn-secondary w-100" style="margin-bottom: 0.85rem; font-size: 0.85rem; justify-content: flex-start; gap: 0.6rem; padding: 0.85rem; border-radius: 12px;">
                     <i class="fas fa-lock"></i> تفعيل قفل PIN سري
                 </button>
                 
-                <span class="setting-label">الحفظ السحابي والتنقل والنسخ (Backup)</span>
+                <span class="setting-label">مزامنة البيانات والنسخ والتحميل</span>
                 <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-                    <button id="btnExportBackup" class="btn-secondary w-100" style="font-size: 0.75rem; padding: 0.60rem;" title="تحميل نسخة احتياطية مشفرة للهاتف">
+                    <button id="btnExportBackup" class="btn-secondary w-100" style="font-size: 0.8rem; padding: 0.75rem; border-radius: 12px;" title="تحميل نسخة احتياطية مشفرة للهاتف">
                         <i class="fas fa-download"></i> تصدير البيانات
                     </button>
-                    <label class="btn-secondary w-100" style="font-size: 0.75rem; padding: 0.60rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; margin-bottom:0;" title="رفع واستعادة ميزانية سابقة">
+                    <label class="btn-secondary w-100" style="font-size: 0.8rem; padding: 0.75rem; border-radius: 12px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; margin-bottom:0;" title="رفع واستعادة ميزانية سابقة">
                         <i class="fas fa-upload"></i> استيراد...
                         <input type="file" id="btnImportBackup" accept=".json" style="display: none;">
                     </label>
@@ -250,26 +257,60 @@
         </div>
     </div>
 
-    <div id="toastContainer" class="toast-container"></div>
+    <div id="editTransactionModal" class="drawer hidden" style="justify-content: center; align-items: center; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 20000;">
+        <div class="drawer-overlay" id="closeEditModalOverlay" style="background: rgba(15,23,42,0.7); backdrop-filter: blur(4px);"></div>
+        <div class="card" style="position: relative; width: 92%; max-width: 420px; z-index: 20001; background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.4); animation: scaleUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);">
+            <div class="card-header" style="border-bottom: none; margin-bottom: 1rem; padding-bottom: 0;">
+                <h3 style="font-weight: 700; color: var(--accent); display: flex; gap: 0.5rem; align-items: center;">
+                    <i class="fas fa-edit"></i> تعديل وتحديث قيد مالي
+                </h3>
+            </div>
+            <form id="editTransactionForm">
+                <div class="form-group">
+                    <label>قيمة المبلغ المصرفي المعدل (ج.م) *</label>
+                    <input type="number" id="editTxAmount" step="0.01" required style="border-radius: 10px; padding: 0.65rem;">
+                </div>
+                <div class="form-group">
+                    <label>تصنيف وفئة المصروف *</label>
+                    <select id="editTxCategory" required style="border-radius: 10px; padding: 0.65rem;">
+                        </select>
+                </div>
+                <div class="form-group">
+                    <label>البيان / الوصف المحدث</label>
+                    <input type="text" id="editTxDescription" style="border-radius: 10px; padding: 0.65rem;">
+                </div>
+                <div class="form-group">
+                    <label>تاريخ القيد الجديد</label>
+                    <input type="date" id="editTxDate" style="border-radius: 10px; padding: 0.65rem;">
+                </div>
+                <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
+                    <button type="submit" class="btn-primary w-100" style="border-radius: 12px; padding: 0.75rem; font-weight: 700;"><i class="fas fa-check"></i> حفظ التحديثات</button>
+                    <button type="button" id="cancelEditBtn" class="btn-secondary w-100" style="border-radius: 12px; padding: 0.75rem;">إلغاء الأمر</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <div id="deleteConfirmationModal" class="drawer hidden" style="justify-content: center; align-items: center; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 10000;">
-        <div class="drawer-overlay" id="closeDeleteModalOverlay" style="background: rgba(0, 0, 0, 0.6);"></div>
-        <div class="card" style="position: relative; width: 90%; max-width: 400px; z-index: 10001; background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 12px;">
-            <div class="card-header" style="border-bottom: none; margin-bottom: 0.5rem; padding-bottom: 0;">
-                <h3 style="color: #ef4444; width: 100%; justify-content: center; font-weight: 700; display: flex; gap: 0.5rem; align-items: center;">
+        <div class="drawer-overlay" id="closeDeleteModalOverlay" style="background: rgba(0, 0, 0, 0.5);"></div>
+        <div class="card" style="position: relative; width: 90%; max-width: 380px; z-index: 10001; background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 18px; text-align: center;">
+            <div class="card-header" style="border-bottom: none; margin-bottom: 0.5rem; padding-bottom: 0; justify-content: center;">
+                <h3 style="color: #ef4444; font-weight: 700; display: flex; gap: 0.5rem; align-items: center;">
                     <i class="fas fa-exclamation-triangle"></i> تأكيد حذف القيد!
                 </h3>
             </div>
-            <p style="text-align: center; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6;">
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6;">
                 هل أنت متأكد تماماً من رغبتك في حذف هذا القيد المالي من سجل محفظتك؟ هذه العملية نهائية ولا يمكن التراجع عنها.
             </p>
             <div style="display: flex; gap: 0.5rem;">
-                <button id="confirmDeleteBtn" class="btn-primary w-100" style="background-color: #ef4444; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">نعم، احذف القيد</button>
-                <button id="cancelDeleteBtn" class="btn-secondary w-100">إلغاء الأمر</button>
+                <button id="confirmDeleteBtn" class="btn-primary w-100" style="background-color: #ef4444; border-radius: 12px; padding: 0.75rem; font-weight: bold; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">نعم، احذف القيد</button>
+                <button id="cancelDeleteBtn" class="btn-secondary w-100" style="border-radius: 12px; padding: 0.75rem;">إلغاء الأمر</button>
             </div>
         </div>
     </div>
 
-    <script src="app.js?v=3.1"></script>
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="app.js?v=4.0"></script>
 </body>
 </html>
