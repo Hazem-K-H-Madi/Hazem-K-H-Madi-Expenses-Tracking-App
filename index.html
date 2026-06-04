@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark" data-color="indigo">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
@@ -9,303 +9,1462 @@
     <meta name="apple-mobile-web-app-title" content="متعقب المصاريف">
     <meta name="description" content="تطبيق متعقب المصاريف الشخصية والبيت والعائلة - بالجنيه المصري | Hazem K H Madi">
     <title>متعقب المصاريف | Hazem K H Madi</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         :root {
+            --font-arabic: 'Cairo', 'Segoe UI', sans-serif;
+            --font-latin: 'Inter', system-ui, sans-serif;
+            --safe-bottom: env(safe-area-inset-bottom, 16px);
+            --safe-top: env(safe-area-inset-top, 0px);
+            --radius-xs: 6px;
+            --radius-sm: 10px;
+            --radius-md: 14px;
+            --radius-lg: 18px;
+            --radius-xl: 22px;
+            --radius-2xl: 28px;
+            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --transition-spring: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Theme: Dark Indigo (default) */
+        [data-theme="dark"][data-color="indigo"] {
             --bg-canvas: #0d0f14;
             --bg-surface: #14161c;
             --bg-elevated: #1a1c23;
             --bg-overlay: #1f2129;
+            --bg-input: #1a1c23;
             --text-primary: #f0f2f5;
             --text-secondary: #b0b5be;
             --text-muted: #6b7280;
-            --accent-indigo: #6366f1;
-            --accent-purple: #8b5cf6;
-            --accent-cyan: #0ea5e9;
-            --accent-rose: #f43f5e;
-            --accent-amber: #f59e0b;
-            --accent-emerald: #10b981;
-            --border-subtle: rgba(255,255,255,0.06);
-            --border-medium: rgba(255,255,255,0.1);
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.25);
-            --shadow-md: 0 8px 24px rgba(0,0,0,0.4);
-            --shadow-lg: 0 16px 40px rgba(0,0,0,0.55);
-            --radius-sm: 10px;
-            --radius-md: 16px;
-            --radius-lg: 20px;
-            --radius-xl: 24px;
-            --transition-snappy: 0.2s cubic-bezier(0.4,0,0.2,1);
-            --transition-bounce: 0.35s cubic-bezier(0.34,1.56,0.64,1);
-            --font-arabic: 'Cairo', 'Segoe UI', sans-serif;
-            --font-latin: 'Inter', system-ui, sans-serif;
-            --safe-bottom: env(safe-area-inset-bottom, 16px);
+            --accent-primary: #6366f1;
+            --accent-secondary: #818cf8;
+            --accent-tertiary: #4f46e5;
+            --accent-glow: rgba(99, 102, 241, 0.35);
+            --accent-soft: rgba(99, 102, 241, 0.12);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #f43f5e;
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --border-medium: rgba(255, 255, 255, 0.1);
+            --border-strong: rgba(255, 255, 255, 0.18);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+            --header-bg: #1a1c23;
+            --card-border: rgba(255, 255, 255, 0.06);
+            --progress-bg: rgba(255, 255, 255, 0.08);
+            --modal-overlay: rgba(0, 0, 0, 0.75);
+            --toast-bg: #1f2937;
+            --nav-bg: #1a1c23;
+            --footer-border: rgba(255, 255, 255, 0.06);
         }
 
-        * { margin:0; padding:0; box-sizing:border-box; }
-        html { -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+        /* Dark Emerald */
+        [data-theme="dark"][data-color="emerald"] {
+            --bg-canvas: #0a0f0c;
+            --bg-surface: #0f1612;
+            --bg-elevated: #141c17;
+            --bg-overlay: #18201b;
+            --bg-input: #141c17;
+            --text-primary: #e8f5ed;
+            --text-secondary: #a3c4ae;
+            --text-muted: #5c7a68;
+            --accent-primary: #10b981;
+            --accent-secondary: #34d399;
+            --accent-tertiary: #059669;
+            --accent-glow: rgba(16, 185, 129, 0.35);
+            --accent-soft: rgba(16, 185, 129, 0.12);
+            --success: #34d399;
+            --warning: #f59e0b;
+            --danger: #f43f5e;
+            --border-subtle: rgba(255, 255, 255, 0.05);
+            --border-medium: rgba(255, 255, 255, 0.09);
+            --border-strong: rgba(255, 255, 255, 0.16);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+            --header-bg: #141c17;
+            --card-border: rgba(255, 255, 255, 0.05);
+            --progress-bg: rgba(255, 255, 255, 0.07);
+            --modal-overlay: rgba(0, 0, 0, 0.75);
+            --toast-bg: #18201b;
+            --nav-bg: #141c17;
+            --footer-border: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Dark Rose */
+        [data-theme="dark"][data-color="rose"] {
+            --bg-canvas: #140b0d;
+            --bg-surface: #1a1013;
+            --bg-elevated: #201518;
+            --bg-overlay: #26191c;
+            --bg-input: #1a1013;
+            --text-primary: #f5e8ec;
+            --text-secondary: #c4a3ad;
+            --text-muted: #7a5c65;
+            --accent-primary: #f43f5e;
+            --accent-secondary: #fb7185;
+            --accent-tertiary: #e11d48;
+            --accent-glow: rgba(244, 63, 94, 0.35);
+            --accent-soft: rgba(244, 63, 94, 0.12);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #f43f5e;
+            --border-subtle: rgba(255, 255, 255, 0.05);
+            --border-medium: rgba(255, 255, 255, 0.09);
+            --border-strong: rgba(255, 255, 255, 0.16);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+            --header-bg: #201518;
+            --card-border: rgba(255, 255, 255, 0.05);
+            --progress-bg: rgba(255, 255, 255, 0.07);
+            --modal-overlay: rgba(0, 0, 0, 0.75);
+            --toast-bg: #201518;
+            --nav-bg: #201518;
+            --footer-border: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Dark Ocean */
+        [data-theme="dark"][data-color="ocean"] {
+            --bg-canvas: #0a0e17;
+            --bg-surface: #0f141f;
+            --bg-elevated: #141a27;
+            --bg-overlay: #19202f;
+            --bg-input: #141a27;
+            --text-primary: #e6f0fa;
+            --text-secondary: #a3c0df;
+            --text-muted: #5c7da0;
+            --accent-primary: #0ea5e9;
+            --accent-secondary: #38bdf8;
+            --accent-tertiary: #0284c7;
+            --accent-glow: rgba(14, 165, 233, 0.35);
+            --accent-soft: rgba(14, 165, 233, 0.12);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #f43f5e;
+            --border-subtle: rgba(255, 255, 255, 0.05);
+            --border-medium: rgba(255, 255, 255, 0.09);
+            --border-strong: rgba(255, 255, 255, 0.16);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+            --header-bg: #141a27;
+            --card-border: rgba(255, 255, 255, 0.05);
+            --progress-bg: rgba(255, 255, 255, 0.07);
+            --modal-overlay: rgba(0, 0, 0, 0.75);
+            --toast-bg: #141a27;
+            --nav-bg: #141a27;
+            --footer-border: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Dark Monochrome */
+        [data-theme="dark"][data-color="mono"] {
+            --bg-canvas: #0a0a0a;
+            --bg-surface: #111111;
+            --bg-elevated: #181818;
+            --bg-overlay: #1e1e1e;
+            --bg-input: #181818;
+            --text-primary: #f5f5f5;
+            --text-secondary: #b0b0b0;
+            --text-muted: #707070;
+            --accent-primary: #888888;
+            --accent-secondary: #a0a0a0;
+            --accent-tertiary: #666666;
+            --accent-glow: rgba(136, 136, 136, 0.3);
+            --accent-soft: rgba(136, 136, 136, 0.1);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #f43f5e;
+            --border-subtle: rgba(255, 255, 255, 0.05);
+            --border-medium: rgba(255, 255, 255, 0.08);
+            --border-strong: rgba(255, 255, 255, 0.14);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+            --header-bg: #181818;
+            --card-border: rgba(255, 255, 255, 0.05);
+            --progress-bg: rgba(255, 255, 255, 0.06);
+            --modal-overlay: rgba(0, 0, 0, 0.8);
+            --toast-bg: #181818;
+            --nav-bg: #181818;
+            --footer-border: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Light Theme - Indigo */
+        [data-theme="light"][data-color="indigo"] {
+            --bg-canvas: #f5f6fa;
+            --bg-surface: #ffffff;
+            --bg-elevated: #ffffff;
+            --bg-overlay: #f0f1f5;
+            --bg-input: #f0f1f5;
+            --text-primary: #1a1d28;
+            --text-secondary: #4a4f5e;
+            --text-muted: #8b8f9a;
+            --accent-primary: #6366f1;
+            --accent-secondary: #818cf8;
+            --accent-tertiary: #4f46e5;
+            --accent-glow: rgba(99, 102, 241, 0.2);
+            --accent-soft: rgba(99, 102, 241, 0.08);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #f43f5e;
+            --border-subtle: rgba(0, 0, 0, 0.06);
+            --border-medium: rgba(0, 0, 0, 0.1);
+            --border-strong: rgba(0, 0, 0, 0.16);
+            --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.15);
+            --header-bg: #ffffff;
+            --card-border: rgba(0, 0, 0, 0.06);
+            --progress-bg: #e8e9ee;
+            --modal-overlay: rgba(0, 0, 0, 0.5);
+            --toast-bg: #1a1d28;
+            --nav-bg: #ffffff;
+            --footer-border: rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="light"][data-color="emerald"] {
+            --bg-canvas: #f2f7f4;
+            --bg-surface: #ffffff;
+            --bg-elevated: #ffffff;
+            --bg-overlay: #edf2ef;
+            --bg-input: #edf2ef;
+            --text-primary: #1a1d28;
+            --text-secondary: #4a5e52;
+            --text-muted: #7a8a80;
+            --accent-primary: #10b981;
+            --accent-secondary: #34d399;
+            --accent-tertiary: #059669;
+            --accent-glow: rgba(16, 185, 129, 0.2);
+            --accent-soft: rgba(16, 185, 129, 0.08);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #f43f5e;
+            --border-subtle: rgba(0, 0, 0, 0.06);
+            --border-medium: rgba(0, 0, 0, 0.1);
+            --border-strong: rgba(0, 0, 0, 0.16);
+            --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.15);
+            --header-bg: #ffffff;
+            --card-border: rgba(0, 0, 0, 0.06);
+            --progress-bg: #e0e8e3;
+            --modal-overlay: rgba(0, 0, 0, 0.5);
+            --toast-bg: #1a1d28;
+            --nav-bg: #ffffff;
+            --footer-border: rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="light"][data-color="rose"] {
+            --bg-canvas: #faf5f6;
+            --bg-surface: #ffffff;
+            --bg-elevated: #ffffff;
+            --bg-overlay: #f5edef;
+            --bg-input: #f5edef;
+            --text-primary: #1a1d28;
+            --text-secondary: #5e4a50;
+            --text-muted: #8a7a80;
+            --accent-primary: #f43f5e;
+            --accent-secondary: #fb7185;
+            --accent-tertiary: #e11d48;
+            --accent-glow: rgba(244, 63, 94, 0.2);
+            --accent-soft: rgba(244, 63, 94, 0.08);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #f43f5e;
+            --border-subtle: rgba(0, 0, 0, 0.06);
+            --border-medium: rgba(0, 0, 0, 0.1);
+            --border-strong: rgba(0, 0, 0, 0.16);
+            --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.15);
+            --header-bg: #ffffff;
+            --card-border: rgba(0, 0, 0, 0.06);
+            --progress-bg: #e8e0e2;
+            --modal-overlay: rgba(0, 0, 0, 0.5);
+            --toast-bg: #1a1d28;
+            --nav-bg: #ffffff;
+            --footer-border: rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="light"][data-color="ocean"] {
+            --bg-canvas: #f2f6fa;
+            --bg-surface: #ffffff;
+            --bg-elevated: #ffffff;
+            --bg-overlay: #edf2f7;
+            --bg-input: #edf2f7;
+            --text-primary: #1a1d28;
+            --text-secondary: #3a5a7a;
+            --text-muted: #6a8aaa;
+            --accent-primary: #0ea5e9;
+            --accent-secondary: #38bdf8;
+            --accent-tertiary: #0284c7;
+            --accent-glow: rgba(14, 165, 233, 0.2);
+            --accent-soft: rgba(14, 165, 233, 0.08);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #f43f5e;
+            --border-subtle: rgba(0, 0, 0, 0.06);
+            --border-medium: rgba(0, 0, 0, 0.1);
+            --border-strong: rgba(0, 0, 0, 0.16);
+            --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.15);
+            --header-bg: #ffffff;
+            --card-border: rgba(0, 0, 0, 0.06);
+            --progress-bg: #dce6f0;
+            --modal-overlay: rgba(0, 0, 0, 0.5);
+            --toast-bg: #1a1d28;
+            --nav-bg: #ffffff;
+            --footer-border: rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="light"][data-color="mono"] {
+            --bg-canvas: #f5f5f5;
+            --bg-surface: #ffffff;
+            --bg-elevated: #ffffff;
+            --bg-overlay: #eeeeee;
+            --bg-input: #eeeeee;
+            --text-primary: #1a1a1a;
+            --text-secondary: #555555;
+            --text-muted: #888888;
+            --accent-primary: #666666;
+            --accent-secondary: #888888;
+            --accent-tertiary: #444444;
+            --accent-glow: rgba(100, 100, 100, 0.2);
+            --accent-soft: rgba(100, 100, 100, 0.08);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #f43f5e;
+            --border-subtle: rgba(0, 0, 0, 0.06);
+            --border-medium: rgba(0, 0, 0, 0.1);
+            --border-strong: rgba(0, 0, 0, 0.16);
+            --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.15);
+            --header-bg: #ffffff;
+            --card-border: rgba(0, 0, 0, 0.06);
+            --progress-bg: #e0e0e0;
+            --modal-overlay: rgba(0, 0, 0, 0.5);
+            --toast-bg: #1a1a1a;
+            --nav-bg: #ffffff;
+            --footer-border: rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: var(--font-arabic);
             background: var(--bg-canvas);
             color: var(--text-primary);
             min-height: 100vh;
+            min-height: -webkit-fill-available;
             overflow-x: hidden;
-            padding-bottom: calc(100px + var(--safe-bottom));
+            padding-bottom: calc(110px + var(--safe-bottom));
             position: relative;
-            transition: background 0.3s;
-        }
-        body::after {
-            content: '';
-            position: fixed; inset: 0;
-            background: radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.08) 0%, transparent 60%),
-                        radial-gradient(ellipse at 80% 100%, rgba(139,92,246,0.06) 0%, transparent 55%);
-            pointer-events: none; z-index: 0;
+            transition: background 0.4s ease, color 0.4s ease;
         }
 
-        .app-container { max-width:520px; margin:0 auto; padding:16px 16px 0; position:relative; z-index:1; }
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse at 40% 0%, var(--accent-soft) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 100%, var(--accent-soft) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-medium);
+            border-radius: 20px;
+        }
+
+        .app-container {
+            max-width: 560px;
+            margin: 0 auto;
+            padding: 14px 14px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (min-width: 768px) {
+            .app-container {
+                max-width: 680px;
+                padding: 18px 20px 0;
+            }
+        }
+        @media (min-width: 1024px) {
+            .app-container {
+                max-width: 800px;
+                padding: 20px 24px 0;
+            }
+        }
 
         /* Header */
         .app-header {
-            background: var(--bg-elevated);
+            background: var(--header-bg);
             border-radius: var(--radius-xl);
-            padding: 20px 22px;
-            margin-bottom: 16px;
-            border: 1px solid var(--border-subtle);
+            padding: 18px 20px;
+            margin-bottom: 14px;
+            border: 1px solid var(--card-border);
             box-shadow: var(--shadow-md);
-            display: flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            transition: all var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
         }
-        .header-brand { display:flex; align-items:center; gap:12px; }
+        .app-header::after {
+            content: '';
+            position: absolute;
+            top: -25px;
+            right: -25px;
+            width: 80px;
+            height: 80px;
+            background: var(--accent-glow);
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(20px);
+        }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+        }
         .header-logo {
-            width:44px; height:44px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             border-radius: var(--radius-sm);
-            display:flex; align-items:center; justify-content:center;
-            font-size:22px; color:#fff;
-            box-shadow: 0 8px 20px rgba(99,102,241,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #fff;
+            box-shadow: 0 6px 18px var(--accent-glow);
+            transition: transform var(--transition-bounce);
+            animation: logoFloat 3s ease-in-out infinite;
         }
-        .header-title { font-size:1.15rem; font-weight:700; color:#fff; letter-spacing: -0.3px; }
-        .header-subtitle { font-size:0.7rem; color:var(--text-muted); font-family:var(--font-latin); letter-spacing: 0.5px; }
+        @keyframes logoFloat {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-3px);
+            }
+        }
+        .header-logo:active {
+            transform: scale(0.9);
+            animation: none;
+        }
+        .header-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.2px;
+            transition: color var(--transition-smooth);
+        }
+        .header-subtitle {
+            font-size: 0.65rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            font-family: var(--font-latin);
+            letter-spacing: 0.5px;
+            transition: color var(--transition-smooth);
+        }
+        .header-actions {
+            display: flex;
+            gap: 6px;
+            position: relative;
+            z-index: 1;
+        }
+        .btn-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid var(--border-medium);
+            background: var(--bg-overlay);
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            transition: all var(--transition-fast);
+            position: relative;
+        }
+        .btn-icon:hover {
+            background: var(--accent-soft);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px var(--accent-glow);
+        }
+        .btn-icon:active {
+            transform: scale(0.9);
+            transition: all 0.08s ease;
+        }
+        .btn-icon.pulse-dot::after {
+            content: '';
+            position: absolute;
+            top: 7px;
+            right: 7px;
+            width: 7px;
+            height: 7px;
+            background: var(--danger);
+            border-radius: 50%;
+            border: 2px solid var(--header-bg);
+            animation: pulseDot 2s infinite;
+        }
+        @keyframes pulseDot {
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(2);
+                opacity: 0.3;
+            }
+        }
 
         /* Tabs */
         .tab-nav {
-            display:flex; gap:6px; margin-bottom:14px;
-            background: var(--bg-surface); border-radius: var(--radius-md); padding:5px;
-            border:1px solid var(--border-subtle);
-            position:sticky; top:12px; z-index:50;
+            display: flex;
+            gap: 5px;
+            margin-bottom: 12px;
+            background: var(--bg-surface);
+            border-radius: var(--radius-md);
+            padding: 4px;
+            border: 1px solid var(--border-subtle);
+            position: sticky;
+            top: 10px;
+            z-index: 50;
+            transition: all var(--transition-smooth);
         }
         .tab-btn {
-            flex:1; padding:12px 8px; border:none; background:transparent;
-            border-radius: var(--radius-sm); cursor:pointer;
-            font-family:var(--font-arabic); font-weight:600; font-size:0.85rem;
-            color:var(--text-muted); transition: all var(--transition-bounce);
-            display:flex; align-items:center; justify-content:center; gap:6px;
+            flex: 1;
+            padding: 11px 8px;
+            border: none;
+            background: transparent;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-family: var(--font-arabic);
+            font-weight: 600;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            transition: all var(--transition-bounce);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            white-space: nowrap;
         }
         .tab-btn.active {
-            background: var(--bg-elevated); color:#fff; font-weight:700;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-            border:1px solid var(--border-medium);
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            font-weight: 700;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-medium);
         }
         .tab-badge {
-            font-size:0.65rem; background:rgba(244,63,94,0.15); color:#f43f5e;
-            padding:2px 8px; border-radius:20px; font-weight:700;
+            font-size: 0.6rem;
+            background: var(--accent-soft);
+            color: var(--accent-primary);
+            padding: 2px 7px;
+            border-radius: 20px;
+            font-weight: 700;
+            transition: all var(--transition-smooth);
         }
-        .tab-btn.active .tab-badge { background:rgba(99,102,241,0.2); color:#a5b4fc; }
+        .tab-btn.active .tab-badge {
+            background: var(--accent-primary);
+            color: #fff;
+        }
 
         /* Cards */
         .card {
-            background: var(--bg-surface); border-radius: var(--radius-lg);
-            padding:18px 20px; margin-bottom:14px;
-            border:1px solid var(--border-subtle); box-shadow: var(--shadow-sm);
-            transition: all var(--transition-snappy); position:relative; overflow:hidden;
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            padding: 16px 18px;
+            margin-bottom: 12px;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            animation: cardIn 0.4s ease forwards;
         }
-        .card:hover { box-shadow: var(--shadow-md); border-color:var(--border-medium); }
-        .card-accent-left { border-right:3px solid var(--accent-indigo); }
-        .card-accent-teal { border-right:3px solid var(--accent-cyan); }
-        .card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:8px; }
-        .card-title { font-weight:700; font-size:0.9rem; display:flex; align-items:center; gap:8px; color:#e2e5ea; }
-        .icon-circle { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; background:rgba(255,255,255,0.05); border:1px solid var(--border-medium); }
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+        .card:active {
+            transform: scale(0.985);
+            transition: all 0.1s ease;
+        }
+        .card-accent-left {
+            border-right: 3px solid var(--accent-primary);
+        }
+        .card-accent-teal {
+            border-right: 3px solid var(--success);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .card-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--text-primary);
+            transition: color var(--transition-smooth);
+        }
+        .icon-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            background: var(--bg-overlay);
+            border: 1px solid var(--border-medium);
+            transition: all var(--transition-smooth);
+        }
 
         /* Budget display */
-        .budget-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
-        .budget-cell {
-            background: var(--bg-overlay); border-radius: var(--radius-sm);
-            padding:14px; text-align:center; border:1px solid var(--border-subtle);
+        .budget-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 10px;
         }
-        .budget-label { font-size:0.7rem; color:var(--text-muted); margin-bottom:4px; }
-        .budget-number { font-size:1.25rem; font-weight:800; font-family:var(--font-latin); }
-        .text-green { color: var(--accent-emerald); }
-        .text-red { color: var(--accent-rose); }
-        .text-amber { color: var(--accent-amber); }
+        @media (min-width: 768px) {
+            .budget-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .budget-cell {
+            background: var(--bg-overlay);
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+            text-align: center;
+            border: 1px solid var(--border-subtle);
+            transition: all var(--transition-smooth);
+        }
+        .budget-cell:hover {
+            border-color: var(--border-medium);
+            box-shadow: var(--shadow-sm);
+        }
+        .budget-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-bottom: 3px;
+            transition: color var(--transition-smooth);
+        }
+        .budget-number {
+            font-size: 1.15rem;
+            font-weight: 800;
+            font-family: var(--font-latin);
+            transition: color var(--transition-smooth);
+        }
+        .text-green {
+            color: var(--success);
+        }
+        .text-red {
+            color: var(--danger);
+        }
+        .text-amber {
+            color: var(--warning);
+        }
 
-        .progress-wrap { margin-top:4px; }
-        .progress-header { display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-muted); margin-bottom:5px; }
-        .progress-bar { height:6px; background:rgba(255,255,255,0.08); border-radius:10px; overflow:hidden; }
-        .progress-fill { height:100%; border-radius:10px; transition: width 0.5s ease; }
-        .progress-safe { background: linear-gradient(90deg, #10b981, #34d399); }
-        .progress-warn { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
-        .progress-danger { background: linear-gradient(90deg, #f43f5e, #fb7185); animation: pulse-bar 1.8s infinite; }
-        @keyframes pulse-bar { 0%,100%{opacity:1;} 50%{opacity:0.7;} }
+        .progress-wrap {
+            margin-top: 2px;
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+        .progress-bar {
+            height: 6px;
+            background: var(--progress-bg);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background 0.4s ease;
+        }
+        .progress-safe {
+            background: linear-gradient(90deg, var(--success), #34d399);
+        }
+        .progress-warn {
+            background: linear-gradient(90deg, var(--warning), #fbbf24);
+        }
+        .progress-danger {
+            background: linear-gradient(90deg, var(--danger), #fb7185);
+            animation: pulseBar 1.6s infinite;
+        }
+        @keyframes pulseBar {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.65;
+            }
+        }
 
         /* Form */
-        .form-row { display:flex; gap:8px; flex-wrap:wrap; align-items:flex-end; }
-        .form-group { flex:1; min-width:80px; display:flex; flex-direction:column; gap:4px; }
-        .form-label { font-size:0.7rem; font-weight:600; color:var(--text-secondary); }
+        .form-row {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        .form-group {
+            flex: 1;
+            min-width: 70px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .form-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: color var(--transition-smooth);
+        }
         .form-input {
-            padding:10px 14px; background:var(--bg-overlay);
-            border:1px solid var(--border-medium); border-radius:var(--radius-sm);
-            color:#fff; font-family:var(--font-arabic); font-size:0.9rem;
-            transition:0.2s; outline:none;
+            padding: 10px 13px;
+            background: var(--bg-input);
+            border: 1.5px solid var(--border-medium);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-family: var(--font-arabic);
+            font-size: 0.85rem;
+            transition: all var(--transition-fast);
+            outline: none;
+            width: 100%;
         }
-        .form-input:focus { border-color:var(--accent-indigo); box-shadow:0 0 0 3px rgba(99,102,241,0.2); }
+        .form-input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px var(--accent-soft);
+            background: var(--bg-elevated);
+        }
+        .form-input::placeholder {
+            color: var(--text-muted);
+            opacity: 0.6;
+        }
+
         .btn {
-            padding:10px 18px; border-radius:20px; font-family:var(--font-arabic);
-            font-weight:700; font-size:0.8rem; border:none; cursor:pointer;
-            transition: all var(--transition-snappy); display:inline-flex; align-items:center; gap:6px;
-            white-space:nowrap; background:transparent; color:inherit;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-family: var(--font-arabic);
+            font-weight: 700;
+            font-size: 0.78rem;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-bounce);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
         }
-        .btn:active { transform: scale(0.95); }
-        .btn-primary { background: var(--accent-indigo); color:#fff; box-shadow:0 4px 14px rgba(99,102,241,0.4); }
-        .btn-primary:hover { background:#818cf8; box-shadow:0 6px 20px rgba(99,102,241,0.6); }
-        .btn-outline { border:1px solid var(--border-medium); color:#cbd5e1; }
-        .btn-outline:hover { border-color:var(--accent-indigo); color:#fff; background:rgba(99,102,241,0.1); }
-        .btn-sm { padding:5px 12px; font-size:0.7rem; border-radius:16px; }
-        .btn-danger-text { background:transparent; border:1px solid rgba(244,63,94,0.3); color:#f43f5e; padding:4px 10px; border-radius:16px; font-size:0.7rem; cursor:pointer; }
-        .btn-danger-text:hover { background:rgba(244,63,94,0.1); border-color:#f43f5e; }
+        .btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transition: opacity 0.2s;
+            border-radius: inherit;
+        }
+        .btn:hover::after {
+            opacity: 1;
+        }
+        .btn:active {
+            transform: scale(0.93);
+            transition: all 0.08s ease;
+        }
+        .btn-primary {
+            background: var(--accent-primary);
+            color: #fff;
+            box-shadow: 0 4px 14px var(--accent-glow);
+        }
+        .btn-primary:hover {
+            box-shadow: 0 6px 22px var(--accent-glow);
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--border-medium);
+            color: var(--text-secondary);
+        }
+        .btn-outline:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            background: var(--accent-soft);
+        }
+        .btn-sm {
+            padding: 5px 11px;
+            font-size: 0.68rem;
+            border-radius: 14px;
+        }
+        .btn-danger-text {
+            background: transparent;
+            border: 1px solid rgba(244, 63, 94, 0.25);
+            color: var(--danger);
+            padding: 4px 9px;
+            border-radius: 14px;
+            font-size: 0.65rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .btn-danger-text:hover {
+            background: rgba(244, 63, 94, 0.1);
+            border-color: var(--danger);
+        }
+
+        /* Quick add chips */
+        .quick-add-chips {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+        .chip {
+            background: var(--bg-overlay);
+            border: 1px solid var(--border-medium);
+            padding: 5px 12px;
+            border-radius: 18px;
+            font-size: 0.68rem;
+            cursor: pointer;
+            transition: all var(--transition-bounce);
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        .chip:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            background: var(--accent-soft);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        .chip:active {
+            transform: scale(0.9);
+        }
 
         /* Transaction list */
-        .transaction-list { list-style:none; max-height:320px; overflow-y:auto; }
-        .transaction-item {
-            display:flex; align-items:center; justify-content:space-between;
-            padding:12px; border-radius:var(--radius-sm); margin-bottom:6px;
-            background:var(--bg-overlay); border:1px solid transparent; gap:10px;
-            flex-wrap:wrap; animation: fadeSlide 0.3s ease;
+        .transaction-list {
+            list-style: none;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 0;
         }
-        @keyframes fadeSlide { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:none;} }
-        .transaction-item:hover { border-color:var(--border-medium); background:#1f212a; }
-        .transaction-info { flex:1; }
-        .transaction-desc { font-weight:600; font-size:0.85rem; }
-        .transaction-date { font-size:0.7rem; color:var(--text-muted); }
-        .transaction-amount { font-weight:700; font-family:var(--font-latin); color:#f43f5e; }
-        .empty-state { text-align:center; padding:30px; color:var(--text-muted); }
-        .empty-state i { font-size:2rem; margin-bottom:8px; opacity:0.5; }
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 12px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 5px;
+            background: var(--bg-overlay);
+            border: 1px solid transparent;
+            gap: 8px;
+            flex-wrap: wrap;
+            animation: fadeSlide 0.35s ease forwards;
+            transition: all var(--transition-fast);
+        }
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .transaction-item:hover {
+            border-color: var(--border-medium);
+            background: var(--bg-elevated);
+            box-shadow: var(--shadow-sm);
+        }
+        .transaction-info {
+            flex: 1;
+            min-width: 80px;
+        }
+        .transaction-desc {
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--text-primary);
+        }
+        .transaction-date {
+            font-size: 0.63rem;
+            color: var(--text-muted);
+        }
+        .transaction-amount {
+            font-weight: 700;
+            font-family: var(--font-latin);
+            color: var(--danger);
+            font-size: 0.82rem;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 28px 16px;
+            color: var(--text-muted);
+        }
+        .empty-state i {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            opacity: 0.4;
+            display: block;
+            animation: floatIcon 3s ease-in-out infinite;
+        }
+        @keyframes floatIcon {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+        .empty-state p {
+            font-size: 0.78rem;
+        }
+
+        /* Overview card */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        @media (min-width: 768px) {
+            .overview-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
 
         /* Modal */
         .modal-backdrop {
-            position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(6px);
-            z-index:200; display:flex; align-items:flex-end; justify-content:center;
-            opacity:0; pointer-events:none; transition:opacity 0.3s;
+            position: fixed;
+            inset: 0;
+            background: var(--modal-overlay);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 200;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
         }
-        .modal-backdrop.active { opacity:1; pointer-events:auto; }
+        .modal-backdrop.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
         .modal-panel {
-            background:var(--bg-elevated); border-radius:24px 24px 0 0;
-            width:100%; max-width:520px; max-height:80vh; overflow-y:auto;
-            padding:12px 20px 28px; transform:translateY(30px);
-            transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-            border-top:1px solid var(--border-medium);
+            background: var(--bg-elevated);
+            border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+            width: 100%;
+            max-width: 560px;
+            max-height: 82vh;
+            overflow-y: auto;
+            padding: 10px 18px 26px;
+            transform: translateY(40px);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-top: 1px solid var(--border-medium);
+            box-shadow: var(--shadow-lg);
         }
-        .modal-backdrop.active .modal-panel { transform:translateY(0); }
-        .modal-handle { width:40px; height:4px; background:#4b5563; border-radius:10px; margin:8px auto 16px; }
+        .modal-backdrop.active .modal-panel {
+            transform: translateY(0);
+        }
+        .modal-handle {
+            width: 38px;
+            height: 4px;
+            background: var(--border-strong);
+            border-radius: 10px;
+            margin: 6px auto 14px;
+            cursor: grab;
+        }
 
         /* Toast */
         .toast-container {
-            position:fixed; top:20px; left:50%; transform:translateX(-50%);
-            z-index:999; display:flex; flex-direction:column; gap:8px;
-            width:90%; max-width:400px; pointer-events:none;
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            width: 92%;
+            max-width: 420px;
+            pointer-events: none;
         }
         .toast {
-            padding:12px 18px; border-radius:20px; color:#fff; font-weight:600;
-            font-size:0.8rem; text-align:center; background:#1f2937;
-            box-shadow:var(--shadow-lg); animation:slideDown 0.4s ease; pointer-events:auto;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.78rem;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            animation: slideDown 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        @keyframes slideDown { from{opacity:0;transform:translateY(-20px);} to{opacity:1;transform:none;} }
+        .toast.success {
+            background: var(--success);
+        }
+        .toast.error {
+            background: var(--danger);
+        }
+        .toast.info {
+            background: var(--toast-bg);
+            border: 1px solid var(--border-medium);
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
 
-        /* Bottom Navigation */
+        /* Bottom Nav */
         .bottom-nav {
-            position:fixed; bottom:0; left:0; right:0;
-            background: var(--bg-elevated); border-top:1px solid var(--border-subtle);
-            display:flex; justify-content:space-around; align-items:center;
-            padding:10px 8px calc(10px + env(safe-area-inset-bottom, 8px));
-            z-index:100; backdrop-filter:blur(10px);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--nav-bg);
+            border-top: 1px solid var(--footer-border);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 8px 6px calc(8px + env(safe-area-inset-bottom, 8px));
+            z-index: 100;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            gap: 2px;
+            transition: all var(--transition-smooth);
         }
         .bottom-nav-btn {
-            display:flex; flex-direction:column; align-items:center;
-            gap:4px; color:var(--text-muted); font-size:0.65rem;
-            font-weight:500; cursor:pointer; transition:color 0.2s;
-            background:none; border:none; font-family:var(--font-arabic);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            color: var(--text-muted);
+            font-size: 0.6rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            background: none;
+            border: none;
+            font-family: var(--font-arabic);
+            padding: 5px 8px;
+            border-radius: 12px;
+            position: relative;
         }
-        .bottom-nav-btn.active { color:var(--accent-indigo); }
-        .bottom-nav-btn i { font-size:1.2rem; }
-        .badge-dot {
-            width:8px; height:8px; background:var(--accent-rose); border-radius:50%;
-            position:absolute; top:-2px; right:-8px;
+        .bottom-nav-btn.active {
+            color: var(--accent-primary);
+            background: var(--accent-soft);
+        }
+        .bottom-nav-btn i {
+            font-size: 1.1rem;
+            transition: transform var(--transition-bounce);
+        }
+        .bottom-nav-btn:active i {
+            transform: scale(0.85);
         }
         .install-btn-highlight {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 20px;
+            padding: 7px 14px;
+            color: #fff !important;
+            font-weight: 700;
+            box-shadow: 0 4px 16px var(--accent-glow);
+            animation: gentleGlow 2.5s ease-in-out infinite;
+        }
+        @keyframes gentleGlow {
+            0%,
+            100% {
+                box-shadow: 0 4px 16px var(--accent-glow);
+            }
+            50% {
+                box-shadow: 0 8px 28px var(--accent-glow);
+            }
+        }
+
+        /* Settings panel */
+        .settings-section {
+            margin-bottom: 16px;
+        }
+        .settings-section h4 {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .theme-toggle {
+            display: flex;
+            background: var(--bg-overlay);
+            border-radius: 20px;
+            padding: 3px;
+            gap: 2px;
+        }
+        .theme-toggle button {
+            flex: 1;
+            padding: 9px;
+            border: none;
+            background: transparent;
+            border-radius: 18px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all var(--transition-bounce);
+            font-family: var(--font-arabic);
+        }
+        .theme-toggle button.active {
+            background: var(--accent-primary);
+            color: #fff;
+            box-shadow: var(--shadow-sm);
+        }
+        .color-swatches {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .color-swatch {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all var(--transition-bounce);
+            position: relative;
+        }
+        .color-swatch:hover {
+            transform: scale(1.15);
+            box-shadow: var(--shadow-md);
+        }
+        .color-swatch.active {
+            border-color: var(--text-primary);
+            box-shadow: 0 0 0 4px var(--accent-soft);
+        }
+        .color-swatch.indigo {
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            border-radius:20px; padding:6px 16px; color:#fff; font-weight:700;
-            box-shadow:0 4px 12px rgba(99,102,241,0.5);
-            margin-top:4px;
+        }
+        .color-swatch.emerald {
+            background: linear-gradient(135deg, #10b981, #34d399);
+        }
+        .color-swatch.rose {
+            background: linear-gradient(135deg, #f43f5e, #fb7185);
+        }
+        .color-swatch.ocean {
+            background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+        }
+        .color-swatch.mono {
+            background: linear-gradient(135deg, #666, #999);
+        }
+
+        /* Play Store card */
+        .playstore-card {
+            background: linear-gradient(135deg, #1a1c23, #1f2129);
+            border: 2px solid var(--accent-primary);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            text-align: center;
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+            animation: cardIn 0.5s ease forwards;
+        }
+        .playstore-card::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 100px;
+            height: 100px;
+            background: var(--accent-glow);
+            border-radius: 50%;
+            filter: blur(25px);
+        }
+        .playstore-icon {
+            font-size: 2.5rem;
+            margin-bottom: 6px;
+        }
+        .playstore-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+        .playstore-subtitle {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
         }
 
         /* Export container */
-        .export-wrapper { position:absolute; left:-9999px; width:720px; background:#0d0f14; color:#fff; z-index:-1; opacity:0; }
+        .export-wrapper {
+            position: absolute;
+            left: -9999px;
+            width: 720px;
+            background: var(--bg-canvas);
+            color: var(--text-primary);
+            z-index: -1;
+            opacity: 0;
+            transition: all var(--transition-smooth);
+        }
 
         /* Footer */
         .app-footer {
-            text-align:center; padding:18px 16px; margin-top:10px;
-            border-top:1px solid var(--border-subtle);
+            text-align: center;
+            padding: 16px 14px;
+            margin-top: 8px;
+            border-top: 1px solid var(--footer-border);
+            transition: all var(--transition-smooth);
         }
-        .footer-credential-img { width:70px; border-radius:12px; border:1px solid var(--border-medium); margin-bottom:8px; filter: brightness(0.9); }
-        .footer-name { font-weight:700; font-family:var(--font-latin); color:#e2e5ea; }
-        .footer-role { font-size:0.7rem; color:var(--text-muted); font-family:var(--font-latin); }
-        .footer-links a { color:var(--text-secondary); text-decoration:none; margin:0 8px; font-size:0.7rem; font-family:var(--font-latin); }
-        .footer-links a:hover { color:var(--accent-indigo); }
-
-        /* Quick add chips */
-        .quick-add-chips { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
-        .chip {
-            background:var(--bg-overlay); border:1px solid var(--border-medium);
-            padding:6px 14px; border-radius:20px; font-size:0.7rem;
-            cursor:pointer; transition:0.2s; color:var(--text-secondary);
+        .footer-credential-img {
+            width: 60px;
+            height: auto;
+            border-radius: 10px;
+            border: 1px solid var(--border-medium);
+            margin-bottom: 6px;
+            transition: all var(--transition-smooth);
         }
-        .chip:hover { border-color:var(--accent-indigo); color:#fff; background:rgba(99,102,241,0.15); }
-
-        /* Overview card */
-        .overview-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-
-        /* Settings icon */
-        .settings-icon {
-            background: rgba(255,255,255,0.05);
-            border:1px solid var(--border-medium);
-            width:36px; height:36px; border-radius:50%;
-            display:flex; align-items:center; justify-content:center;
-            cursor:pointer; color:var(--text-secondary);
-            transition: all var(--transition-snappy);
+        .footer-name {
+            font-weight: 700;
+            font-family: var(--font-latin);
+            color: var(--text-primary);
+            font-size: 0.78rem;
         }
-        .settings-icon:hover { background:rgba(255,255,255,0.1); color:#fff; }
+        .footer-role {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            font-family: var(--font-latin);
+        }
+        .footer-links {
+            margin-top: 5px;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.65rem;
+            font-family: var(--font-latin);
+            transition: color var(--transition-fast);
+        }
+        .footer-links a:hover {
+            color: var(--accent-primary);
+        }
 
-        @media (max-width:400px) {
-            .form-row { flex-direction:column; }
-            .budget-grid { grid-template-columns:1fr 1fr; gap:6px; }
-            .tab-btn { font-size:0.75rem; }
+        /* Ripple effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(0);
+            animation: ripple 0.6s ease-out forwards;
+            pointer-events: none;
+        }
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Confetti */
+        .confetti-piece {
+            position: fixed;
+            z-index: 9999;
+            pointer-events: none;
+            animation: confettiFall 1.5s ease-out forwards;
+        }
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(105vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive refinements */
+        @media (max-width: 360px) {
+            .app-container {
+                padding: 8px 6px 0;
+            }
+            .app-header {
+                padding: 14px 12px;
+                border-radius: var(--radius-lg);
+            }
+            .header-title {
+                font-size: 0.9rem;
+            }
+            .header-logo {
+                width: 34px;
+                height: 34px;
+                font-size: 16px;
+            }
+            .card {
+                padding: 12px 10px;
+                border-radius: var(--radius-md);
+            }
+            .budget-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 5px;
+            }
+            .budget-number {
+                font-size: 1rem;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+            .form-group {
+                min-width: 100%;
+            }
+            .tab-btn {
+                font-size: 0.7rem;
+                padding: 9px 4px;
+            }
+            .bottom-nav-btn {
+                font-size: 0.55rem;
+                padding: 3px 5px;
+            }
+            .bottom-nav-btn i {
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .card {
+                padding: 20px 24px;
+            }
+            .budget-number {
+                font-size: 1.35rem;
+            }
+            .form-row {
+                flex-wrap: nowrap;
+            }
+            .tab-btn {
+                font-size: 0.9rem;
+                padding: 13px 10px;
+            }
+            .transaction-list {
+                max-height: 380px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            body {
+                padding-bottom: calc(130px + var(--safe-bottom));
+            }
+            .bottom-nav {
+                justify-content: center;
+                gap: 20px;
+            }
+            .bottom-nav-btn {
+                padding: 8px 16px;
+                font-size: 0.7rem;
+            }
+            .app-header {
+                padding: 22px 28px;
+            }
+            .transaction-list {
+                max-height: 420px;
+            }
         }
     </style>
 </head>
-<body>
+<body data-theme="dark" data-color="indigo">
     <div class="toast-container" id="toastContainer"></div>
 
     <div class="modal-backdrop" id="modalBackdrop">
         <div class="modal-panel" id="modalPanel">
             <div class="modal-handle"></div>
-            <h3 class="card-title" id="modalTitle" style="justify-content:center;margin-bottom:16px;"></h3>
+            <h3 class="card-title" id="modalTitle" style="justify-content:center;margin-bottom:14px;"></h3>
             <div id="modalContent"></div>
         </div>
     </div>
 
     <div class="export-wrapper" id="exportWrapper"></div>
 
-    <div class="app-container">
+    <div class="app-container" id="appContainer">
         <header class="app-header">
             <div class="header-brand">
                 <div class="header-logo">💷</div>
@@ -314,29 +1473,32 @@
                     <div class="header-subtitle">EXPENSE TRACKER</div>
                 </div>
             </div>
-            <div style="display:flex; gap:8px;">
-                <div class="settings-icon" id="btnQuickSettings" title="إعدادات سريعة"><i class="fa-solid fa-gear"></i></div>
+            <div class="header-actions">
+                <button class="btn-icon pulse-dot" id="btnSettings" title="الإعدادات والتخصيص" aria-label="الإعدادات">
+                    <i class="fa-solid fa-sliders"></i>
+                </button>
+                <button class="btn-icon" id="btnCalc" title="حاسبة الدخل" aria-label="حاسبة الدخل">
+                    <i class="fa-solid fa-calculator"></i>
+                </button>
             </div>
         </header>
 
         <!-- Combined Overview -->
         <div class="card" style="border:1px solid var(--border-medium);">
-            <div class="card-header">
-                <span class="card-title"><i class="fa-solid fa-chart-pie"></i> نظرة عامة</span>
-                <button class="btn btn-sm btn-outline" id="btnResetMonth"><i class="fa-solid fa-arrows-rotate"></i> بداية شهر جديد</button>
-            </div>
+            <div class="card-title" style="margin-bottom:10px;">📊 نظرة عامة سريعة</div>
             <div class="overview-grid">
                 <div class="budget-cell">
                     <div class="budget-label">المتبقي الشخصي</div>
-                    <div class="budget-number" id="overviewRemainingPersonal" style="font-size:1rem;">0 ج.م</div>
+                    <div class="budget-number" id="overviewRemainingPersonal" style="font-size:0.95rem;">0 ج.م</div>
                 </div>
                 <div class="budget-cell">
                     <div class="budget-label">المتبقي العائلي</div>
-                    <div class="budget-number" id="overviewRemainingFamily" style="font-size:1rem;">0 ج.م</div>
+                    <div class="budget-number" id="overviewRemainingFamily" style="font-size:0.95rem;">0 ج.م</div>
                 </div>
-            </div>
-            <div style="margin-top:8px; display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-muted);">
-                <span>إجمالي المصروفات: <strong id="totalSpentOverall">0 ج.م</strong></span>
+                <div class="budget-cell" style="grid-column:1/-1;">
+                    <div class="budget-label">إجمالي المصروفات</div>
+                    <div class="budget-number text-red" id="totalSpentOverall" style="font-size:0.95rem;">0 ج.م</div>
+                </div>
             </div>
         </div>
 
@@ -357,12 +1519,12 @@
                     <div class="budget-cell"><div class="budget-label">المتبقي</div><div class="budget-number text-green" id="budgetRemainingPersonal">0 ج.م</div></div>
                 </div>
                 <div class="progress-wrap">
-                    <div class="progress-header"><span>الصرف</span><span id="progressPercentPersonal">0%</span></div>
+                    <div class="progress-header"><span>نسبة الصرف</span><span id="progressPercentPersonal">0%</span></div>
                     <div class="progress-bar"><div class="progress-fill progress-safe" id="progressFillPersonal" style="width:0%"></div></div>
                 </div>
             </div>
             <div class="card">
-                <div class="card-title" style="margin-bottom:8px;">➕ إضافة مصروف شخصي</div>
+                <div class="card-title" style="margin-bottom:7px;">➕ إضافة مصروف شخصي</div>
                 <div class="quick-add-chips" id="quickChipsPersonal">
                     <span class="chip" data-amount="50" data-desc="مواصلات">🚕 مواصلات</span>
                     <span class="chip" data-amount="120" data-desc="غداء">🍔 غداء</span>
@@ -371,7 +1533,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group"><label class="form-label">الوصف</label><input type="text" class="form-input" id="descPersonal" placeholder="مثال: غداء"></div>
-                    <div class="form-group" style="max-width:130px;"><label class="form-label">المبلغ (ج.م)</label><input type="number" class="form-input" id="amountPersonal" placeholder="0.00"></div>
+                    <div class="form-group" style="max-width:120px;"><label class="form-label">المبلغ (ج.م)</label><input type="number" class="form-input" id="amountPersonal" placeholder="0.00" step="0.01" min="0.01"></div>
                     <button class="btn btn-primary" id="addPersonalBtn">إضافة</button>
                 </div>
             </div>
@@ -380,7 +1542,7 @@
                     <span class="card-title">📋 سجل المصروفات</span>
                     <button class="btn-danger-text" id="clearPersonalBtn">مسح الكل</button>
                 </div>
-                <ul class="transaction-list" id="transactionListPersonal"><li class="empty-state"><i class="fa-solid fa-receipt"></i><p>لا توجد مصروفات</p></li></ul>
+                <ul class="transaction-list" id="transactionListPersonal"><li class="empty-state"><i class="fa-solid fa-receipt"></i><p>لا توجد مصروفات شخصية بعد</p></li></ul>
             </div>
         </section>
 
@@ -396,12 +1558,12 @@
                     <div class="budget-cell"><div class="budget-label">المتبقي</div><div class="budget-number text-green" id="budgetRemainingFamily">0 ج.م</div></div>
                 </div>
                 <div class="progress-wrap">
-                    <div class="progress-header"><span>الصرف</span><span id="progressPercentFamily">0%</span></div>
+                    <div class="progress-header"><span>نسبة الصرف</span><span id="progressPercentFamily">0%</span></div>
                     <div class="progress-bar"><div class="progress-fill progress-safe" id="progressFillFamily" style="width:0%"></div></div>
                 </div>
             </div>
             <div class="card">
-                <div class="card-title" style="margin-bottom:8px;">➕ إضافة مصروف عائلي</div>
+                <div class="card-title" style="margin-bottom:7px;">➕ إضافة مصروف عائلي</div>
                 <div class="quick-add-chips" id="quickChipsFamily">
                     <span class="chip" data-amount="300" data-desc="أكل البيت">🍲 أكل البيت</span>
                     <span class="chip" data-amount="500" data-desc="فواتير">💡 فواتير</span>
@@ -410,7 +1572,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group"><label class="form-label">الوصف</label><input type="text" class="form-input" id="descFamily" placeholder="فواتير، أكل..."></div>
-                    <div class="form-group" style="max-width:130px;"><label class="form-label">المبلغ (ج.م)</label><input type="number" class="form-input" id="amountFamily" placeholder="0.00"></div>
+                    <div class="form-group" style="max-width:120px;"><label class="form-label">المبلغ (ج.م)</label><input type="number" class="form-input" id="amountFamily" placeholder="0.00" step="0.01" min="0.01"></div>
                     <button class="btn btn-primary" id="addFamilyBtn">إضافة</button>
                 </div>
             </div>
@@ -419,155 +1581,259 @@
                     <span class="card-title">📋 سجل المصروفات</span>
                     <button class="btn-danger-text" id="clearFamilyBtn">مسح الكل</button>
                 </div>
-                <ul class="transaction-list" id="transactionListFamily"><li class="empty-state"><i class="fa-solid fa-receipt"></i><p>لا توجد مصروفات</p></li></ul>
+                <ul class="transaction-list" id="transactionListFamily"><li class="empty-state"><i class="fa-solid fa-receipt"></i><p>لا توجد مصروفات عائلية بعد</p></li></ul>
             </div>
         </section>
+
+        <!-- Google Play Store Integration Card -->
+        <div class="playstore-card" id="playstoreCard">
+            <div class="playstore-icon">📱</div>
+            <div class="playstore-title">تثبيت التطبيق من Google Play</div>
+            <div class="playstore-subtitle">ثبّت التطبيق كتطبيق رسمي على هاتفك عبر متجر Play</div>
+            <button class="btn btn-primary" id="btnPlayStore" style="margin:0 auto;">
+                <i class="fa-brands fa-google-play"></i> تثبيت من Google Play
+            </button>
+            <p style="font-size:0.6rem;color:var(--text-muted);margin-top:8px;">يدعم Trusted Web Activity (TWA) • تثبيت رسمي</p>
+        </div>
 
         <footer class="app-footer">
             <img src="https://drive.google.com/thumbnail?id=1C7BT9_FOkAysydVqegpxGoWfrv-A7SVR&sz=w200" alt="Credential" class="footer-credential-img" onerror="this.style.display='none'">
             <div class="footer-name">Hazem K H Madi</div>
             <div class="footer-role">Senior Product Designer</div>
-            <div class="footer-links" style="margin-top:6px;">
-                <a href="https://hazemkhmadi.framer.ai" target="_blank">Portfolio</a>
-                <a href="https://www.linkedin.com/in/hazem-k-h-madi" target="_blank">LinkedIn</a>
+            <div class="footer-links">
+                <a href="https://hazemkhmadi.framer.ai" target="_blank" rel="noopener"><i class="fa-solid fa-globe"></i> Portfolio</a>
+                <a href="https://www.linkedin.com/in/hazem-k-h-madi" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                <a href="#" id="btnShortcuts"><i class="fa-solid fa-keyboard"></i> اختصارات</a>
             </div>
         </footer>
     </div>
 
     <!-- Bottom Navigation Bar -->
     <div class="bottom-nav" id="bottomNav">
-        <button class="bottom-nav-btn active" id="navPersonal"><i class="fa-solid fa-user"></i><span>الشخصية</span></button>
-        <button class="bottom-nav-btn" id="navFamily"><i class="fa-solid fa-house"></i><span>العائلة</span></button>
-        <button class="bottom-nav-btn" id="navCalculator"><i class="fa-solid fa-calculator"></i><span>الحاسبة</span></button>
-        <button class="bottom-nav-btn" id="navExport"><i class="fa-solid fa-file-export"></i><span>تصدير</span></button>
-        <button class="bottom-nav-btn install-btn-highlight" id="navInstall" style="display: none;">
-            <i class="fa-solid fa-download"></i><span>تثبيت التطبيق</span>
+        <button class="bottom-nav-btn active" data-view="personal" id="navPersonal">
+            <i class="fa-solid fa-user"></i><span>الشخصية</span>
+        </button>
+        <button class="bottom-nav-btn" data-view="family" id="navFamily">
+            <i class="fa-solid fa-house"></i><span>العائلة</span>
+        </button>
+        <button class="bottom-nav-btn" id="navCalculator">
+            <i class="fa-solid fa-calculator"></i><span>الحاسبة</span>
+        </button>
+        <button class="bottom-nav-btn" id="navExport">
+            <i class="fa-solid fa-file-export"></i><span>تصدير</span>
+        </button>
+        <button class="bottom-nav-btn install-btn-highlight" id="navInstall">
+            <i class="fa-solid fa-download"></i><span>تثبيت</span>
         </button>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+    </script>
+
     <script>
         (function() {
-            // === STORAGE KEYS ===
-            const STORAGE = {
-                pBudget: 'exp_p_budget_v5',
-                pTxns: 'exp_p_txns_v5',
-                fBudget: 'exp_f_budget_v5',
-                fTxns: 'exp_f_txns_v5',
-                tab: 'exp_tab_v5'
+            // ==================== STATE ====================
+            const STORAGE_KEYS = {
+                pBudget: 'exp_v5_p_budget',
+                pTxns: 'exp_v5_p_txns',
+                fBudget: 'exp_v5_f_budget',
+                fTxns: 'exp_v5_f_txns',
+                tab: 'exp_v5_tab',
+                theme: 'exp_v5_theme',
+                color: 'exp_v5_color',
             };
 
-            // === STATE ===
             const state = {
                 activeTab: 'personal',
                 personal: { budget: 0, transactions: [] },
-                family: { budget: 0, transactions: [] }
+                family: { budget: 0, transactions: [] },
+                theme: 'dark',
+                color: 'indigo',
             };
 
-            // === DOM REFS ===
+            let deferredPrompt = null;
+
+            // ==================== DOM REFS ====================
             const $ = (s) => document.querySelector(s);
             const $$ = (s) => document.querySelectorAll(s);
 
-            const dom = {
-                badgePersonal: $('#badgePersonal'), badgeFamily: $('#badgeFamily'),
-                budgetTotalPersonal: $('#budgetTotalPersonal'), budgetRemainingPersonal: $('#budgetRemainingPersonal'),
-                progressPercentPersonal: $('#progressPercentPersonal'), progressFillPersonal: $('#progressFillPersonal'),
-                descPersonal: $('#descPersonal'), amountPersonal: $('#amountPersonal'), addPersonalBtn: $('#addPersonalBtn'),
-                transactionListPersonal: $('#transactionListPersonal'), setBudgetPersonal: $('#setBudgetPersonal'), clearPersonalBtn: $('#clearPersonalBtn'),
-                budgetTotalFamily: $('#budgetTotalFamily'), budgetRemainingFamily: $('#budgetRemainingFamily'),
-                progressPercentFamily: $('#progressPercentFamily'), progressFillFamily: $('#progressFillFamily'),
-                descFamily: $('#descFamily'), amountFamily: $('#amountFamily'), addFamilyBtn: $('#addFamilyBtn'),
-                transactionListFamily: $('#transactionListFamily'), setBudgetFamily: $('#setBudgetFamily'), clearFamilyBtn: $('#clearFamilyBtn'),
-                modalBackdrop: $('#modalBackdrop'), modalTitle: $('#modalTitle'), modalContent: $('#modalContent'),
-                exportWrapper: $('#exportWrapper'),
-                toastContainer: $('#toastContainer'),
-                sectionPersonal: $('#sectionPersonal'), sectionFamily: $('#sectionFamily'),
-                tabNav: $('#tabNav'),
-                overviewRemainingPersonal: $('#overviewRemainingPersonal'),
-                overviewRemainingFamily: $('#overviewRemainingFamily'),
-                totalSpentOverall: $('#totalSpentOverall'),
-                quickChipsPersonal: $('#quickChipsPersonal'), quickChipsFamily: $('#quickChipsFamily'),
-                bottomNav: $('#bottomNav'),
-                btnResetMonth: $('#btnResetMonth'),
-                btnQuickSettings: $('#btnQuickSettings'),
-                navInstall: $('#navInstall'),
-            };
+            function getAllDOMElements() {
+                return {
+                    badgePersonal: $('#badgePersonal'),
+                    badgeFamily: $('#badgeFamily'),
+                    budgetTotalPersonal: $('#budgetTotalPersonal'),
+                    budgetRemainingPersonal: $('#budgetRemainingPersonal'),
+                    progressPercentPersonal: $('#progressPercentPersonal'),
+                    progressFillPersonal: $('#progressFillPersonal'),
+                    descPersonal: $('#descPersonal'),
+                    amountPersonal: $('#amountPersonal'),
+                    addPersonalBtn: $('#addPersonalBtn'),
+                    transactionListPersonal: $('#transactionListPersonal'),
+                    setBudgetPersonal: $('#setBudgetPersonal'),
+                    clearPersonalBtn: $('#clearPersonalBtn'),
+                    budgetTotalFamily: $('#budgetTotalFamily'),
+                    budgetRemainingFamily: $('#budgetRemainingFamily'),
+                    progressPercentFamily: $('#progressPercentFamily'),
+                    progressFillFamily: $('#progressFillFamily'),
+                    descFamily: $('#descFamily'),
+                    amountFamily: $('#amountFamily'),
+                    addFamilyBtn: $('#addFamilyBtn'),
+                    transactionListFamily: $('#transactionListFamily'),
+                    setBudgetFamily: $('#setBudgetFamily'),
+                    clearFamilyBtn: $('#clearFamilyBtn'),
+                    modalBackdrop: $('#modalBackdrop'),
+                    modalTitle: $('#modalTitle'),
+                    modalContent: $('#modalContent'),
+                    exportWrapper: $('#exportWrapper'),
+                    toastContainer: $('#toastContainer'),
+                    sectionPersonal: $('#sectionPersonal'),
+                    sectionFamily: $('#sectionFamily'),
+                    tabNav: $('#tabNav'),
+                    overviewRemainingPersonal: $('#overviewRemainingPersonal'),
+                    overviewRemainingFamily: $('#overviewRemainingFamily'),
+                    totalSpentOverall: $('#totalSpentOverall'),
+                    quickChipsPersonal: $('#quickChipsPersonal'),
+                    quickChipsFamily: $('#quickChipsFamily'),
+                    bottomNav: $('#bottomNav'),
+                    btnSettings: $('#btnSettings'),
+                    btnCalc: $('#btnCalc'),
+                    btnPlayStore: $('#btnPlayStore'),
+                    btnShortcuts: $('#btnShortcuts'),
+                };
+            }
 
-            let deferredPrompt;
+            let dom = getAllDOMElements();
 
-            // === UTILITIES ===
+            // ==================== UTILS ====================
             function formatCurrency(amt) {
-                try { return new Intl.NumberFormat('ar-EG', { style: 'currency', currency: 'EGP' }).format(amt); }
-                catch { return amt.toFixed(2) + ' ج.م'; }
+                try { return new Intl.NumberFormat('ar-EG', { style: 'currency', currency: 'EGP',
+                        maximumFractionDigits: 2 }).format(amt); } catch { return amt.toFixed(2) + ' ج.م'; }
             }
-            function shortCurrency(amt) { return amt >= 1000 ? (amt / 1000).toFixed(1) + 'k' : amt.toFixed(0) + ' ج.م'; }
+
+            function shortCurrency(amt) { return amt >= 1000 ? (amt / 1000).toFixed(1) + 'k ج.م' : amt.toFixed(0) +
+                    ' ج.م'; }
+
             function today() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
-            function formatDateAr(d) { const m = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر']; const dt = new Date(d); return `${dt.getDate()} ${m[dt.getMonth()]} ${dt.getFullYear()}`; }
-            function uid() { return Date.now() + Math.random().toString(36); }
-            function escapeHtml(t) { const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
 
-            function toast(msg, type='info') {
-                const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
-                if(type === 'success') t.style.background = '#10b981';
-                else if(type === 'error') t.style.background = '#f43f5e';
+            function formatDateAr(d) { const m = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس',
+                    'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+                ]; const dt = new Date(d); return `${dt.getDate()} ${m[dt.getMonth()]} ${dt.getFullYear()}`; }
+
+            function uid() { return 'txn_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8); }
+
+            function toast(msg, type = 'info') {
+                const t = document.createElement('div');
+                t.className = 'toast ' + type;
+                const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+                t.innerHTML = `${icons[type]||'ℹ️'} ${msg}`;
                 dom.toastContainer.appendChild(t);
-                setTimeout(() => { t.style.opacity='0'; t.style.transform='translateY(-20px)'; t.style.transition='0.3s'; setTimeout(()=>t.remove(),300); }, 2200);
+                setTimeout(() => { t.style.opacity = '0';
+                    t.style.transform = 'translateY(-20px)';
+                    t.style.transition = 'all 0.35s ease';
+                    setTimeout(() => t.remove(), 350); }, 2400);
             }
 
-            // === DATA PERSISTENCE ===
-            function save() {
-                localStorage.setItem(STORAGE.pBudget, state.personal.budget);
-                localStorage.setItem(STORAGE.pTxns, JSON.stringify(state.personal.transactions));
-                localStorage.setItem(STORAGE.fBudget, state.family.budget);
-                localStorage.setItem(STORAGE.fTxns, JSON.stringify(state.family.transactions));
-                localStorage.setItem(STORAGE.tab, state.activeTab);
+            function saveData() {
+                localStorage.setItem(STORAGE_KEYS.pBudget, state.personal.budget);
+                localStorage.setItem(STORAGE_KEYS.pTxns, JSON.stringify(state.personal.transactions));
+                localStorage.setItem(STORAGE_KEYS.fBudget, state.family.budget);
+                localStorage.setItem(STORAGE_KEYS.fTxns, JSON.stringify(state.family.transactions));
+                localStorage.setItem(STORAGE_KEYS.tab, state.activeTab);
+                localStorage.setItem(STORAGE_KEYS.theme, state.theme);
+                localStorage.setItem(STORAGE_KEYS.color, state.color);
             }
 
-            function load() {
-                state.personal.budget = parseFloat(localStorage.getItem(STORAGE.pBudget)) || 0;
-                state.personal.transactions = JSON.parse(localStorage.getItem(STORAGE.pTxns)) || [];
-                state.family.budget = parseFloat(localStorage.getItem(STORAGE.fBudget)) || 0;
-                state.family.transactions = JSON.parse(localStorage.getItem(STORAGE.fTxns)) || [];
-                state.activeTab = localStorage.getItem(STORAGE.tab) || 'personal';
-                if(!Array.isArray(state.personal.transactions)) state.personal.transactions = [];
-                if(!Array.isArray(state.family.transactions)) state.family.transactions = [];
+            function loadData() {
+                const pb = localStorage.getItem(STORAGE_KEYS.pBudget);
+                state.personal.budget = pb !== null ? +pb : 0;
+                const pt = localStorage.getItem(STORAGE_KEYS.pTxns);
+                state.personal.transactions = pt ? JSON.parse(pt) : [];
+                const fb = localStorage.getItem(STORAGE_KEYS.fBudget);
+                state.family.budget = fb !== null ? +fb : 0;
+                const ft = localStorage.getItem(STORAGE_KEYS.fTxns);
+                state.family.transactions = ft ? JSON.parse(ft) : [];
+                state.activeTab = localStorage.getItem(STORAGE_KEYS.tab) || 'personal';
+                state.theme = localStorage.getItem(STORAGE_KEYS.theme) || 'dark';
+                state.color = localStorage.getItem(STORAGE_KEYS.color) || 'indigo';
+                if (!Array.isArray(state.personal.transactions)) state.personal.transactions = [];
+                if (!Array.isArray(state.family.transactions)) state.family.transactions = [];
+                applyTheme();
             }
 
-            // === COMPUTED ===
-            function spent(cat) { return state[cat].transactions.reduce((s,t)=>s+(+t.amount||0),0); }
+            function applyTheme() {
+                document.documentElement.setAttribute('data-theme', state.theme);
+                document.documentElement.setAttribute('data-color', state.color);
+                document.body.setAttribute('data-theme', state.theme);
+                document.body.setAttribute('data-color', state.color);
+                const metaTheme = document.querySelector('meta[name="theme-color"]');
+                if (metaTheme) {
+                    metaTheme.content = state.theme === 'dark' ? '#0d0f14' : '#ffffff';
+                }
+            }
+
+            function spent(cat) { return state[cat].transactions.reduce((s, t) => s + (+t.amount || 0), 0); }
+
             function remaining(cat) { return state[cat].budget - spent(cat); }
-            function percentage(cat) { if(state[cat].budget<=0) return 0; return Math.min((spent(cat)/state[cat].budget)*100, 100); }
 
-            // === RENDER ===
+            function percentage(cat) { if (state[cat].budget <= 0) return 0; return Math.min((spent(cat) / state[cat]
+                    .budget) * 100, 100); }
+
+            // ==================== RENDER ====================
+            function renderBadges() {
+                dom.badgePersonal.textContent = shortCurrency(spent('personal'));
+                dom.badgeFamily.textContent = shortCurrency(spent('family'));
+            }
+
+            function renderOverview() {
+                const remP = remaining('personal');
+                const remF = remaining('family');
+                if (dom.overviewRemainingPersonal) {
+                    dom.overviewRemainingPersonal.textContent = formatCurrency(remP);
+                    dom.overviewRemainingPersonal.className = 'budget-number ' + (remP > 0 ? 'text-green' : remP < 0 ?
+                        'text-red' : 'text-amber');
+                }
+                if (dom.overviewRemainingFamily) {
+                    dom.overviewRemainingFamily.textContent = formatCurrency(remF);
+                    dom.overviewRemainingFamily.className = 'budget-number ' + (remF > 0 ? 'text-green' : remF < 0 ?
+                        'text-red' : 'text-amber');
+                }
+                if (dom.totalSpentOverall) {
+                    dom.totalSpentOverall.textContent = formatCurrency(spent('personal') + spent('family'));
+                }
+            }
+
             function renderBudget(cat) {
-                const rem = remaining(cat), pct = percentage(cat);
-                const totalEl = cat==='personal'?dom.budgetTotalPersonal:dom.budgetTotalFamily;
-                const remEl = cat==='personal'?dom.budgetRemainingPersonal:dom.budgetRemainingFamily;
-                const pctEl = cat==='personal'?dom.progressPercentPersonal:dom.progressPercentFamily;
-                const fillEl = cat==='personal'?dom.progressFillPersonal:dom.progressFillFamily;
-
-                totalEl.textContent = formatCurrency(state[cat].budget);
-                remEl.textContent = formatCurrency(rem);
-                remEl.className = 'budget-number ' + (rem>0?'text-green':rem<0?'text-red':'text-amber');
-                pctEl.textContent = pct.toFixed(1)+'%';
-                fillEl.style.width = pct+'%';
-                fillEl.classList.remove('progress-safe','progress-warn','progress-danger');
-                if(pct<60) fillEl.classList.add('progress-safe');
-                else if(pct<85) fillEl.classList.add('progress-warn');
-                else fillEl.classList.add('progress-danger');
+                const rem = remaining(cat),
+                    pct = percentage(cat);
+                const totalEl = cat === 'personal' ? dom.budgetTotalPersonal : dom.budgetTotalFamily;
+                const remEl = cat === 'personal' ? dom.budgetRemainingPersonal : dom.budgetRemainingFamily;
+                const pctEl = cat === 'personal' ? dom.progressPercentPersonal : dom.progressPercentFamily;
+                const fillEl = cat === 'personal' ? dom.progressFillPersonal : dom.progressFillFamily;
+                if (totalEl) totalEl.textContent = formatCurrency(state[cat].budget);
+                if (remEl) { remEl.textContent = formatCurrency(rem);
+                    remEl.className = 'budget-number ' + (rem > 0 ? 'text-green' : rem < 0 ? 'text-red' : 'text-amber'); }
+                if (pctEl) pctEl.textContent = pct.toFixed(1) + '%';
+                if (fillEl) { fillEl.style.width = pct + '%';
+                    fillEl.classList.remove('progress-safe', 'progress-warn', 'progress-danger');
+                    fillEl.classList.add(pct < 60 ? 'progress-safe' : pct < 85 ? 'progress-warn' : 'progress-danger'); }
             }
 
             function renderTxns(cat) {
-                const listEl = cat==='personal'?dom.transactionListPersonal:dom.transactionListFamily;
+                const listEl = cat === 'personal' ? dom.transactionListPersonal : dom.transactionListFamily;
+                if (!listEl) return;
                 const txns = [...state[cat].transactions].reverse();
                 listEl.innerHTML = '';
-                if(!txns.length) {
-                    listEl.innerHTML = '<li class="empty-state"><i class="fa-solid fa-receipt"></i><p>لا توجد مصروفات</p></li>';
+                if (!txns.length) {
+                    listEl.innerHTML =
+                        `<li class="empty-state"><i class="fa-solid fa-receipt"></i><p>لا توجد مصروفات ${cat==='personal'?'شخصية':'عائلية'} بعد</p></li>`;
                     return;
                 }
-                txns.forEach(t=>{
-                    const li = document.createElement('li'); li.className='transaction-item';
+                txns.forEach((t, i) => {
+                    const li = document.createElement('li');
+                    li.className = 'transaction-item';
+                    li.style.animationDelay = (i * 0.03) + 's';
                     li.innerHTML = `
                         <div class="transaction-info">
                             <div class="transaction-desc">${escapeHtml(t.description)}</div>
@@ -575,316 +1841,653 @@
                         </div>
                         <div style="display:flex;align-items:center;gap:8px;">
                             <span class="transaction-amount">- ${formatCurrency(t.amount)}</span>
-                            <button class="btn-danger-text del-txn" data-id="${t.id}" data-cat="${cat}"><i class="fa-solid fa-xmark"></i></button>
+                            <button class="btn-danger-text del-txn-btn" data-id="${t.id}" data-cat="${cat}" aria-label="حذف">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
                         </div>`;
                     listEl.appendChild(li);
                 });
-                listEl.querySelectorAll('.del-txn').forEach(b=>b.addEventListener('click', (e)=>{
-                    const id = b.dataset.id, c = b.dataset.cat;
-                    state[c].transactions = state[c].transactions.filter(t=>t.id!==id);
-                    save(); renderAll(); toast('🗑️ تم الحذف');
-                }));
-            }
-
-            function renderOverview() {
-                const remP = remaining('personal'), remF = remaining('family');
-                dom.overviewRemainingPersonal.textContent = formatCurrency(remP);
-                dom.overviewRemainingPersonal.className = 'budget-number ' + (remP>0?'text-green':remP<0?'text-red':'text-amber');
-                dom.overviewRemainingFamily.textContent = formatCurrency(remF);
-                dom.overviewRemainingFamily.className = 'budget-number ' + (remF>0?'text-green':remF<0?'text-red':'text-amber');
-                dom.totalSpentOverall.textContent = formatCurrency(spent('personal') + spent('family'));
-            }
-
-            function renderBadges() {
-                dom.badgePersonal.textContent = shortCurrency(spent('personal'));
-                dom.badgeFamily.textContent = shortCurrency(spent('family'));
+                listEl.querySelectorAll('.del-txn-btn').forEach(b => {
+                    b.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const id = this.dataset.id,
+                            c = this.dataset.cat;
+                        state[c].transactions = state[c].transactions.filter(tx => tx.id !== id);
+                        saveData();
+                        renderAll();
+                        toast('🗑️ تم حذف المصروف', 'info');
+                    });
+                });
             }
 
             function renderAll() {
-                renderBudget('personal'); renderBudget('family');
-                renderTxns('personal'); renderTxns('family');
-                renderBadges(); renderOverview();
+                renderBudget('personal');
+                renderBudget('family');
+                renderTxns('personal');
+                renderTxns('family');
+                renderBadges();
+                renderOverview();
             }
 
-            // === ACTIONS ===
+            function escapeHtml(t) { const d = document.createElement('div');
+                d.textContent = t; return d.innerHTML; }
+
+            // ==================== ACTIONS ====================
             function switchTab(tab) {
-                state.activeTab = tab; save();
-                dom.tabNav.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-                dom.tabNav.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-                dom.sectionPersonal.style.display = tab==='personal'?'':'none';
-                dom.sectionFamily.style.display = tab==='family'?'':'none';
-                dom.bottomNav.querySelectorAll('.bottom-nav-btn').forEach(b=>b.classList.remove('active'));
-                document.getElementById(tab==='personal'?'navPersonal':'navFamily').classList.add('active');
+                state.activeTab = tab;
+                saveData();
+                dom.tabNav.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                const activeBtn = dom.tabNav.querySelector(`[data-tab="${tab}"]`);
+                if (activeBtn) activeBtn.classList.add('active');
+                dom.sectionPersonal.style.display = tab === 'personal' ? '' : 'none';
+                dom.sectionFamily.style.display = tab === 'family' ? '' : 'none';
+                dom.bottomNav.querySelectorAll('.bottom-nav-btn').forEach(b => b.classList.remove('active'));
+                const navBtn = document.getElementById(tab === 'personal' ? 'navPersonal' : 'navFamily');
+                if (navBtn) navBtn.classList.add('active');
                 renderAll();
             }
 
             function addTxn(cat, desc, amt) {
-                if(!desc) return toast('أدخل وصفاً','error');
-                if(isNaN(amt)||amt<=0) return toast('مبلغ غير صحيح','error');
-                state[cat].transactions.push({ id:uid(), description:desc, amount:amt, date:today() });
-                save(); renderAll();
-                if(cat==='personal') { dom.descPersonal.value=''; dom.amountPersonal.value=''; }
-                else { dom.descFamily.value=''; dom.amountFamily.value=''; }
-                toast('تمت الإضافة','success');
-                if(remaining(cat)<0) toast('⚠️ تجاوزت الميزانية!','error');
-            }
-
-            function clearAll(cat) {
-                if(!state[cat].transactions.length) return toast('لا يوجد شيء');
-                openModal('تأكيد المسح', `
-                    <p style="text-align:center;margin-bottom:16px;">مسح جميع مصروفات ${cat==='personal'?'الشخصية':'العائلة'}؟</p>
-                    <div style="display:flex;gap:8px;">
-                        <button class="btn btn-primary flex-1" id="confirmClear">نعم</button>
-                        <button class="btn btn-outline flex-1" id="cancelClear">إلغاء</button>
-                    </div>`);
-                $('#confirmClear').onclick = ()=>{ state[cat].transactions=[]; save(); renderAll(); closeModal(); toast('تم المسح'); };
-                $('#cancelClear').onclick = closeModal;
-            }
-
-            function resetMonth() {
-                if(!state.personal.transactions.length && !state.family.transactions.length) return toast('لا توجد مصروفات لمسحها');
-                openModal('بداية شهر جديد', `
-                    <p style="text-align:center;margin-bottom:16px;">سيتم مسح جميع المصروفات للشخصية والعائلة، مع الاحتفاظ بالميزانيات الحالية. متابعة؟</p>
-                    <div style="display:flex;gap:8px;">
-                        <button class="btn btn-primary flex-1" id="confirmReset">تأكيد</button>
-                        <button class="btn btn-outline flex-1" id="cancelReset">إلغاء</button>
-                    </div>`);
-                $('#confirmReset').onclick = ()=>{
-                    state.personal.transactions = [];
-                    state.family.transactions = [];
-                    save(); renderAll(); closeModal();
-                    toast('🎉 شهر جديد سعيد! تم مسح المصروفات.');
-                };
-                $('#cancelReset').onclick = closeModal;
-            }
-
-            function quickSettingsModal() {
-                openModal('الإعدادات السريعة', `
-                    <div style="display:flex;flex-direction:column;gap:12px;">
-                        <button class="btn btn-outline w-100" id="qsSetPersonal">تعديل الميزانية الشخصية</button>
-                        <button class="btn btn-outline w-100" id="qsSetFamily">تعديل ميزانية العائلة</button>
-                        <button class="btn btn-outline w-100" id="qsCalculator">حاسبة الدخل</button>
-                        <button class="btn btn-outline w-100" id="qsExport">تصدير التقارير</button>
-                    </div>`);
-                $('#qsSetPersonal').onclick = ()=>{ closeModal(); setBudgetModal('personal'); };
-                $('#qsSetFamily').onclick = ()=>{ closeModal(); setBudgetModal('family'); };
-                $('#qsCalculator').onclick = ()=>{ closeModal(); openCalculator(); };
-                $('#qsExport').onclick = ()=>{ closeModal(); openExportOptions(); };
+                if (!desc || !desc.trim()) return toast('⚠️ الرجاء إدخال وصف للمصروف', 'error');
+                if (isNaN(amt) || amt <= 0) return toast('⚠️ الرجاء إدخال مبلغ صحيح', 'error');
+                state[cat].transactions.push({ id: uid(), description: desc.trim(), amount: amt, date: today() });
+                saveData();
+                renderAll();
+                if (cat === 'personal') { dom.descPersonal.value = '';
+                    dom.amountPersonal.value = '';
+                    dom.descPersonal.focus(); } else { dom.descFamily.value = '';
+                    dom.amountFamily.value = '';
+                    dom.descFamily.focus(); }
+                const rem = remaining(cat);
+                if (rem < 0) {
+                    toast('⚠️ تنبيه: لقد تجاوزت الميزانية المحددة!', 'error');
+                } else if (rem < state[cat].budget * 0.1 && state[cat].budget > 0) {
+                    toast('⚡ الميزانية أوشكت على النفاد (أقل من 10%)', 'info');
+                } else {
+                    toast('✅ تم إضافة المصروف بنجاح', 'success');
+                }
             }
 
             function setBudgetModal(cat) {
-                const name = cat==='personal'?'الشخصية':'البيت والعائلة';
-                openModal(`تحديد ميزانية ${name}`, `
+                const name = cat === 'personal' ? 'الشخصية' : 'البيت والعائلة';
+                dom.modalTitle.textContent = '📋 تحديد ميزانية ' + name;
+                dom.modalContent.innerHTML = `
                     <div style="text-align:center;">
-                        <input type="number" class="form-input" id="budgetInput" value="${state[cat].budget}" step="1" min="0" style="font-size:1.3rem;text-align:center;margin-bottom:16px;">
+                        <p style="color:var(--text-secondary);margin-bottom:12px;font-size:0.8rem;">أدخل الميزانية الشهرية لمصاريف <strong>${name}</strong></p>
+                        <input type="number" class="form-input" id="budgetInput" value="${state[cat].budget}" step="1" min="0" style="font-size:1.3rem;text-align:center;margin-bottom:14px;" placeholder="المبلغ بالجنيه المصري">
                         <div style="display:flex;gap:8px;">
-                            <button class="btn btn-primary flex-1" id="saveBudgetBtn">حفظ</button>
+                            <button class="btn btn-primary flex-1" id="saveBudgetBtn">💾 حفظ</button>
                             <button class="btn btn-outline flex-1" id="cancelBudgetBtn">إلغاء</button>
                         </div>
-                    </div>`);
-                $('#budgetInput').focus();
-                $('#saveBudgetBtn').onclick = ()=>{
-                    const v = parseFloat($('#budgetInput').value);
-                    if(isNaN(v)||v<0) return toast('قيمة غير صحيحة','error');
-                    state[cat].budget = v; save(); renderAll(); closeModal(); toast('✅ تم الحفظ');
-                };
-                $('#cancelBudgetBtn').onclick = closeModal;
+                    </div>`;
+                dom.modalBackdrop.classList.add('active');
+                setTimeout(() => { const inp = $('#budgetInput'); if (inp) inp.focus(); }, 200);
+                $('#saveBudgetBtn').addEventListener('click', () => {
+                    const v = parseFloat($('#budgetInput')?.value);
+                    if (isNaN(v) || v < 0) return toast('⚠️ قيمة غير صحيحة', 'error');
+                    state[cat].budget = v;
+                    saveData();
+                    renderAll();
+                    closeModal();
+                    toast('✅ تم حفظ الميزانية بنجاح', 'success');
+                });
+                $('#cancelBudgetBtn').addEventListener('click', closeModal);
             }
 
-            // === CALCULATOR ===
-            function openCalculator() {
-                openModal('حاسبة الدخل المتعدد', `
-                    <div id="calcApp">
-                        <div id="incomeSources" style="max-height:180px;overflow-y:auto;margin-bottom:12px;"></div>
-                        <button class="btn btn-outline btn-sm w-100" id="addIncomeSource">+ إضافة مصدر دخل</button>
-                        <div class="budget-cell" style="margin:12px 0;"><span>الإجمالي: </span><strong id="calcTotal" style="font-family:var(--font-latin);">0 ج.م</strong></div>
-                        <div class="form-row" style="margin-bottom:10px;">
-                            <div class="form-group"><label>نسبة الشخصية %</label><input type="number" class="form-input" id="pctPersonal" value="40" min="0" max="100"></div>
-                            <div class="form-group"><label>نسبة العائلة %</label><input type="number" class="form-input" id="pctFamily" value="60" readonly></div>
+            function clearAllModal(cat) {
+                if (!state[cat].transactions.length) return toast('ℹ️ لا توجد مصروفات لمسحها', 'info');
+                const name = cat === 'personal' ? 'الشخصية' : 'العائلية';
+                dom.modalTitle.textContent = '🗑️ تأكيد المسح';
+                dom.modalContent.innerHTML = `
+                    <div style="text-align:center;">
+                        <p style="color:var(--danger);font-weight:600;margin-bottom:8px;">⚠️ هل أنت متأكد من مسح جميع مصروفات ${name}؟</p>
+                        <p style="color:var(--text-muted);font-size:0.7rem;margin-bottom:14px;">عدد المصروفات: ${state[cat].transactions.length} - لا يمكن التراجع</p>
+                        <div style="display:flex;gap:8px;">
+                            <button class="btn btn-primary flex-1" id="confirmClearBtn" style="background:var(--danger);">🗑️ نعم امسح</button>
+                            <button class="btn btn-outline flex-1" id="cancelClearBtn">إلغاء</button>
                         </div>
-                        <div class="budget-cell">👤 الشخصية: <span id="sharePersonal">0 ج.م</span></div>
-                        <div class="budget-cell" style="margin-bottom:12px;">🏠 العائلة: <span id="shareFamily">0 ج.م</span></div>
-                        <button class="btn btn-primary w-100" id="applyCalc">تطبيق على الميزانيات</button>
-                    </div>`);
-                let sources = [{id:uid(), name:'', amount:''}];
+                    </div>`;
+                dom.modalBackdrop.classList.add('active');
+                $('#confirmClearBtn').addEventListener('click', () => { state[cat].transactions = [];
+                    saveData();
+                    renderAll();
+                    closeModal();
+                    toast('🗑️ تم مسح جميع المصروفات', 'info'); });
+                $('#cancelClearBtn').addEventListener('click', closeModal);
+            }
+
+            function closeModal() {
+                dom.modalBackdrop.classList.remove('active');
+                setTimeout(() => { dom.modalContent.innerHTML = ''; }, 350);
+            }
+
+            // ==================== CALCULATOR ====================
+            function openCalculator() {
+                dom.modalTitle.textContent = '🧮 حاسبة الدخل المتعدد';
+                dom.modalContent.innerHTML = `
+                    <div id="calcApp">
+                        <p style="text-align:center;color:var(--text-secondary);font-size:0.75rem;margin-bottom:10px;">💡 أدخل مصادر دخلك وسيتم تقسيمها على الفئتين</p>
+                        <div id="incomeSources" style="max-height:170px;overflow-y:auto;margin-bottom:10px;"></div>
+                        <button class="btn btn-outline btn-sm w-100" id="addIncomeSource"><i class="fa-solid fa-plus"></i> إضافة مصدر دخل</button>
+                        <div class="budget-cell" style="margin:10px 0;"><span>💰 الإجمالي: </span><strong id="calcTotal" style="font-family:var(--font-latin);">0 ج.م</strong></div>
+                        <div class="form-row" style="margin-bottom:8px;">
+                            <div class="form-group"><label class="form-label">نسبة الشخصية %</label><input type="number" class="form-input" id="pctPersonal" value="40" min="0" max="100" step="1"></div>
+                            <div class="form-group"><label class="form-label">نسبة العائلة %</label><input type="number" class="form-input" id="pctFamily" value="60" readonly></div>
+                        </div>
+                        <div class="budget-cell" style="margin-bottom:4px;">👤 نصيب الشخصية: <span id="sharePersonal" style="font-family:var(--font-latin);">0 ج.م</span></div>
+                        <div class="budget-cell" style="margin-bottom:10px;">🏠 نصيب العائلة: <span id="shareFamily" style="font-family:var(--font-latin);">0 ج.م</span></div>
+                        <button class="btn btn-primary w-100" id="applyCalc">✅ تطبيق على الميزانيات</button>
+                    </div>`;
+                dom.modalBackdrop.classList.add('active');
+                let sources = [{ id: uid(), name: '', amount: '' }];
+
                 function renderSources() {
                     const container = $('#incomeSources');
-                    container.innerHTML = sources.map((s,i)=>`
-                        <div class="form-row" style="margin-bottom:6px;">
+                    if (!container) return;
+                    container.innerHTML = sources.map((s, i) => `
+                        <div class="form-row" style="margin-bottom:5px;">
                             <input class="form-input src-name" placeholder="المصدر ${i+1}" value="${escapeHtml(s.name)}">
-                            <input class="form-input src-amount" type="number" placeholder="المبلغ" value="${s.amount}" style="max-width:100px;">
-                            ${sources.length>1?`<button class="btn-danger-text del-src" data-id="${s.id}"><i class="fa-solid fa-trash"></i></button>`:''}
+                            <input class="form-input src-amount" type="number" placeholder="المبلغ" value="${s.amount}" style="max-width:100px;" step="0.01" min="0">
+                            ${sources.length>1?`<button class="btn-danger-text del-src-btn" data-id="${s.id}"><i class="fa-solid fa-trash"></i></button>`:'<span style="width:30px;"></span>'}
                         </div>`).join('');
-                    container.querySelectorAll('.src-name,.src-amount').forEach(inp=>inp.addEventListener('input', updateCalc));
-                    container.querySelectorAll('.del-src').forEach(b=>b.addEventListener('click', (e)=>{
-                        sources = sources.filter(s=>s.id!==b.dataset.id); renderSources(); updateCalc();
+                    container.querySelectorAll('.src-name,.src-amount').forEach(inp => inp.addEventListener('input',
+                        updateCalc));
+                    container.querySelectorAll('.del-src-btn').forEach(b => b.addEventListener('click', () => {
+                        sources = sources.filter(s => s.id !== b.dataset.id);
+                        renderSources();
+                        updateCalc();
                     }));
                 }
+
                 function updateCalc() {
-                    const names = $$('#incomeSources .src-name'), amounts = $$('#incomeSources .src-amount');
-                    let total=0; sources.forEach((s,i)=>{ s.name=names[i]?.value||''; s.amount=amounts[i]?.value||''; total+= +s.amount||0; });
-                    const pctP = +($('#pctPersonal')?.value||0); const pctF = Math.max(0,100-pctP);
-                    if($('#pctFamily')) $('#pctFamily').value = pctF;
-                    $('#calcTotal').textContent = formatCurrency(total);
-                    $('#sharePersonal').textContent = formatCurrency(total*pctP/100);
-                    $('#shareFamily').textContent = formatCurrency(total*pctF/100);
+                    const names = $$('#incomeSources .src-name'),
+                        amounts = $$('#incomeSources .src-amount');
+                    let total = 0;
+                    sources.forEach((s, i) => { s.name = names[i]?.value || '';
+                        s.amount = amounts[i]?.value || '';
+                        total += +s.amount || 0; });
+                    const pctP = +($('#pctPersonal')?.value || 0);
+                    const pctF = Math.max(0, 100 - pctP);
+                    const pctFEl = $('#pctFamily');
+                    if (pctFEl) pctFEl.value = pctF;
+                    const calcTotalEl = $('#calcTotal');
+                    if (calcTotalEl) calcTotalEl.textContent = formatCurrency(total);
+                    const sharePEl = $('#sharePersonal');
+                    if (sharePEl) sharePEl.textContent = formatCurrency(total * pctP / 100);
+                    const shareFEl = $('#shareFamily');
+                    if (shareFEl) shareFEl.textContent = formatCurrency(total * pctF / 100);
                 }
-                $('#addIncomeSource').onclick = ()=>{ sources.push({id:uid(),name:'',amount:''}); renderSources(); updateCalc(); };
-                $('#pctPersonal').oninput = ()=>{ let v=+$('#pctPersonal').value; v=Math.max(0,Math.min(100,v)); $('#pctPersonal').value=v; updateCalc(); };
-                $('#applyCalc').onclick = ()=>{
-                    const total = +($('#calcTotal').textContent.replace(/[^0-9.]/g,''))||0;
-                    const pctP = +($('#pctPersonal')?.value||0);
-                    if(total<=0) return toast('أدخل دخلاً صحيحاً','error');
-                    state.personal.budget = total*pctP/100; state.family.budget = total*(100-pctP)/100;
-                    save(); renderAll(); closeModal(); toast('✅ تم تطبيق الميزانيات');
-                };
-                renderSources(); updateCalc();
+                $('#addIncomeSource').addEventListener('click', () => { sources.push({ id: uid(), name: '',
+                        amount: '' });
+                    renderSources();
+                    updateCalc(); });
+                $('#pctPersonal').addEventListener('input', () => { let v = +$('#pctPersonal').value;
+                    v = Math.max(0, Math.min(100, v));
+                    $('#pctPersonal').value = v;
+                    updateCalc(); });
+                $('#applyCalc').addEventListener('click', () => {
+                    const totalText = $('#calcTotal')?.textContent?.replace(/[^0-9.]/g, '') || '0';
+                    const total = parseFloat(totalText) || 0;
+                    const pctP = +($('#pctPersonal')?.value || 0);
+                    if (total <= 0) return toast('⚠️ أدخل دخلاً صحيحاً', 'error');
+                    state.personal.budget = total * pctP / 100;
+                    state.family.budget = total * (100 - pctP) / 100;
+                    saveData();
+                    renderAll();
+                    closeModal();
+                    toast('✅ تم تطبيق الميزانيات بنجاح!', 'success');
+                });
+                renderSources();
+                updateCalc();
             }
 
-            // === EXPORT ===
+            // ==================== EXPORT ====================
             function buildExportHTML(cat) {
-                const d = state[cat]; const s = spent(cat); const r = remaining(cat); const p = percentage(cat);
-                const name = cat==='personal'?'المصاريف الشخصية':'مصاريف البيت والعائلة';
-                let rows = d.transactions.length?d.transactions.slice().reverse().map((t,i)=>`<tr><td>${i+1}</td><td>${escapeHtml(t.description)}</td><td>${formatDateAr(t.date)}</td><td>${formatCurrency(t.amount)}</td></tr>`).join(''):'<tr><td colspan="4" style="text-align:center;">لا توجد مصروفات</td></tr>';
-                return `<div style="font-family:'Cairo',sans-serif;direction:rtl;background:#0d0f14;color:#fff;padding:24px;border-radius:20px;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;"><h2>${name}</h2><span>${formatCurrency(d.budget)}</span></div>
-                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">
-                        <div style="background:#1a1c23;padding:12px;border-radius:12px;text-align:center;"><div>الميزانية</div><strong>${formatCurrency(d.budget)}</strong></div>
-                        <div style="background:#1a1c23;padding:12px;border-radius:12px;text-align:center;"><div>المصروف</div><strong style="color:#f43f5e;">${formatCurrency(s)}</strong></div>
-                        <div style="background:#1a1c23;padding:12px;border-radius:12px;text-align:center;"><div>المتبقي</div><strong style="color:#10b981;">${formatCurrency(r)}</strong></div>
+                const d = state[cat];
+                const s = spent(cat),
+                    r = remaining(cat),
+                    p = percentage(cat);
+                const name = cat === 'personal' ? 'المصاريف الشخصية' : 'مصاريف البيت والعائلة';
+                let rows = d.transactions.length ? d.transactions.slice().reverse().map((t, i) =>
+                    `<tr><td>${i+1}</td><td>${escapeHtml(t.description)}</td><td>${formatDateAr(t.date)}</td><td style="font-weight:700;">${formatCurrency(t.amount)}</td></tr>`
+                ).join('') :
+                    '<tr><td colspan="4" style="text-align:center;padding:20px;">لا توجد مصروفات مسجلة</td></tr>';
+                return `<div style="font-family:'Cairo',sans-serif;direction:rtl;background:var(--bg-canvas);color:var(--text-primary);padding:24px;border-radius:20px;border:2px solid var(--accent-primary);">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;"><h2 style="margin:0;">${name}</h2><span style="font-family:var(--font-latin);font-weight:700;">الميزانية: ${formatCurrency(d.budget)}</span></div>
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">
+                        <div style="background:var(--bg-overlay);padding:12px;border-radius:12px;text-align:center;"><div style="font-size:0.65rem;color:var(--text-muted);">الميزانية</div><strong>${formatCurrency(d.budget)}</strong></div>
+                        <div style="background:var(--bg-overlay);padding:12px;border-radius:12px;text-align:center;"><div style="font-size:0.65rem;color:var(--text-muted);">المصروف</div><strong style="color:var(--danger);">${formatCurrency(s)}</strong></div>
+                        <div style="background:var(--bg-overlay);padding:12px;border-radius:12px;text-align:center;"><div style="font-size:0.65rem;color:var(--text-muted);">المتبقي</div><strong style="color:var(--success);">${formatCurrency(r)}</strong></div>
                     </div>
-                    <table style="width:100%;border-collapse:collapse;margin-top:12px;"><thead><tr style="border-bottom:1px solid #2a2d37;"><th>#</th><th>الوصف</th><th>التاريخ</th><th>المبلغ</th></tr></thead><tbody>${rows}</tbody></table>
-                    <div style="margin-top:20px;text-align:center;font-size:0.7rem;color:#6b7280;">تطبيق متعقب المصاريف | Hazem K H Madi</div></div>`;
+                    <div style="margin-bottom:8px;"><div style="height:8px;background:var(--progress-bg);border-radius:10px;overflow:hidden;"><div style="height:100%;width:${p}%;background:${p<60?'var(--success)':p<85?'var(--warning)':'var(--danger)'};border-radius:10px;"></div></div><div style="text-align:left;font-size:0.6rem;color:var(--text-muted);margin-top:3px;">الصرف: ${p.toFixed(1)}%</div></div>
+                    <table style="width:100%;border-collapse:collapse;margin-top:10px;font-size:0.75rem;"><thead><tr style="border-bottom:2px solid var(--border-medium);"><th style="padding:8px;text-align:right;">#</th><th style="padding:8px;text-align:right;">الوصف</th><th style="padding:8px;text-align:right;">التاريخ</th><th style="padding:8px;text-align:right;">المبلغ</th></tr></thead><tbody>${rows}</tbody><tfoot><tr style="border-top:2px solid var(--border-medium);"><td colspan="3" style="padding:10px;text-align:left;font-weight:700;">الإجمالي</td><td style="padding:10px;font-weight:700;color:var(--danger);">${formatCurrency(s)}</td></tr></tfoot></table>
+                    <div style="margin-top:18px;text-align:center;font-size:0.6rem;color:var(--text-muted);border-top:1px solid var(--border-subtle);padding-top:10px;">تطبيق متعقب المصاريف | Built by <strong>Hazem K H Madi</strong> - Senior Product Designer</div>
+                </div>`;
             }
 
             async function exportFile(cat, format) {
-                const html = buildExportHTML(cat); dom.exportWrapper.innerHTML = html;
-                dom.exportWrapper.style.position='relative'; dom.exportWrapper.style.left='auto'; dom.exportWrapper.style.zIndex='300'; dom.exportWrapper.style.opacity='1'; dom.exportWrapper.style.margin='20px auto'; dom.exportWrapper.style.width='720px';
-                await new Promise(r=>setTimeout(r,400));
+                const html = buildExportHTML(cat);
+                dom.exportWrapper.innerHTML = html;
+                dom.exportWrapper.style.cssText =
+                    'position:relative;left:auto;z-index:300;opacity:1;pointer-events:auto;margin:16px auto;width:95%;max-width:720px;border-radius:20px;overflow:hidden;';
+                dom.exportWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                await new Promise(r => setTimeout(r, 500));
                 try {
-                    const canvas = await html2canvas(dom.exportWrapper, {scale:2,backgroundColor:'#0d0f14',logging:false});
-                    if(format==='png') {
-                        const a=document.createElement('a'); a.download=`تقرير_${cat}_${today()}.png`; a.href=canvas.toDataURL(); a.click(); toast('📸 PNG تم');
+                    const canvas = await html2canvas(dom.exportWrapper, { scale: 2, backgroundColor: getComputedStyle(
+                            document.body).getPropertyValue('--bg-canvas').trim() || '#0d0f14', logging: false,
+                        useCORS: true });
+                    if (format === 'png') {
+                        const a = document.createElement('a');
+                        a.download = `تقرير_المصاريف_${cat==='personal'?'الشخصية':'العائلية'}_${today()}.png`;
+                        a.href = canvas.toDataURL('image/png');
+                        a.click();
+                        toast('📸 تم تصدير التقرير كصورة PNG', 'success');
                     } else {
-                        const {jsPDF}=window.jspdf; const pdf=new jsPDF('p','mm','a4'); const w=210,h=(canvas.height*w)/canvas.width;
-                        pdf.addImage(canvas,'PNG',0,0,w,Math.min(h,297)); if(h>297){let rem=h-297;while(rem>0){pdf.addPage();pdf.addImage(canvas,'PNG',0,-297,w,h);rem-=297;}}
-                        pdf.save(`تقرير_${cat}_${today()}.pdf`); toast('📄 PDF تم');
+                        const { jsPDF } = window.jspdf;
+                        const pdf = new jsPDF('p', 'mm', 'a4');
+                        const imgW = 210,
+                            imgH = (canvas.height * imgW) / canvas.width;
+                        pdf.addImage(canvas, 'PNG', 0, 0, imgW, Math.min(imgH, 297));
+                        if (imgH > 297) { let rh = imgH - 297; while (rh > 0) { pdf.addPage();
+                                pdf.addImage(canvas, 'PNG', 0, -297, imgW, imgH);
+                                rh -= 297; } }
+                        pdf.save(`تقرير_المصاريف_${cat==='personal'?'الشخصية':'العائلية'}_${today()}.pdf`);
+                        toast('📄 تم تصدير التقرير كملف PDF', 'success');
                     }
-                } catch(e) { toast('فشل التصدير','error'); console.error(e); }
-                dom.exportWrapper.style.position='absolute'; dom.exportWrapper.style.left='-9999px'; dom.exportWrapper.style.zIndex='-1'; dom.exportWrapper.style.opacity='0'; dom.exportWrapper.innerHTML='';
+                } catch (e) { toast('❌ فشل التصدير', 'error');
+                    console.error(e); }
+                setTimeout(() => { dom.exportWrapper.style.cssText =
+                        'position:absolute;left:-9999px;z-index:-1;opacity:0;pointer-events:none;';
+                    dom.exportWrapper.innerHTML = ''; }, 400);
             }
 
             function openExportOptions() {
-                openModal('تصدير التقرير', `
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-                        <button class="btn btn-outline exp-btn" data-cat="personal" data-f="png">📸 شخصي PNG</button>
-                        <button class="btn btn-outline exp-btn" data-cat="personal" data-f="pdf">📄 شخصي PDF</button>
-                        <button class="btn btn-outline exp-btn" data-cat="family" data-f="png">📸 عائلي PNG</button>
-                        <button class="btn btn-outline exp-btn" data-cat="family" data-f="pdf">📄 عائلي PDF</button>
-                    </div><button class="btn btn-outline w-100 mt-2" id="cancelExp">إلغاء</button>`);
-                $$('.exp-btn').forEach(b=>b.addEventListener('click',()=>{ closeModal(); exportFile(b.dataset.cat,b.dataset.f); }));
-                $('#cancelExp').onclick=closeModal;
-            }
-
-            // === MODAL HELPERS ===
-            function openModal(title, content) {
-                dom.modalTitle.textContent = title;
-                dom.modalContent.innerHTML = content;
+                dom.modalTitle.textContent = '📤 تصدير التقرير';
+                dom.modalContent.innerHTML = `
+                    <p style="text-align:center;color:var(--text-secondary);font-size:0.75rem;margin-bottom:12px;">اختر الفئة والصيغة</p>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                        <button class="btn btn-outline exp-opt-btn" data-cat="personal" data-f="png" style="flex-direction:column;gap:6px;padding:14px;">📸<span>شخصي PNG</span></button>
+                        <button class="btn btn-outline exp-opt-btn" data-cat="personal" data-f="pdf" style="flex-direction:column;gap:6px;padding:14px;">📄<span>شخصي PDF</span></button>
+                        <button class="btn btn-outline exp-opt-btn" data-cat="family" data-f="png" style="flex-direction:column;gap:6px;padding:14px;">📸<span>عائلي PNG</span></button>
+                        <button class="btn btn-outline exp-opt-btn" data-cat="family" data-f="pdf" style="flex-direction:column;gap:6px;padding:14px;">📄<span>عائلي PDF</span></button>
+                    </div>
+                    <button class="btn btn-outline w-100 mt-3" id="cancelExpBtn">إلغاء</button>`;
                 dom.modalBackdrop.classList.add('active');
+                $$('.exp-opt-btn').forEach(b => b.addEventListener('click', () => { closeModal();
+                    exportFile(b.dataset.cat, b.dataset.f); }));
+                $('#cancelExpBtn').addEventListener('click', closeModal);
             }
-            function closeModal() { dom.modalBackdrop.classList.remove('active'); }
 
-            // === PWA INSTALL LOGIC ===
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                dom.navInstall.style.display = 'flex';
-            });
+            // ==================== SETTINGS PANEL ====================
+            function openSettings() {
+                dom.modalTitle.textContent = '⚙️ الإعدادات والتخصيص';
+                dom.modalContent.innerHTML = `
+                    <div class="settings-section">
+                        <h4>🌓 المظهر</h4>
+                        <div class="theme-toggle" id="themeToggle">
+                            <button data-theme="dark" class="${state.theme==='dark'?'active':''}">🌙 داكن</button>
+                            <button data-theme="light" class="${state.theme==='light'?'active':''}">☀️ فاتح</button>
+                        </div>
+                    </div>
+                    <div class="settings-section">
+                        <h4>🎨 نظام الألوان</h4>
+                        <div class="color-swatches" id="colorSwatches">
+                            <div class="color-swatch indigo ${state.color==='indigo'?'active':''}" data-color="indigo" title="نيلي"></div>
+                            <div class="color-swatch emerald ${state.color==='emerald'?'active':''}" data-color="emerald" title="زمردي"></div>
+                            <div class="color-swatch rose ${state.color==='rose'?'active':''}" data-color="rose" title="وردي"></div>
+                            <div class="color-swatch ocean ${state.color==='ocean'?'active':''}" data-color="ocean" title="محيط"></div>
+                            <div class="color-swatch mono ${state.color==='mono'?'active':''}" data-color="mono" title="أحادي"></div>
+                        </div>
+                    </div>
+                    <div class="settings-section">
+                        <h4>💾 البيانات</h4>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                            <button class="btn btn-outline btn-sm" id="btnExportData"><i class="fa-solid fa-download"></i> تصدير البيانات</button>
+                            <button class="btn btn-outline btn-sm" id="btnImportData"><i class="fa-solid fa-upload"></i> استيراد البيانات</button>
+                            <input type="file" id="importFileInput" accept=".json" style="display:none;">
+                            <button class="btn-danger-text" id="btnResetAll">🗑️ إعادة ضبط الكل</button>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline w-100 mt-3" id="closeSettingsBtn">إغلاق</button>`;
+                dom.modalBackdrop.classList.add('active');
 
-            window.addEventListener('appinstalled', () => {
-                deferredPrompt = null;
-                dom.navInstall.style.display = 'none';
-                toast('تم تثبيت التطبيق!', 'success');
-            });
+                // Theme toggle
+                $$('#themeToggle button').forEach(b => b.addEventListener('click', () => {
+                    state.theme = b.dataset.theme;
+                    applyTheme();
+                    saveData();
+                    $$('#themeToggle button').forEach(x => x.classList.remove('active'));
+                    b.classList.add('active');
+                    toast(`تم تغيير المظهر إلى ${state.theme==='dark'?'الداكن':'الفاتح'}`, 'success');
+                }));
+
+                // Color swatches
+                $$('#colorSwatches .color-swatch').forEach(s => s.addEventListener('click', () => {
+                    state.color = s.dataset.color;
+                    applyTheme();
+                    saveData();
+                    $$('#colorSwatches .color-swatch').forEach(x => x.classList.remove(
+                        'active'));
+                    s.classList.add('active');
+                    toast('🎨 تم تغيير نظام الألوان', 'success');
+                }));
+
+                // Export data
+                $('#btnExportData').addEventListener('click', () => {
+                    const data = {
+                        personal: state.personal,
+                        family: state.family,
+                        theme: state.theme,
+                        color: state.color,
+                        exportedAt: new Date().toISOString(),
+                    };
+                    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = `بيانات_المصاريف_${today()}.json`;
+                    a.click();
+                    toast('💾 تم تصدير البيانات بنجاح', 'success');
+                });
+
+                // Import data
+                const fileInput = $('#importFileInput');
+                $('#btnImportData').addEventListener('click', () => fileInput.click());
+                fileInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        try {
+                            const data = JSON.parse(ev.target.result);
+                            if (data.personal && data.family) {
+                                state.personal = data.personal;
+                                state.family = data.family;
+                                if (data.theme) state.theme = data.theme;
+                                if (data.color) state.color = data.color;
+                                saveData();
+                                applyTheme();
+                                renderAll();
+                                toast('✅ تم استيراد البيانات بنجاح', 'success');
+                            } else { toast('❌ ملف غير صالح', 'error'); }
+                        } catch { toast('❌ فشل قراءة الملف', 'error'); }
+                    };
+                    reader.readAsText(file);
+                    fileInput.value = '';
+                });
+
+                // Reset all
+                $('#btnResetAll').addEventListener('click', () => {
+                    if (confirm(
+                            '⚠️ هل أنت متأكد من إعادة ضبط جميع البيانات؟ لا يمكن التراجع عن هذا الإجراء.')) {
+                        state.personal = { budget: 0, transactions: [] };
+                        state.family = { budget: 0, transactions: [] };
+                        state.theme = 'dark';
+                        state.color = 'indigo';
+                        saveData();
+                        applyTheme();
+                        renderAll();
+                        closeModal();
+                        toast('🗑️ تم إعادة ضبط جميع البيانات', 'info');
+                    }
+                });
+
+                $('#closeSettingsBtn').addEventListener('click', closeModal);
+            }
+
+            // ==================== PLAY STORE ====================
+            function openPlayStoreGuide() {
+                dom.modalTitle.textContent = '📱 التثبيت من Google Play';
+                dom.modalContent.innerHTML = `
+                    <div style="text-align:center;">
+                        <div style="font-size:3rem;margin-bottom:10px;">📲</div>
+                        <p style="font-weight:700;font-size:0.9rem;color:var(--text-primary);margin-bottom:6px;">تثبيت التطبيق كتطبيق رسمي</p>
+                        <p style="color:var(--text-secondary);font-size:0.75rem;margin-bottom:14px;">يمكنك تثبيت هذا التطبيق من Google Play Store باستخدام تقنية Trusted Web Activity (TWA)</p>
+                        <div style="background:var(--bg-overlay);border-radius:var(--radius-md);padding:14px;text-align:right;font-size:0.7rem;color:var(--text-secondary);margin-bottom:12px;line-height:1.7;">
+                            <p><strong>📋 خطوات النشر على Google Play:</strong></p>
+                            <p>1. أنشئ مشروع TWA باستخدام <strong>Bubblewrap</strong> أو <strong>PWABuilder</strong></p>
+                            <p>2. أضف عنوان URL هذا كـ start_url في manifest</p>
+                            <p>3. وقع التطبيق بشهادة Android</p>
+                            <p>4. ارفع الـ APK/AAB إلى Google Play Console</p>
+                            <p>5. انشر التطبيق ليكون متاحاً للتحميل</p>
+                        </div>
+                        <p style="color:var(--text-muted);font-size:0.65rem;margin-bottom:10px;">أو يمكنك تثبيته الآن مباشرة من المتصفح:</p>
+                        <button class="btn btn-primary w-100" id="installPWAnow">
+                            <i class="fa-solid fa-download"></i> تثبيت التطبيق الآن (PWA)
+                        </button>
+                    </div>`;
+                dom.modalBackdrop.classList.add('active');
+                $('#installPWAnow').addEventListener('click', () => {
+                    closeModal();
+                    promptInstall();
+                });
+            }
 
             function promptInstall() {
                 if (deferredPrompt) {
                     deferredPrompt.prompt();
                     deferredPrompt.userChoice.then((choiceResult) => {
                         if (choiceResult.outcome === 'accepted') {
-                            toast('🎉 جاري التثبيت...', 'success');
+                            toast('🎉 تم تثبيت التطبيق بنجاح!', 'success');
+                            spawnConfetti();
                         }
                         deferredPrompt = null;
-                        dom.navInstall.style.display = 'none';
                     });
                 } else {
-                    // iOS or unsupported fallback
-                    openModal('تثبيت التطبيق', `
+                    dom.modalTitle.textContent = '📲 تثبيت التطبيق';
+                    dom.modalContent.innerHTML = `
                         <div style="text-align:center;">
-                            <p style="margin-bottom:12px;">لتثبيت التطبيق على هاتفك:</p>
-                            <p><strong>📱 iPhone (iOS):</strong> اضغط على زر المشاركة <i class="fa-solid fa-square-arrow-up-right"></i> ثم "إضافة إلى الشاشة الرئيسية".</p>
-                            <p style="margin-top:8px;"><strong>🤖 Android:</strong> اضغط على القائمة (⋮) واختر "تثبيت التطبيق" أو "Add to Home screen".</p>
+                            <p style="margin-bottom:12px;font-size:0.85rem;">لتثبيت التطبيق على هاتفك:</p>
+                            <p style="font-size:0.75rem;color:var(--text-secondary);"><strong>📱 iPhone (iOS):</strong><br>اضغط على زر المشاركة <i class="fa-solid fa-square-arrow-up-right"></i> ثم "إضافة إلى الشاشة الرئيسية"</p>
+                            <p style="font-size:0.75rem;color:var(--text-secondary);margin-top:8px;"><strong>🤖 Android:</strong><br>اضغط على القائمة (⋮) واختر "تثبيت التطبيق" أو "Add to Home screen"</p>
                             <button class="btn btn-outline w-100 mt-3" id="closeInstallGuide">حسناً</button>
-                        </div>`);
-                    $('#closeInstallGuide').onclick = closeModal;
+                        </div>`;
+                    dom.modalBackdrop.classList.add('active');
+                    $('#closeInstallGuide').addEventListener('click', closeModal);
                 }
             }
 
-            // === EVENT LISTENERS ===
-            dom.tabNav.addEventListener('click', e=>{ const btn=e.target.closest('.tab-btn'); if(btn) switchTab(btn.dataset.tab); });
-            dom.addPersonalBtn.addEventListener('click', ()=>addTxn('personal', dom.descPersonal.value.trim(), +dom.amountPersonal.value));
-            dom.addFamilyBtn.addEventListener('click', ()=>addTxn('family', dom.descFamily.value.trim(), +dom.amountFamily.value));
-            dom.setBudgetPersonal.onclick = ()=>setBudgetModal('personal');
-            dom.setBudgetFamily.onclick = ()=>setBudgetModal('family');
-            dom.clearPersonalBtn.onclick = ()=>clearAll('personal');
-            dom.clearFamilyBtn.onclick = ()=>clearAll('family');
-            dom.btnResetMonth.onclick = resetMonth;
-            dom.btnQuickSettings.onclick = quickSettingsModal;
-            dom.modalBackdrop.addEventListener('click', e=>{ if(e.target===dom.modalBackdrop) closeModal(); });
-            document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+            function spawnConfetti() {
+                const colors = ['#6366f1', '#8b5cf6', '#10b981', '#f59e0b', '#f43f5e', '#0ea5e9', '#34d399',
+                '#fb7185'];
+                for (let i = 0; i < 50; i++) {
+                    const piece = document.createElement('div');
+                    piece.className = 'confetti-piece';
+                    piece.style.cssText = `
+                        left:${Math.random()*100}vw;
+                        top:${-20-Math.random()*60}px;
+                        width:${6+Math.random()*10}px;
+                        height:${6+Math.random()*10}px;
+                        background:${colors[Math.floor(Math.random()*colors.length)]};
+                        border-radius:${Math.random()>0.5?'50%':'2px'};
+                        animation-delay:${Math.random()*0.6}s;
+                        animation-duration:${1.2+Math.random()*1.8}s;
+                    `;
+                    document.body.appendChild(piece);
+                    setTimeout(() => piece.remove(), 2000);
+                }
+            }
 
-            // Quick chips
-            dom.quickChipsPersonal.addEventListener('click', e=>{ const c=e.target.closest('.chip'); if(c) addTxn('personal', c.dataset.desc, +c.dataset.amount); });
-            dom.quickChipsFamily.addEventListener('click', e=>{ const c=e.target.closest('.chip'); if(c) addTxn('family', c.dataset.desc, +c.dataset.amount); });
+            // ==================== KEYBOARD SHORTCUTS ====================
+            function showShortcuts() {
+                dom.modalTitle.textContent = '⌨️ اختصارات لوحة المفاتيح';
+                dom.modalContent.innerHTML = `
+                    <div style="font-size:0.78rem;color:var(--text-secondary);line-height:2;">
+                        <p><strong>Ctrl + 1</strong> → المصاريف الشخصية</p>
+                        <p><strong>Ctrl + 2</strong> → مصاريف العائلة</p>
+                        <p><strong>Ctrl + E</strong> → تصدير التقرير</p>
+                        <p><strong>Ctrl + K</strong> → حاسبة الدخل</p>
+                        <p><strong>Ctrl + S</strong> → الإعدادات</p>
+                        <p><strong>Ctrl + I</strong> → تثبيت التطبيق</p>
+                        <p><strong>Escape</strong> → إغلاق النوافذ</p>
+                        <p><strong>Enter</strong> → إضافة مصروف (عند التركيز على حقل المبلغ)</p>
+                    </div>
+                    <button class="btn btn-outline w-100 mt-3" id="closeShortcutsBtn">حسناً</button>`;
+                dom.modalBackdrop.classList.add('active');
+                $('#closeShortcutsBtn').addEventListener('click', closeModal);
+            }
 
-            // Bottom nav
-            document.getElementById('navPersonal').onclick = ()=>switchTab('personal');
-            document.getElementById('navFamily').onclick = ()=>switchTab('family');
-            document.getElementById('navCalculator').onclick = openCalculator;
-            document.getElementById('navExport').onclick = openExportOptions;
-            dom.navInstall.onclick = promptInstall;
+            // ==================== RIPPLE EFFECT ====================
+            function addRipple(e) {
+                const btn = e.currentTarget;
+                const ripple = document.createElement('span');
+                ripple.className = 'ripple';
+                const rect = btn.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+                ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+                btn.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            }
 
-            // Enter key to add expense
-            dom.amountPersonal.addEventListener('keydown', e=>{ if(e.key==='Enter') addTxn('personal', dom.descPersonal.value.trim(), +dom.amountPersonal.value); });
-            dom.amountFamily.addEventListener('keydown', e=>{ if(e.key==='Enter') addTxn('family', dom.descFamily.value.trim(), +dom.amountFamily.value); });
+            // ==================== EVENT BINDINGS ====================
+            function bindEvents() {
+                dom = getAllDOMElements();
 
-            // === INIT ===
-            load();
-            switchTab(state.activeTab);
-            renderAll();
+                // Tab switching
+                dom.tabNav.addEventListener('click', e => { const btn = e.target.closest('.tab-btn'); if (btn)
+                        switchTab(btn.dataset.tab); });
+
+                // Add transactions
+                dom.addPersonalBtn.addEventListener('click', () => addTxn('personal', dom.descPersonal.value,
+                    +dom.amountPersonal.value));
+                dom.addFamilyBtn.addEventListener('click', () => addTxn('family', dom.descFamily.value, +dom
+                    .amountFamily.value));
+
+                // Enter key
+                dom.amountPersonal.addEventListener('keydown', e => { if (e.key === 'Enter') addTxn('personal',
+                        dom.descPersonal.value, +dom.amountPersonal.value); });
+                dom.descPersonal.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault();
+                        dom.amountPersonal.focus(); } });
+                dom.amountFamily.addEventListener('keydown', e => { if (e.key === 'Enter') addTxn('family', dom
+                        .descFamily.value, +dom.amountFamily.value); });
+                dom.descFamily.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); dom
+                        .amountFamily.focus(); } });
+
+                // Set budget
+                dom.setBudgetPersonal.addEventListener('click', () => setBudgetModal('personal'));
+                dom.setBudgetFamily.addEventListener('click', () => setBudgetModal('family'));
+
+                // Clear all
+                dom.clearPersonalBtn.addEventListener('click', () => clearAllModal('personal'));
+                dom.clearFamilyBtn.addEventListener('click', () => clearAllModal('family'));
+
+                // Quick chips
+                dom.quickChipsPersonal.addEventListener('click', e => { const chip = e.target.closest('.chip'); if (
+                        chip) addTxn('personal', chip.dataset.desc, +chip.dataset.amount); });
+                dom.quickChipsFamily.addEventListener('click', e => { const chip = e.target.closest('.chip'); if (chip)
+                        addTxn('family', chip.dataset.desc, +chip.dataset.amount); });
+
+                // Modal close
+                dom.modalBackdrop.addEventListener('click', e => { if (e.target === dom.modalBackdrop) closeModal
+                    (); });
+
+                // Bottom nav
+                document.getElementById('navPersonal').addEventListener('click', () => switchTab('personal'));
+                document.getElementById('navFamily').addEventListener('click', () => switchTab('family'));
+                document.getElementById('navCalculator').addEventListener('click', openCalculator);
+                document.getElementById('navExport').addEventListener('click', openExportOptions);
+                document.getElementById('navInstall').addEventListener('click', promptInstall);
+
+                // Header buttons
+                dom.btnSettings.addEventListener('click', openSettings);
+                dom.btnCalc.addEventListener('click', openCalculator);
+                dom.btnPlayStore.addEventListener('click', openPlayStoreGuide);
+                dom.btnShortcuts.addEventListener('click', (e) => { e.preventDefault();
+                    showShortcuts(); });
+
+                // Ripple on all buttons
+                document.querySelectorAll('.btn, .btn-icon, .chip, .bottom-nav-btn').forEach(b => {
+                    b.addEventListener('click', addRipple);
+                });
+
+                // Global keyboard shortcuts
+                document.addEventListener('keydown', e => {
+                    if (e.key === 'Escape') { if (dom.modalBackdrop.classList.contains('active'))
+                        closeModal(); }
+                    if (e.ctrlKey || e.metaKey) {
+                        if (e.key === '1') { e.preventDefault();
+                            switchTab('personal'); }
+                        if (e.key === '2') { e.preventDefault();
+                            switchTab('family'); }
+                        if (e.key === 'e' || e.key === 'E') { e.preventDefault();
+                            openExportOptions(); }
+                        if (e.key === 'k' || e.key === 'K') { e.preventDefault();
+                            openCalculator(); }
+                        if (e.key === 's' || e.key === 'S') { e.preventDefault();
+                            openSettings(); }
+                        if (e.key === 'i' || e.key === 'I') { e.preventDefault();
+                            promptInstall(); }
+                    }
+                });
+            }
+
+            // ==================== PWA ====================
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                const installBtn = document.getElementById('navInstall');
+                if (installBtn) installBtn.style.display = 'flex';
+            });
+
+            window.addEventListener('appinstalled', () => {
+                deferredPrompt = null;
+                const installBtn = document.getElementById('navInstall');
+                if (installBtn) installBtn.style.display = 'none';
+                toast('🎉 تم تثبيت التطبيق بنجاح!', 'success');
+                spawnConfetti();
+            });
 
             // Service Worker
             if ('serviceWorker' in navigator) {
-                const swCode = `self.addEventListener('install',e=>e.waitUntil(caches.open('v3').then(c=>c.addAll(['/'])).then(self.skipWaiting()))); self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));`;
-                navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode],{type:'application/javascript'}))).catch(()=>{});
+                const swCode = `
+                    const CACHE='expense-tracker-v5';
+                    self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll([self.location.href])).then(()=>self.skipWaiting()));});
+                    self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
+                    self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{if(res.ok){const clone=res.clone();caches.open(CACHE).then(c=>c.put(e.request,clone));}return res;})));});
+                `;
+                navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode], { type: 'application/javascript' })))
+                    .then(() => console.log('✅ Service Worker registered'))
+                    .catch(() => console.warn('SW registration skipped'));
             }
-            // Web Manifest
-            const manifest = {
-                name: 'متعقب المصاريف',
-                short_name: 'المصاريف',
+
+            // Manifest
+            const manifestData = {
+                name: 'متعقب المصاريف | Expense Tracker',
+                short_name: 'متعقب المصاريف',
+                description: 'تطبيق متعقب المصاريف الشخصية والبيت والعائلة - بالجنيه المصري | Hazem K H Madi',
                 start_url: location.href,
                 display: 'standalone',
                 background_color: '#0d0f14',
                 theme_color: '#0d0f14',
-                icons: [{
-                    src: 'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192"><rect width="192" height="192" rx="32" fill="#0d0f14"/><text x="96" y="110" text-anchor="middle" font-size="80" fill="white">💷</text></svg>'),
-                    sizes: '192x192'
-                }]
+                orientation: 'portrait-primary',
+                icons: [{ src: 'data:image/svg+xml,' + encodeURIComponent(
+                        '<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192"><rect width="192" height="192" rx="32" fill="#0d0f14"/><text x="96" y="110" text-anchor="middle" font-size="80" fill="white">💷</text></svg>'
+                        ), sizes: '192x192', type: 'image/svg+xml' }],
+                lang: 'ar',
+                dir: 'rtl',
+                categories: ['finance', 'utilities'],
             };
             const manifestLink = document.createElement('link');
             manifestLink.rel = 'manifest';
-            manifestLink.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/json'}));
+            manifestLink.href = URL.createObjectURL(new Blob([JSON.stringify(manifestData)], { type: 'application/json' }));
             document.head.appendChild(manifestLink);
+
+            // ==================== INIT ====================
+            loadData();
+            applyTheme();
+            switchTab(state.activeTab);
+            renderAll();
+            bindEvents();
+
+            console.log('💷 متعقب المصاريف - الإصدار النهائي | Final Version');
+            console.log('👨‍💻 Built by Hazem K H Madi - Senior Product Designer');
+            console.log('🎨 Features: Light/Dark Mode | 5 Color Schemes | Google Play Integration | PWA | Export | Calculator');
+            console.log('⌨️ Keyboard Shortcuts: Ctrl+1/2 | Ctrl+E | Ctrl+K | Ctrl+S | Ctrl+I | Esc');
+            console.log('📱 Installable as PWA with full offline support');
+
+            // Expose for debugging
+            window.__tracker = { state, renderAll, saveData, loadData, applyTheme, toast, spawnConfetti };
         })();
     </script>
 </body>
