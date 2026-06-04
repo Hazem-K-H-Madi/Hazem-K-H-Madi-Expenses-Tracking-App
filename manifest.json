@@ -1,6 +1,6 @@
 {
-  "short_name": "ماليتي",
-  "name": "مستشار المالية الذكي للمصروفات والعمليات",
+  "short_name": "الخازن",
+  "name": "محفظة الخازن المالي الذكي الشخصي والعائلي",
   "icons": [
     {
       "src": "icon-192.png",
@@ -15,7 +15,7 @@
   ],
   "start_url": "index.html",
   "background_color": "#f6f8fa",
-  "theme_color": "#ffffff",
+  "theme_color": "#2563eb",
   "display": "standalone",
   "orientation": "portrait-primary",
   "dir": "rtl",
