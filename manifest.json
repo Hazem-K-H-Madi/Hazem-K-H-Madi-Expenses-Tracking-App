@@ -1,23 +1,35 @@
 {
-  "short_name": "الخازن",
-  "name": "محفظة الخازن المالي الذكي الشخصي والعائلي",
+  "name": "المستشار المالي الذكي - إدارة الميزانية وحسابات المنزل",
+  "short_name": "المستشار المالي",
+  "description": "نظام مالي احترافي متكامل لإدارة المصروفات الشخصية والعائلية مع موزع دخل متطور وحسابات معزولة تماماً.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#090d16",
+  "theme_color": "#4f46e5",
+  "lang": "ar",
+  "dir": "rtl",
+  "categories": ["finance", "utilities"],
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png",
+      "sizes": "192x192",
       "type": "image/png",
-      "sizes": "192x192"
+      "purpose": "any"
     },
     {
-      "src": "icon-512.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png",
+      "sizes": "512x512",
       "type": "image/png",
-      "sizes": "512x512"
+      "purpose": "maskable"
     }
   ],
-  "start_url": "index.html",
-  "background_color": "#f6f8fa",
-  "theme_color": "#2563eb",
-  "display": "standalone",
-  "orientation": "portrait-primary",
-  "dir": "rtl",
-  "lang": "ar"
+  "shortcuts": [
+    {
+      "name": "تسجيل معاملة جديدة",
+      "short_name": "إضافة معاملة",
+      "url": "index.html?action=add-tx",
+      "description": "فتح نموذج إضافة معاملة مالية جديدة بشكل عاجل"
+    }
+  ]
 }
