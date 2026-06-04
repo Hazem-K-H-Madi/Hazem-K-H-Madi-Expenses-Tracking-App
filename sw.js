@@ -1,4 +1,4 @@
-const cacheName = 'dynamic-budget-v2';
+const cacheName = 'smart-budget-v2';
 const assets = [
   'index.html',
   'manifest.json'
@@ -7,7 +7,21 @@ const assets = [
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(cacheName).then(cache => {
-      cache.addAll(assets);
+      return cache.addAll(assets);
+    }).then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys().then(keys => {
+      return Promise.all(
+        keys.map(key => {
+          if (key !== cacheName) {
+            return caches.delete(key);
+          }
+        })
+      );
     })
   );
 });
