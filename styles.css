@@ -1,798 +1,1098 @@
-/* ==========================================================================
-   Smart Wallet Pro - Premium Light Neo-Glassmorphism Engine (v6.0)
-   Inspired by Hazem K H Madi Design System & Personal Identity Branding
-   Default Mode: Light Premium | Micro-Interactions & Fluid Architecture
-   ========================================================================== */
-
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&display=swap');
-
-/* 1. نظام الألوان والهوية البصرية الشاملة (Default Light Mode) */
+/* -------------------------------------------------------------------------
+ * Design Tokens & Root Variables Mapping
+ * ------------------------------------------------------------------------- */
 :root {
-  --font-main: 'Cairo', sans-serif;
-  
-  /* لوحة ألوان البانر والهوية الشخصية المحدثة */
-  --bg-primary: #f5f4fa;
-  --bg-canvas: linear-gradient(135deg, #f5f4fa 0%, #eef0fc 100%);
-  --bg-card: rgba(255, 255, 255, 0.85);
-  --border-color: rgba(90, 70, 250, 0.08);
-  --text-primary: #1e1b4b;
-  --text-secondary: #6b698a;
-  
-  /* تدرجات الأرجواني والبنفسجي الفاخر */
-  --accent: #5a46fa;
-  --accent-light: rgba(90, 70, 250, 0.06);
-  --accent-gradient: linear-gradient(135deg, #5a46fa 0%, #7d6eff 100%);
-  --accent-glow: rgba(90, 70, 250, 0.15);
-  
-  /* إعدادات العناصر والهياكل */
-  --radius-pill: 50px;
-  --radius-lg: 24px;
-  --radius-md: 16px;
-  --radius-sm: 12px;
-  
-  --transition-premium: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  --shadow-premium: 0 20px 40px -10px rgba(90, 70, 250, 0.06), 0 1px 3px rgba(0, 0, 0, 0.02);
+    /* Spacers Scale */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+
+    /* Light Theme Color Tokens (Default Bootstrap) */
+    --bg-surface-primary: #f8fafc;
+    --bg-surface-card: #ffffff;
+    --bg-surface-element: #f1f5f9;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    
+    --color-primary: #2563eb;
+    --color-primary-light: #dbeafe;
+    --color-success: #10b981;
+    --color-success-light: #ecfdf5;
+    --color-danger: #ef4444;
+    --color-danger-light: #fee2e2;
+    --color-warning: #f59e0b;
+    --color-warning-light: #fef3c7;
+    
+    --border-color: #e2e8f0;
+
+    /* Multi-layered Diffusion Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+    --shadow-blur-glass: blur(12px);
+
+    /* Animation Easing: Spring Physics Simulation */
+    --spring-easing: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s linear;
 }
 
-/* نمط المظهر المظلم الاختياري التكميلي */
-[data-theme="dark"] {
-  --bg-primary: #0b0d19;
-  --bg-canvas: linear-gradient(135deg, #0b0d19 0%, #06070c 100%);
-  --bg-card: rgba(20, 24, 46, 0.7);
-  --border-color: rgba(255, 255, 255, 0.06);
-  --text-primary: #f1f3f9;
-  --text-secondary: #8a8da3;
-  --shadow-premium: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+/* Dark Mode Color Overrides Token Map */
+.app-dark-mode {
+    --bg-surface-primary: #0f172a;
+    --bg-surface-card: #1e293b;
+    --bg-surface-element: #334155;
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #64748b;
+    
+    --color-primary: #3b82f6;
+    --color-primary-light: #1e3a8a;
+    --color-success: #34d399;
+    --color-success-light: #064e3b;
+    --color-danger: #f87171;
+    --color-danger-light: #7f1d1d;
+    --color-warning: #fbbf24;
+    --color-warning-light: #78350f;
+    
+    --border-color: #334155;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
 }
 
-/* 2. تصفير الـ CSS ومعالجة تهيئة الحاويات */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
+/* -------------------------------------------------------------------------
+ * Core Reset & Global Shell Elements
+ * ------------------------------------------------------------------------- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    font-family: 'Cairo', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 body {
-  font-family: var(--font-main);
-  background: var(--bg-canvas);
-  color: var(--text-primary);
-  min-height: 100vh;
-  line-height: 1.6;
-  padding-bottom: 4rem;
-  overflow-x: hidden;
-  transition: background 0.4s ease, color 0.4s ease;
+    background-color: var(--bg-surface-primary);
+    color: var(--text-primary);
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
 }
 
-/* 3. حاوية حماية محرك التطبيق وشاشات الانتظار */
-.app-container {
-  width: 100%;
-  max-width: 100%;
-  padding: 1.25rem;
-  box-sizing: border-box;
-  animation: appEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+#app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+    background-color: var(--bg-surface-primary);
+    transition: var(--transition-smooth);
 }
 
-.app-loader {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: var(--bg-canvas);
-  z-index: 999999;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.spinner {
-  width: 48px;
-  height: 48px;
-  border: 4px solid var(--accent-light);
-  border-top: 4px solid var(--accent);
-  border-radius: 50%;
-  animation: loaderRotation 0.7s linear infinite;
-}
-
-.app-loader p {
-  font-weight: 700;
-  color: var(--accent);
-  font-size: 0.95rem;
-}
-
-/* الفئة الحرجة والمسؤولة عن إخفاء لودر التحمل وسجلات السحب */
-.hidden {
-  display: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none;
-}
-
-/* 4. الهيدر العائم الفاخر (Premium Floating Header) */
+/* -------------------------------------------------------------------------
+ * Header & Modern Tab Design Engine
+ * ------------------------------------------------------------------------- */
 .app-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.25rem 1.75rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: var(--shadow-premium);
-  margin-bottom: 1.75rem;
+    background-color: var(--bg-surface-card);
+    border-bottom: 1px solid var(--border-color);
+    padding: var(--space-md) var(--space-md) 0 var(--space-md);
+    z-index: 100;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-sm);
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+.header-main-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
 }
 
-.logo-icon {
-  width: 52px;
-  height: 52px;
-  background: var(--accent-gradient);
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4rem;
-  color: #fff;
-  box-shadow: 0 10px 25px var(--accent-glow);
+.brand-zone {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.brand-logo-icon {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .brand-text h1 {
-  font-size: 1.3rem;
-  font-weight: 900;
-  color: var(--text-primary);
-  letter-spacing: -0.5px;
-}
-
-.brand-text .version {
-  font-size: 0.72rem;
-  color: var(--text-secondary);
-  font-weight: 700;
-  background: var(--accent-light);
-  padding: 0.1rem 0.5rem;
-  border-radius: var(--radius-pill);
-  display: inline-block;
-  margin-top: 0.15rem;
-}
-
-/* 5. شريط التبديل الاستراتيجي ثنائي الهوية (Wallet Hub Switcher) */
-.wallet-selector-bar {
-  display: flex;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  padding: 0.45rem;
-  border-radius: var(--radius-md);
-  gap: 0.5rem;
-  margin-bottom: 2rem;
-  box-shadow: var(--shadow-premium);
-  backdrop-filter: blur(20px);
-}
-
-.wallet-tab-btn {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  padding: 0.95rem;
-  font-family: var(--font-main);
-  font-weight: 700;
-  font-size: 0.92rem;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.65rem;
-  transition: var(--transition-premium);
-}
-
-.wallet-tab-btn:hover {
-  color: var(--accent);
-  background: var(--accent-light);
-}
-
-.wallet-tab-btn.active {
-  background: #fff !important;
-  color: var(--accent) !important;
-  border: 1px solid rgba(90, 70, 250, 0.15) !important;
-  box-shadow: 0 10px 25px -5px rgba(90, 70, 250, 0.12);
-}
-
-/* انتقال دراماتيكي للهوية البصرية الفاخرة عند تفعيل محفظة المنزل والعائلة */
-.wallet-tab-btn#switchToFamilyBtn.active {
-  color: #7c3aed !important;
-}
-[data-theme="light"] #switchToFamilyBtn.active {
-  border-color: rgba(124, 58, 237, 0.2) !important;
-  box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.15);
-}
-
-/* 6. تبويبات الملاحة الداخلية للـ Dashboard */
-.tab-navigation {
-  display: flex;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  padding: 0.35rem;
-  border-radius: var(--radius-md);
-  margin-bottom: 1.75rem;
-}
-
-.tab-button {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  padding: 0.85rem;
-  font-family: var(--font-main);
-  font-weight: 700;
-  font-size: 0.9rem;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  transition: var(--transition-premium);
-}
-
-.tab-button.active {
-  background: var(--accent-gradient);
-  color: #fff;
-  box-shadow: 0 8px 20px var(--accent-glow);
-}
-
-/* 7. تصميم كروت التوزيع والبيانات (Neo-Glassmorphic Cards) */
-.card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: 1.75rem;
-  margin-bottom: 1.75rem;
-  box-shadow: var(--shadow-premium);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(90, 70, 250, 0.18);
-  box-shadow: 0 30px 60px -15px rgba(90, 70, 250, 0.1);
-}
-
-.card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 0.85rem;
-}
-
-.card-header h2, .card-header h3 {
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-}
-
-/* 8. عناصر النماذج وحقول المدخلات الفاخرة */
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group label {
-  display: block;
-  font-size: 0.82rem;
-  color: var(--text-secondary);
-  margin-bottom: 0.6rem;
-  font-weight: 700;
-}
-
-.form-group input, .form-group select {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid var(--border-color);
-  padding: 0.95rem 1.25rem;
-  font-family: var(--font-main);
-  color: var(--text-primary);
-  border-radius: var(--radius-sm);
-  font-size: 0.95rem;
-  transition: var(--transition-premium);
-}
-
-.form-group input:focus, .form-group select:focus {
-  background: #fff;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(90, 70, 250, 0.12);
-}
-
-/* الأزرار وأنظمة التحكم الاحترافية */
-.btn-primary {
-  width: 100%;
-  background: var(--accent-gradient);
-  color: #fff;
-  border: none;
-  padding: 1rem;
-  font-family: var(--font-main);
-  font-weight: 800;
-  font-size: 1rem;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  box-shadow: 0 10px 28px var(--accent-glow);
-  transition: var(--transition-premium);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 15px 32px var(--accent-glow);
-  filter: brightness(1.05);
-}
-
-.btn-secondary {
-  background: #fff;
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
-  padding: 0.9rem 1.5rem;
-  font-family: var(--font-main);
-  font-weight: 700;
-  font-size: 0.9rem;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  box-shadow: var(--shadow-premium);
-  transition: var(--transition-premium);
-}
-
-.btn-secondary:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.icon-button {
-  background: #fff;
-  border: 1px solid var(--border-color);
-  color: var(--text-primary);
-  width: 46px;
-  height: 46px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition-premium);
-  box-shadow: var(--shadow-premium);
-}
-
-.icon-button:hover {
-  background: var(--accent);
-  color: #fff;
-  box-shadow: 0 8px 20px var(--accent-glow);
-  border-color: var(--accent);
-}
-
-/* 9. شريط التمرير (Slider) وموزع السيولة الذكي */
-.custom-slider {
-  -webkit-appearance: none;
-  width: 100%;
-  height: 8px;
-  border-radius: var(--radius-pill);
-  background: rgba(90, 70, 250, 0.08);
-  outline: none;
-  margin: 1.5rem 0;
-}
-
-.custom-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--accent);
-  cursor: pointer;
-  box-shadow: 0 0 15px var(--accent-glow);
-  border: 2px solid #fff;
-  transition: transform 0.2s ease;
-}
-
-.custom-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.25);
-}
-
-.total-income-display {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.1rem 1.5rem;
-  background: rgba(90, 70, 250, 0.03);
-  border-radius: var(--radius-md);
-  margin-top: 1.5rem;
-  border: 1px dashed rgba(90, 70, 250, 0.2);
-}
-
-.allocation-cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
-}
-
-.alloc-card {
-  padding: 1.25rem;
-  background: #fff;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-premium);
-  border-top: 4px solid var(--accent);
-}
-
-.alloc-card.family {
-  border-top-color: #7c3aed;
-}
-
-.alloc-title {
-  font-size: 0.78rem;
-  color: var(--text-secondary);
-  font-weight: 700;
-  display: block;
-}
-
-.alloc-amount {
-  font-weight: 900;
-  margin-top: 0.4rem;
-  font-size: 1.3rem;
-  color: var(--text-primary);
-}
-
-/* 10. شبكة إحصاءات وحالة الحساب الحالية (Stats Dash) */
-.dashboard-stats-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-  margin-bottom: 1.75rem;
-}
-
-.stat-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  box-shadow: var(--shadow-premium);
-}
-
-.stat-icon {
-  width: 52px;
-  height: 52px;
-  border-radius: var(--radius-sm);
-  background: var(--accent-light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4rem;
-  color: var(--accent);
-}
-
-.stat-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.stat-label {
-  font-size: 0.82rem;
-  color: var(--text-secondary);
-  font-weight: 700;
-}
-
-.stat-value {
-  font-size: 1.5rem;
-  font-weight: 900;
-  margin-top: 0.2rem;
-  color: var(--text-primary);
-}
-
-/* حالة الطوارئ عند نفاد الميزانية المحددة */
-.low-budget {
-  border-left: 5px solid #ef4444 !important;
-  background: rgba(239, 68, 68, 0.02) !important;
-  animation: criticalPulse 2s infinite ease-in-out;
-}
-
-/* 11. سجل القيود المعزول (Premium Isolated Ledger) */
-.ledger-container {
-  max-height: 440px;
-  overflow-y: auto;
-}
-
-.ledger-list {
-  list-style: none;
-}
-
-.ledger-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.1rem;
-  background: #fff;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  margin-bottom: 0.75rem;
-  box-shadow: var(--shadow-premium);
-  transition: var(--transition-premium);
-}
-
-.ledger-item:hover {
-  transform: translateY(-2px);
-  border-color: rgba(90, 70, 250, 0.2);
-  box-shadow: 0 15px 30px -10px rgba(90, 70, 250, 0.08);
-}
-
-.ledger-item-right {
-  display: flex;
-  align-items: center;
-  gap: 1.1rem;
-}
-
-.category-icon-tag {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  background: var(--bg-primary);
-}
-
-.item-details h4 {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.item-details span {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  display: block;
-  margin-top: 0.15rem;
-}
-
-.item-amount-badge {
-  background: var(--bg-primary);
-  padding: 0.45rem 0.95rem;
-  border-radius: var(--radius-sm);
-  font-weight: 800;
-  font-size: 0.95rem;
-  border: 1px solid var(--border-color);
-  margin-left: 0.75rem;
-}
-
-/* 12. درج الإعدادات والتخصيص الجانبي (Side Drawer) */
-.drawer {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  z-index: 200000;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.drawer-overlay {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(30, 27, 75, 0.3);
-  backdrop-filter: blur(8px);
-}
-
-.drawer-content {
-  position: relative;
-  width: 100%;
-  max-width: 380px;
-  height: 100%;
-  background: #fff;
-  padding: 2.5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  box-shadow: -20px 0 50px rgba(90, 70, 250, 0.08);
-  animation: drawerSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.drawer-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.theme-switch-container {
-  display: flex;
-  background: var(--bg-primary);
-  padding: 0.35rem;
-  border-radius: var(--radius-sm);
-}
-
-.theme-btn {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  padding: 0.65rem;
-  font-family: var(--font-main);
-  font-size: 0.85rem;
-  font-weight: 700;
-  cursor: pointer;
-  border-radius: 8px;
-}
-
-.theme-btn.active {
-  background: #fff;
-  color: var(--accent);
-  box-shadow: var(--shadow-premium);
-}
-
-/* 13. التنبيهات والإشعارات الفورية (Toasts Node) */
-.toast-container {
-  position: fixed;
-  bottom: 2rem; left: 2rem; right: 2rem;
-  z-index: 9999999;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  pointer-events: none;
-}
-
-.toast {
-  background: #fff;
-  border: 1px solid var(--accent);
-  color: var(--text-primary);
-  padding: 1.1rem 1.5rem;
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-size: 0.92rem;
-  box-shadow: 0 20px 40px rgba(90, 70, 250, 0.12);
-  opacity: 0;
-  transform: translateY(30px);
-  transition: var(--transition-premium);
-}
-
-.toast.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.toast.error { border-color: #ef4444; }
-.toast.error i { color: #ef4444; }
-.toast i { color: var(--accent); }
-
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 2rem;
-  text-align: center;
-  color: var(--text-secondary);
-}
-
-.empty-state i {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  color: var(--accent);
-  opacity: 0.25;
-}
-
-/* 14. فوتر النظام الرسمي للمطور */
-.app-footer {
-  text-align: center;
-  padding: 2.5rem 0;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  border-top: 1px solid var(--border-color);
-  margin-top: 3rem;
-}
-
-.footer-links {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  margin-top: 0.6rem;
-}
-
-.footer-link-item {
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-weight: 700;
-}
-
-.footer-link-item:hover {
-  color: var(--accent);
-}
-
-/* ==========================================================================
-   15. التجاوب الكامل وشبكة العرض للموبايل والتابلت واللابتوب (Pro Grid System)
-   ========================================================================== */
-@media (min-width: 768px) {
-  .app-container {
-    max-width: 1040px;
-    margin: 0 auto;
-    padding: 3rem 2rem;
-  }
-  
-  .income-grid, .ledger-workspace {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    align-items: start;
-  }
-  
-  .dashboard-stats-grid {
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1.5rem;
-  }
-  
-  .wallet-selector-bar {
-    max-width: 540px;
-    margin: 0 auto 2.5rem auto;
-  }
-}
-
-@media (min-width: 1400px) {
-  .app-container {
-    max-width: 1280px;
-  }
-}
-
-/* 16. تأثيرات الأنيميشن وميكانيكا التدوير الحركي (Keyframes) */
-@keyframes loaderRotation {
-  to { transform: rotate(360deg); }
-}
-
-@keyframes appEntrance {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes drawerSlideIn {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
-}
-
-@keyframes criticalPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.2); }
-  50% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
-}
-
-/* تخصيص المسارات ومؤشر التمرير */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(90, 70, 250, 0.1);
-  border-radius: 20px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.brand-text p {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.header-actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.icon-action-btn {
+    background: var(--bg-surface-element);
+    border: none;
+    color: var(--text-secondary);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+}
+
+.icon-action-btn:hover {
+    color: var(--text-primary);
+    transform: scale(1.05);
+}
+
+/* Context Tab Switcher */
+.context-tab-switcher {
+    display: flex;
+    position: relative;
+    background: var(--bg-surface-element);
+    border-radius: 14px;
+    padding: var(--space-xs);
+    margin-bottom: var(--space-sm);
+}
+
+.context-tab {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: var(--space-sm) var(--space-md);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    z-index: 2;
+    transition: color 0.3s ease;
+}
+
+.context-tab.active {
+    color: var(--color-primary);
+}
+
+.active-tab-indicator {
+    position: absolute;
+    top: var(--space-xs);
+    bottom: var(--space-xs);
+    right: var(--space-xs);
+    width: calc(50% - var(--space-xs));
+    background: var(--bg-surface-card);
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
+    z-index: 1;
+    transition: transform 0.35s var(--spring-easing);
+}
+
+/* -------------------------------------------------------------------------
+ * Layout & General Cards Architecture
+ * ------------------------------------------------------------------------- */
+.dashboard-scroll-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-md);
+    padding-bottom: 120px; /* Space for structural sticky footer and FAB */
+    -webkit-overflow-scrolling: touch;
+}
+
+.dashboard-card {
+    background-color: var(--bg-surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: var(--space-md);
+    margin-bottom: var(--space-md);
+    box-shadow: var(--shadow-md);
+}
+
+.card-header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+}
+
+.card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.badge-pill {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* -------------------------------------------------------------------------
+ * Multi-source Income Splitter Styles
+ * ------------------------------------------------------------------------- */
+.income-sources-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+}
+
+.income-row-module {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+    background: var(--bg-surface-element);
+    padding: var(--space-sm);
+    border-radius: 12px;
+}
+
+.income-row-module input {
+    background: var(--bg-surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: var(--space-xs) var(--space-sm);
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.income-row-module .inc-title { flex: 2; width: 50%; }
+.income-row-module .inc-val { flex: 1.5; width: 35%; text-align: left; }
+
+.remove-income-row-btn {
+    background: none;
+    border: none;
+    color: var(--color-danger);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 var(--space-xs);
+}
+
+.text-link-btn {
+    background: none;
+    border: none;
+    color: var(--color-primary);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: var(--space-md);
+    display: inline-block;
+}
+
+.allocation-slider-module {
+    margin: var(--space-md) 0;
+    background: var(--bg-surface-element);
+    padding: var(--space-md);
+    border-radius: 14px;
+}
+
+.slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-bottom: var(--space-sm);
+    color: var(--text-secondary);
+}
+
+.premium-range-input {
+    width: 100%;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+}
+
+.primary-cta-btn {
+    width: 100%;
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    padding: var(--space-md);
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-fast);
+}
+
+.primary-cta-btn:active {
+    transform: scale(0.98);
+}
+
+/* -------------------------------------------------------------------------
+ * Dynamic Balance Board & Runways
+ * ------------------------------------------------------------------------- */
+.dynamic-balance-board {
+    background: linear-gradient(135deg, var(--color-primary) 0%, #1e40af 100%);
+    color: white;
+    border-radius: 24px;
+    padding: var(--space-xl) var(--space-md);
+    margin-bottom: var(--space-md);
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+}
+
+.app-dark-mode .dynamic-balance-board {
+    background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+    border: 1px solid var(--border-color);
+}
+
+.balance-meta-text {
+    font-size: 12px;
+    opacity: 0.85;
+    margin-bottom: var(--space-xs);
+    letter-spacing: 0.5px;
+}
+
+.balance-value-container {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: var(--space-xs);
+    direction: ltr; /* Keeping structured calculation layout direction clean */
+}
+
+.counter-numerical-value {
+    font-size: 38px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.currency-symbol {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.predictive-insights-grid {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-xl);
+}
+
+.insight-tile {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: var(--shadow-blur-glass);
+    -webkit-backdrop-filter: var(--shadow-blur-glass);
+    border-radius: 16px;
+    padding: var(--space-sm) var(--space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    text-align: right;
+}
+
+.tile-icon { font-size: 20px; }
+.tile-label { font-size: 11px; opacity: 0.8; }
+.tile-value { font-size: 13px; font-weight: 700; }
+.tile-value small { font-size: 9px; font-weight: 400; }
+
+.insight-tile.warning-state {
+    background: var(--color-danger);
+    animation: pulseGlow 2s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; }
+}
+
+/* -------------------------------------------------------------------------
+ * SVG Analytics & Legends Engine
+ * ------------------------------------------------------------------------- */
+.analytics-layout-engine {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.svg-chart-viewport {
+    width: 110px;
+    height: 110px;
+    flex-shrink: 0;
+}
+
+.chart-legend-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.legend-row-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+}
+
+.legend-pill-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.color-indicator-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.legend-pct-val {
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.secondary-pill-btn {
+    background: var(--bg-surface-element);
+    border: 1px solid var(--border-color);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+/* -------------------------------------------------------------------------
+ * Real-time Filters & Chips Styles
+ * ------------------------------------------------------------------------- */
+.control-filter-sticky-bar {
+    margin-bottom: var(--space-md);
+}
+
+.search-input-wrapper {
+    position: relative;
+    margin-bottom: var(--space-sm);
+}
+
+.search-input-wrapper input {
+    width: 100%;
+    background-color: var(--bg-surface-card);
+    border: 1px solid var(--border-color);
+    padding: var(--space-sm) var(--space-md);
+    padding-right: var(--space-xl);
+    border-radius: 12px;
+    font-size: 13px;
+    color: var(--text-primary);
+}
+
+.search-input-wrapper svg {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+}
+
+.filter-chips-carousel {
+    display: flex;
+    gap: var(--space-xs);
+    overflow-x: auto;
+    padding-bottom: var(--space-xs);
+    scrollbar-width: none;
+}
+.filter-chips-carousel::-webkit-scrollbar { display: none; }
+
+.filter-chip {
+    background: var(--bg-surface-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 6px var(--space-md);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.filter-chip.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+/* -------------------------------------------------------------------------
+ * Transactions Ledger & Structural Swipe Mechanics
+ * ------------------------------------------------------------------------- */
+.transaction-ledger-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.ledger-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+    align-items: center;
+}
+
+.ledger-title { font-size: 14px; font-weight: 700; }
+.ledger-count-indicator { font-size: 11px; color: var(--text-muted); }
+
+.transactions-feed {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+/* Row Swipe Container Layout */
+.swipe-item-container {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    background-color: var(--color-danger); /* Underlay delete background visible on swipe left */
+}
+
+.swipe-action-underlay-left {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 80px;
+    background-color: var(--color-danger);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    z-index: 1;
+}
+
+.transaction-row-surface {
+    position: relative;
+    background-color: var(--bg-surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: var(--space-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 2;
+    transform: translate3d(0, 0, 0);
+    transition: transform 0.15s ease-out;
+    cursor: pointer;
+}
+
+.row-identity-block {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.category-avatar-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background-color: var(--bg-surface-element);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.row-textual-meta h4 {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.row-textual-meta p {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+.recurring-pill-indicator {
+    background: var(--color-warning-light);
+    color: var(--color-warning);
+    font-size: 8px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+    margin-right: var(--space-xs);
+    display: inline-block;
+}
+
+.row-financial-block {
+    text-align: left;
+}
+
+.row-amount-value {
+    font-size: 14px;
+    font-weight: 700;
+    direction: ltr;
+}
+
+/* -------------------------------------------------------------------------
+ * State-Driven Shimmering UI Skeletons & Empty Elements
+ * ------------------------------------------------------------------------- */
+.skeleton-shimmer-row {
+    height: 74px;
+    background: linear-gradient(90deg, var(--bg-surface-card) 25%, var(--bg-surface-element) 50%, var(--bg-surface-card) 75%);
+    background-size: 200% 100%;
+    animation: shimmerLoop 1.5s infinite;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+}
+
+@keyframes shimmerLoop {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.empty-state-card {
+    text-align: center;
+    padding: var(--space-xl) var(--space-md);
+    background: var(--bg-surface-card);
+    border: 1px dashed var(--text-muted);
+    border-radius: 16px;
+}
+
+.empty-state-card svg {
+    color: var(--text-muted);
+    margin-bottom: var(--space-md);
+    opacity: 0.6;
+}
+
+.empty-state-card p {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+/* -------------------------------------------------------------------------
+ * Slide-Over Overlay Portals System
+ * ------------------------------------------------------------------------- */
+.portal-overlay-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: flex;
+    align-items: flex-end;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.portal-overlay-backdrop.active-portal {
+    opacity: 1;
+    visibility: visible;
+}
+
+.bottom-sheet-surface {
+    width: 100%;
+    background-color: var(--bg-surface-card);
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    padding: var(--space-md);
+    max-height: 92vh;
+    overflow-y: auto;
+    box-shadow: 0 -10px 25px -5px rgba(0,0,0,0.1);
+    transform: translateY(100%);
+    transition: transform 0.4s var(--spring-easing);
+}
+
+.portal-overlay-backdrop.active-portal .bottom-sheet-surface {
+    transform: translateY(0);
+}
+
+.sheet-drag-handle {
+    width: 40px;
+    height: 4px;
+    background: var(--border-color);
+    border-radius: 2px;
+    margin: 0 auto var(--space-md) auto;
+}
+
+.sheet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-lg);
+}
+
+.sheet-title { font-size: 16px; font-weight: 800; }
+
+.close-circle-btn {
+    background: var(--bg-surface-element);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Form Elements Framework */
+.portal-core-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.form-group-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.field-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.large-amount-field {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid var(--border-color);
+    padding: var(--space-sm) 0;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--color-primary);
+    background: transparent;
+    text-align: center;
+}
+.large-amount-field:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.premium-input-field, .premium-select-field, .premium-textarea-field {
+    width: 100%;
+    background-color: var(--bg-surface-element);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: var(--space-sm) var(--space-md);
+    font-size: 13px;
+    color: var(--text-primary);
+}
+.premium-input-field:focus, .premium-select-field:focus, .premium-textarea-field:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+/* Toggle Switch Styling */
+.checkbox-switch-row {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-md);
+    background: var(--bg-surface-element);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 12px;
+}
+
+.switch-container {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.native-hidden-switch { opacity: 0; width: 0; height: 0; }
+
+.custom-switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: var(--border-color);
+    transition: .3s;
+    border-radius: 24px;
+}
+.custom-switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px; width: 18px;
+    left: 3px; bottom: 3px;
+    background-color: white;
+    transition: .3s var(--spring-easing);
+    border-radius: 50%;
+}
+
+.native-hidden-switch:checked + .custom-switch-slider { background-color: var(--color-primary); }
+/* Because RTL direction transforms opposite way physically */
+.native-hidden-switch:checked + .custom-switch-slider:before { transform: translateX(22px); }
+
+.switch-text-label { display: flex; flex-direction: column; }
+.main-switch-text { font-size: 12px; font-weight: 700; }
+.sub-switch-text { font-size: 10px; color: var(--text-muted); }
+
+.form-actions-wrapper {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+}
+
+.primary-btn {
+    flex: 2;
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.secondary-btn {
+    flex: 1;
+    background-color: var(--bg-surface-element);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Settings Internal Layout */
+.settings-content-layout { display: flex; flex-direction: column; gap: var(--space-lg); }
+.settings-action-card {
+    display: flex;
+    gap: var(--space-md);
+    background: var(--bg-surface-element);
+    padding: var(--space-md);
+    border-radius: 16px;
+}
+.settings-action-card .card-icon { font-size: 24px; }
+.settings-action-card h4 { font-size: 13px; font-weight: 700; margin-bottom: var(--space-xs); }
+.settings-action-card p { font-size: 11px; color: var(--text-secondary); margin-bottom: var(--space-sm); }
+
+.install-cta-button {
+    background-color: var(--text-primary);
+    color: var(--bg-surface-card);
+    border: none;
+    padding: var(--space-xs) var(--space-md);
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.ios-guide-box {
+    background: var(--bg-surface-card);
+    border: 1px solid var(--border-color);
+    padding: var(--space-sm);
+    border-radius: 8px;
+    font-size: 10px;
+    margin-top: var(--space-xs);
+    color: var(--text-secondary);
+}
+
+.admin-tools-block h4 { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+.admin-tools-block .section-description { font-size: 11px; color: var(--text-muted); margin-bottom: var(--space-md); }
+
+.export-action-button {
+    width: 100%;
+    background: var(--color-success-light);
+    color: var(--color-success);
+    border: 1px solid var(--color-success);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+}
+
+/* -------------------------------------------------------------------------
+ * Global Floating Trigger Action Button (FAB)
+ * ------------------------------------------------------------------------- */
+.floating-action-button {
+    position: fixed;
+    bottom: 64px;
+    left: var(--space-md); /* Positioned relative to alignment profiles */
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 90;
+    transition: transform 0.25s var(--spring-easing);
+}
+
+.floating-action-button:active { transform: scale(0.9) rotate(45deg); }
+
+/* -------------------------------------------------------------------------
+ * Toast Hub Alerts Architecture
+ * ------------------------------------------------------------------------- */
+.toast-hub-container {
+    position: fixed;
+    top: var(--space-md);
+    left: var(--space-md);
+    right: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    z-index: 10000;
+    pointer-events: none;
+}
+
+.toast-alert-instance {
+    background-color: var(--bg-surface-card);
+    border-right: 4px solid var(--color-primary);
+    box-shadow: var(--shadow-lg);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    pointer-events: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: toastSlideIn 0.3s var(--spring-easing) forwards;
+}
+
+@keyframes toastSlideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.toast-alert-instance.toast-danger { border-right-color: var(--color-danger); }
+.toast-alert-instance.toast-success { border-right-color: var(--color-success); }
+
+/* -------------------------------------------------------------------------
+ * Strict Administrative Permanent Footer Attribution (Strictly English)
+ * ------------------------------------------------------------------------- */
+.app-sticky-attribution-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 44px;
+    background-color: var(--bg-surface-card);
+    border-top: 1px solid var(--border-color);
+    z-index: 85;
+    padding: 0 var(--space-md);
+    display: flex;
+    align-items: center;
+    direction: ltr; /* Fixed layout representation rules */
+}
+
+.attribution-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.attribution-text {
+    font-size: 10px;
+    color: var(--text-secondary);
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.attribution-links {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+.footer-link-badge {
+    background-color: var(--bg-surface-element);
+    color: var(--text-secondary);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 9px;
+    text-decoration: none;
+    font-weight: 600;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    transition: var(--transition-fast);
+}
+
+.footer-link-badge:hover {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+}
+
+.badge-credential {
+    background-color: var(--color-warning-light);
+    color: var(--color-warning);
+}
+
+/* -------------------------------------------------------------------------
+ * Administrative Structural Print Media Sheet Configuration
+ * ------------------------------------------------------------------------- */
+@media print {
+    body, #app-container {
+        overflow: visible !important;
+        position: static !important;
+        height: auto !important;
+        background: white !important;
+        color: black !important;
+    }
+    .dashboard-scroll-content, .app-header, .floating-action-button, 
+    .control-filter-sticky-bar, .app-sticky-attribution-footer, 
+    .portal-overlay-backdrop, #pwa-install-banner-block {
+        display: none !important;
+    }
+    #hidden-print-administrative-template {
+        display: block !important;
+        direction: rtl !important;
+        padding: 30px !important;
+    }
+    .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    .print-table th, .print-table td {
+        border: 1px solid #000 !important;
+        padding: 10px !important;
+        text-align: right !important;
+        font-size: 12px !important;
+    }
+    .print-header {
+        border-bottom: 2px solid #000;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
 }
