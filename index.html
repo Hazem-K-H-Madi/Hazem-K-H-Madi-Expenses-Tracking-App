@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="theme-color" content="#0d0f14">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="متعقب المصاريف">
+    <meta name="description" content="تطبيق متعقب المصاريف الشخصية والبيت والعائلة - بالجنيه المصري | Hazem K H Madi">
+    <title>متعقب المصاريف | Hazem K H Madi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-canvas: #0d0f14;
+            --bg-surface: #14161c;
+            --bg-elevated: #1a1c23;
+            --bg-overlay: #1f2129;
+            --text-primary: #f0f2f5;
+            --text-secondary: #b0b5be;
+            --text-muted: #6b7280;
+            --accent-indigo: #6366f1;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #0ea5e9;
+            --accent-rose: #f43f5e;
+            --accent-amber: #f59e0b;
+            --accent-emerald: #10b981;
+            --border-subtle: rgba(255,255,255,0.06);
+            --border-medium: rgba(255,255,255,0.1);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.25);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.4);
+            --shadow-lg: 0 16px 40px rgba(0,0,0,0.55);
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --transition-snappy: 0.2s cubic-bezier(0.4,0,0.2,1);
+            --transition-bounce: 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            --font-arabic: 'Cairo', 'Segoe UI', sans-serif;
+            --font-latin: 'Inter', system-ui, sans-serif;
+            --safe-bottom: env(safe-area-inset-bottom, 16px);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-arabic);
+            background: var(--bg-canvas);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: calc(100px + var(--safe-bottom));
+            position: relative;
+            transition: background 0.3s;
+        }
+        body::after {
+            content: '';
+            position: fixed; inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.08) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 100%, rgba(139,92,246,0.06) 0%, transparent 55%);
+            pointer-events: none; z-index: 0;
+        }
+
+        .app-container { max-width:520px; margin:0 auto; padding:16px 16px 0; position:relative; z-index:1; }
+
+        /* Header */
+        .app-header {
+            background: var(--bg-elevated);
+            border-radius: var(--radius-xl);
+            padding: 20px 22px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-subtle);
+            box-shadow: var(--shadow-md);
+            display: flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+        }
+        .header-brand { display:flex; align-items:center; gap:12px; }
+        .header-logo {
+            width:44px; height:44px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: var(--radius-sm);
+            display:flex; align-items:center; justify-content:center;
+            font-size:22px; color:#fff;
+            box-shadow: 0 8px 20px rgba(99,102,241,0.35);
+        }
+        .header-title { font-size:1.15rem; font-weight:700; color:#fff; letter-spacing: -0.3px; }
+        .header-subtitle { font-size:0.7rem; color:var(--text-muted); font-family:var(--font-latin); letter-spacing: 0.5px; }
+
+        /* Tabs */
+        .tab-nav {
+            display:flex; gap:6px; margin-bottom:14px;
+            background: var(--bg-surface); border-radius: var(--radius-md); padding:5px;
+            border:1px solid var(--border-subtle);
+            position:sticky; top:12px; z-index:50;
+        }
+        .tab-btn {
+            flex:1; padding:12px 8px; border:none; background:transparent;
+            border-radius: var(--radius-sm); cursor:pointer;
+            font-family:var(--font-arabic); font-weight:600; font-size:0.85rem;
+            color:var(--text-muted); transition: all var(--transition-bounce);
+            display:flex; align-items:center; justify-content:center; gap:6px;
+        }
+        .tab-btn.active {
+            background: var(--bg-elevated); color:#fff; font-weight:700;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            border:1px solid var(--border-medium);
+        }
+        .tab-badge {
+            font-size:0.65rem; background:rgba(244,63,94,0.15); color:#f43f5e;
+            padding:2px 8px; border-radius:20px; font-weight:700;
+        }
+        .tab-btn.active .tab-badge { background:rgba(99,102,241,0.2); color:#a5b4fc; }
+
+        /* Cards */
+        .card {
+            background: var(--bg-surface); border-radius: var(--radius-lg);
+            padding:18px 20px; margin-bottom:14px;
+            border:1px solid var(--border-subtle); box-shadow: var(--shadow-sm);
+            transition: all var(--transition-snappy); position:relative; overflow:hidden;
+        }
+        .card:hover { box-shadow: var(--shadow-md); border-color:var(--border-medium); }
+        .card-accent-left { border-right:3px solid var(--accent-indigo); }
+        .card-accent-teal { border-right:3px solid var(--accent-cyan); }
+        .card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:8px; }
+        .card-title { font-weight:700; font-size:0.9rem; display:flex; align-items:center; gap:8px; color:#e2e5ea; }
+        .icon-circle { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; background:rgba(255,255,255,0.05); border:1px solid var(--border-medium); }
+
+        /* Budget display */
+        .budget-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+        .budget-cell {
+            background: var(--bg-overlay); border-radius: var(--radius-sm);
+            padding:14px; text-align:center; border:1px solid var(--border-subtle);
+        }
+        .budget-label { font-size:0.7rem; color:var(--text-muted); margin-bottom:4px; }
+        .budget-number { font-size:1.25rem; font-weight:800; font-family:var(--font-latin); }
+        .text-green { color: var(--accent-emerald); }
+        .text-red { color: var(--accent-rose); }
+        .text-amber { color: var(--accent-amber); }
+
+        .progress-wrap { margin-top:4px; }
+        .progress-header { display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-muted); margin-bottom:5px; }
+        .progress-bar { height:6px; background:rgba(255,255,255,0.08); border-radius:10px; overflow:hidden; }
+        .progress-fill { height:100%; border-radius:10px; transition: width 0.5s ease; }
+        .progress-safe { background: linear-gradient(90deg, #10b981, #34d399); }
+        .progress-warn { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .progress-danger { background: linear-gradient(90deg, #f43f5e, #fb7185); animation: pulse-bar 1.8s infinite; }
+        @keyframes pulse-bar { 0%,100%{opacity:1;} 50%{opacity:0.7;} }
+
+        /* Form */
+        .form-row { display:flex; gap:8px; flex-wrap:wrap; align-items:flex-end; }
+        .form-group { flex:1; min-width:80px; display:flex; flex-direction:column; gap:4px; }
+        .form-label { font-size:0.7rem; font-weight:600; color:var(--text-secondary); }
+        .form-input {
+            padding:10px 14px; background:var(--bg-overlay);
+            border:1px solid var(--border-medium); border-radius:var(--radius-sm);
+            color:#fff; font-family:var(--font-arabic); font-size:0.9rem;
+            transition:0.2s; outline:none;
+        }
+        .form-input:focus { border-color:var(--accent-indigo); box-shadow:0 0 0 3px rgba(99,102,241,0.2); }
+        .btn {
+            padding:10px 18px; border-radius:20px; font-family:var(--font-arabic);
+            font-weight:700; font-size:0.8rem; border:none; cursor:pointer;
+            transition: all var(--transition-snappy); display:inline-flex; align-items:center; gap:6px;
+            white-space:nowrap; background:transparent; color:inherit;
+        }
+        .btn:active { transform: scale(0.95); }
+        .btn-primary { background: var(--accent-indigo); color:#fff; box-shadow:0 4px 14px rgba(99,102,241,0.4); }
+        .btn-primary:hover { background:#818cf8; box-shadow:0 6px 20px rgba(99,102,241,0.6); }
+        .btn-outline { border:1px solid var(--border-medium); color:#cbd5e1; }
+        .btn-outline:hover { border-color:var(--accent-indigo); color:#fff; background:rgba(99,102,241,0.1); }
+        .btn-sm { padding:5px 12px; font-size:0.7rem; border-radius:16px; }
+        .btn-danger-text { background:transparent; border:1px solid rgba(244,63,94,0.3); color:#f43f5e; padding:4px 10px; border-radius:16px; font-size:0.7rem; cursor:pointer; }
+        .btn-danger-text:hover { background:rgba(244,63,94,0.1); border-color:#f43f5e; }
+
+        /* Transaction list */
+        .transaction-list { list-style:none; max-height:320px; overflow-y:auto; }
+        .transaction-item {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:12px; border-radius:var(--radius-sm); margin-bottom:6px;
+            background:var(--bg-overlay); border:1px solid transparent; gap:10px;
+            flex-wrap:wrap; animation: fadeSlide 0.3s ease;
+        }
+        @keyframes fadeSlide { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:none;} }
+        .transaction-item:hover { border-color:var(--border-medium); background:#1f212a; }
+        .transaction-info { flex:1; }
+        .transaction-desc { font-weight:600; font-size:0.85rem; }
+        .transaction-date { font-size:0.7rem; color:var(--text-muted); }
+        .transaction-amount { font-weight:700; font-family:var(--font-latin); color:#f43f5e; }
+        .empty-state { text-align:center; padding:30px; color:var(--text-muted); }
+        .empty-state i { font-size:2rem; margin-bottom:8px; opacity:0.5; }
+
+        /* Modal */
+        .modal-backdrop {
+            position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(6px);
+            z-index:200; display:flex; align-items:flex-end; justify-content:center;
+            opacity:0; pointer-events:none; transition:opacity 0.3s;
+        }
+        .modal-backdrop.active { opacity:1; pointer-events:auto; }
+        .modal-panel {
+            background:var(--bg-elevated); border-radius:24px 24px 0 0;
+            width:100%; max-width:520px; max-height:80vh; overflow-y:auto;
+            padding:12px 20px 28px; transform:translateY(30px);
+            transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+            border-top:1px solid var(--border-medium);
+        }
+        .modal-backdrop.active .modal-panel { transform:translateY(0); }
+        .modal-handle { width:40px; height:4px; background:#4b5563; border-radius:10px; margin:8px auto 16px; }
+
+        /* Toast */
+        .toast-container {
+            position:fixed; top:20px; left:50%; transform:translateX(-50%);
+            z-index:999; display:flex; flex-direction:column; gap:8px;
+            width:90%; max-width:400px; pointer-events:none;
+        }
+        .toast {
+            padding:12px 18px; border-radius:20px; color:#fff; font-weight:600;
+            font-size:0.8rem; text-align:center; background:#1f2937;
+            box-shadow:var(--shadow-lg); animation:slideDown 0.4s ease; pointer-events:auto;
+        }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-20px);} to{opacity:1;transform:none;} }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position:fixed; bottom:0; left:0; right:0;
+            background: var(--bg-elevated); border-top:1px solid var(--border-subtle);
+            display:flex; justify-content:space-around; align-items:center;
+            padding:10px 8px calc(10px + env(safe-area-inset-bottom, 8px));
+            z-index:100; backdrop-filter:blur(10px);
+        }
+        .bottom-nav-btn {
+            display:flex; flex-direction:column; align-items:center;
+            gap:4px; color:var(--text-muted); font-size:0.65rem;
+            font-weight:500; cursor:pointer; transition:color 0.2s;
+            background:none; border:none; font-family:var(--font-arabic);
+        }
+        .bottom-nav-btn.active { color:var(--accent-indigo); }
+        .bottom-nav-btn i { font-size:1.2rem; }
+        .badge-dot {
+            width:8px; height:8px; background:var(--accent-rose); border-radius:50%;
+            position:absolute; top:-2px; right:-8px;
+        }
+        .install-btn-highlight {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius:20px; padding:6px 16px; color:#fff; font-weight:700;
+            box-shadow:0 4px 12px rgba(99,102,241,0.5);
+            margin-top:4px;
+        }
+
+        /* Export container */
+        .export-wrapper { position:absolute; left:-9999px; width:720px; background:#0d0f14; color:#fff; z-index:-1; opacity:0; }
+
+        /* Footer */
+        .app-footer {
+            text-align:center; padding:18px 16px; margin-top:10px;
+            border-top:1px solid var(--border-subtle);
+        }
+        .footer-credential-img { width:70px; border-radius:12px; border:1px solid var(--border-medium); margin-bottom:8px; filter: brightness(0.9); }
+        .footer-name { font-weight:700; font-family:var(--font-latin); color:#e2e5ea; }
+        .footer-role { font-size:0.7rem; color:var(--text-muted); font-family:var(--font-latin); }
+        .footer-links a { color:var(--text-secondary); text-decoration:none; margin:0 8px; font-size:0.7rem; font-family:var(--font-latin); }
+        .footer-links a:hover { color:var(--accent-indigo); }
+
+        /* Quick add chips */
+        .quick-add-chips { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+        .chip {
+            background:var(--bg-overlay); border:1px solid var(--border-medium);
+            padding:6px 14px; border-radius:20px; font-size:0.7rem;
+            cursor:pointer; transition:0.2s; color:var(--text-secondary);
+        }
+        .chip:hover { border-color:var(--accent-indigo); color:#fff; background:rgba(99,102,241,0.15); }
+
+        /* Overview card */
+        .overview-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+        /* Settings icon */
+        .settings-icon {
+            background: rgba(255,255,255,0.05);
+            border:1px solid var(--border-medium);
+            width:36px; height:36px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            cursor:pointer; color:var(--text-secondary);
+            transition: all var(--transition-snappy);
+        }
+        .settings-icon:hover { background:rgba(255,255,255,0.1); color:#fff; }
+
+        @media (max-width:400px) {
+            .form-row { flex-direction:column; }
+            .budget-grid { grid-template-columns:1fr 1fr; gap:6px; }
+            .tab-btn { font-size:0.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="modal-backdrop" id="modalBackdrop">
+        <div class="modal-panel" id="modalPanel">
+            <div class="modal-handle"></div>
+            <h3 class="card-title" id="modalTitle" style="justify-content:center;margin-bottom:16px;"></h3>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <div class="export-wrapper" id="exportWrapper"></div>
+
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-brand">
+                <div class="header-logo">💷</div>
+                <div>
+                    <div class="header-title">متعقب المصاريف</div>
+                    <div class="header-subtitle">EXPENSE TRACKER</div>
+                </div>
+            </div>
+            <div style="display:flex; gap:8px;">
+                <div class="settings-icon" id="btnQuickSettings" title="إعدادات سريعة"><i class="fa-solid fa-gear"></i></div>
+            </div>
+        </header>
+
+        <!-- Combined Overview -->
+        <div class="card" style="border:1px solid var(--border-medium);">
+            <div class="card-header">
+                <span class="card-title"><i class="fa-solid fa-chart-pie"></i> نظرة عامة</span>
+                <button class="btn btn-sm btn-outline" id="btnResetMonth"><i class="fa-solid fa-arrows-rotate"></i> بداية شهر جديد</button>
+            </div>
+            <div class="overview-grid">
+                <div class="budget-cell">
+                    <div class="budget-label">المتبقي الشخصي</div>
+                    <div class="budget-number" id="overviewRemainingPersonal" style="font-size:1rem;">0 ج.م</div>
+                </div>
+                <div class="budget-cell">
+                    <div class="budget-label">المتبقي العائلي</div>
+                    <div class="budget-number" id="overviewRemainingFamily" style="font-size:1rem;">0 ج.م</div>
+                </div>
+            </div>
+            <div style="margin-top:8px; display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-muted);">
+                <span>إجمالي المصروفات: <strong id="totalSpentOverall">0 ج.م</strong></span>
+            </div>
+        </div>
+
+        <div class="tab-nav" id="tabNav">
+            <button class="tab-btn active" data-tab="personal"><span>👤</span> الشخصية <span class="tab-badge" id="badgePersonal">0</span></button>
+            <button class="tab-btn" data-tab="family"><span>🏠</span> البيت والعائلة <span class="tab-badge" id="badgeFamily">0</span></button>
+        </div>
+
+        <!-- Personal Section -->
+        <section id="sectionPersonal">
+            <div class="card card-accent-left">
+                <div class="card-header">
+                    <span class="card-title"><span class="icon-circle">💰</span> الميزانية الشخصية</span>
+                    <button class="btn btn-outline btn-sm" id="setBudgetPersonal">تعديل</button>
+                </div>
+                <div class="budget-grid">
+                    <div class="budget-cell"><div class="budget-label">الميزانية</div><div class="budget-number text-amber" id="budgetTotalPersonal">0 ج.م</div></div>
+                    <div class="budget-cell"><div class="budget-label">المتبقي</div><div class="budget-number text-green" id="budgetRemainingPersonal">0 ج.م</div></div>
+                </div>
+                <div class="progress-wrap">
+                    <div class="progress-header"><span>الصرف</span><span id="progressPercentPersonal">0%</span></div>
+                    <div class="progress-bar"><div class="progress-fill progress-safe" id="progressFillPersonal" style="width:0%"></div></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title" style="margin-bottom:8px;">➕ إضافة مصروف شخصي</div>
+                <div class="quick-add-chips" id="quickChipsPersonal">
+                    <span class="chip" data-amount="50" data-desc="مواصلات">🚕 مواصلات</span>
+                    <span class="chip" data-amount="120" data-desc="غداء">🍔 غداء</span>
+                    <span class="chip" data-amount="200" data-desc="ترفيه">🎮 ترفيه</span>
+                    <span class="chip" data-amount="75" data-desc="قهوة">☕ قهوة</span>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label class="form-label">الوصف</label><input type="text" class="form-input" id="descPersonal" placeholder="مثال: غداء"></div>
+                    <div class="form-group" style="max-width:130px;"><label class="form-label">المبلغ (ج.م)</label><input type="number" class="form-input" id="amountPersonal" placeholder="0.00"></div>
+                    <button class="btn btn-primary" id="addPersonalBtn">إضافة</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📋 سجل المصروفات</span>
+                    <button class="btn-danger-text" id="clearPersonalBtn">مسح الكل</button>
+                </div>
+                <ul class="transaction-list" id="transactionListPersonal"><li class="empty-state"><i class="fa-solid fa-receipt"></i><p>لا توجد مصروفات</p></li></ul>
+            </div>
+        </section>
+
+        <!-- Family Section -->
+        <section id="sectionFamily" style="display:none;">
+            <div class="card card-accent-teal">
+                <div class="card-header">
+                    <span class="card-title"><span class="icon-circle">🏡</span> ميزانية البيت والعائلة</span>
+                    <button class="btn btn-outline btn-sm" id="setBudgetFamily">تعديل</button>
+                </div>
+                <div class="budget-grid">
+                    <div class="budget-cell"><div class="budget-label">الميزانية</div><div class="budget-number text-amber" id="budgetTotalFamily">0 ج.م</div></div>
+                    <div class="budget-cell"><div class="budget-label">المتبقي</div><div class="budget-number text-green" id="budgetRemainingFamily">0 ج.م</div></div>
+                </div>
+                <div class="progress-wrap">
+                    <div class="progress-header"><span>الصرف</span><span id="progressPercentFamily">0%</span></div>
+                    <div class="progress-bar"><div class="progress-fill progress-safe" id="progressFillFamily" style="width:0%"></div></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title" style="margin-bottom:8px;">➕ إضافة مصروف عائلي</div>
+                <div class="quick-add-chips" id="quickChipsFamily">
+                    <span class="chip" data-amount="300" data-desc="أكل البيت">🍲 أكل البيت</span>
+                    <span class="chip" data-amount="500" data-desc="فواتير">💡 فواتير</span>
+                    <span class="chip" data-amount="150" data-desc="منظفات">🧹 منظفات</span>
+                    <span class="chip" data-amount="200" data-desc="أدوية">💊 أدوية</span>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label class="form-label">الوصف</label><input type="text" class="form-input" id="descFamily" placeholder="فواتير، أكل..."></div>
+                    <div class="form-group" style="max-width:130px;"><label class="form-label">المبلغ (ج.م)</label><input type="number" class="form-input" id="amountFamily" placeholder="0.00"></div>
+                    <button class="btn btn-primary" id="addFamilyBtn">إضافة</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📋 سجل المصروفات</span>
+                    <button class="btn-danger-text" id="clearFamilyBtn">مسح الكل</button>
+                </div>
+                <ul class="transaction-list" id="transactionListFamily"><li class="empty-state"><i class="fa-solid fa-receipt"></i><p>لا توجد مصروفات</p></li></ul>
+            </div>
+        </section>
+
+        <footer class="app-footer">
+            <img src="https://drive.google.com/thumbnail?id=1C7BT9_FOkAysydVqegpxGoWfrv-A7SVR&sz=w200" alt="Credential" class="footer-credential-img" onerror="this.style.display='none'">
+            <div class="footer-name">Hazem K H Madi</div>
+            <div class="footer-role">Senior Product Designer</div>
+            <div class="footer-links" style="margin-top:6px;">
+                <a href="https://hazemkhmadi.framer.ai" target="_blank">Portfolio</a>
+                <a href="https://www.linkedin.com/in/hazem-k-h-madi" target="_blank">LinkedIn</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="bottom-nav" id="bottomNav">
+        <button class="bottom-nav-btn active" id="navPersonal"><i class="fa-solid fa-user"></i><span>الشخصية</span></button>
+        <button class="bottom-nav-btn" id="navFamily"><i class="fa-solid fa-house"></i><span>العائلة</span></button>
+        <button class="bottom-nav-btn" id="navCalculator"><i class="fa-solid fa-calculator"></i><span>الحاسبة</span></button>
+        <button class="bottom-nav-btn" id="navExport"><i class="fa-solid fa-file-export"></i><span>تصدير</span></button>
+        <button class="bottom-nav-btn install-btn-highlight" id="navInstall" style="display: none;">
+            <i class="fa-solid fa-download"></i><span>تثبيت التطبيق</span>
+        </button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        (function() {
+            // === STORAGE KEYS ===
+            const STORAGE = {
+                pBudget: 'exp_p_budget_v5',
+                pTxns: 'exp_p_txns_v5',
+                fBudget: 'exp_f_budget_v5',
+                fTxns: 'exp_f_txns_v5',
+                tab: 'exp_tab_v5'
+            };
+
+            // === STATE ===
+            const state = {
+                activeTab: 'personal',
+                personal: { budget: 0, transactions: [] },
+                family: { budget: 0, transactions: [] }
+            };
+
+            // === DOM REFS ===
+            const $ = (s) => document.querySelector(s);
+            const $$ = (s) => document.querySelectorAll(s);
+
+            const dom = {
+                badgePersonal: $('#badgePersonal'), badgeFamily: $('#badgeFamily'),
+                budgetTotalPersonal: $('#budgetTotalPersonal'), budgetRemainingPersonal: $('#budgetRemainingPersonal'),
+                progressPercentPersonal: $('#progressPercentPersonal'), progressFillPersonal: $('#progressFillPersonal'),
+                descPersonal: $('#descPersonal'), amountPersonal: $('#amountPersonal'), addPersonalBtn: $('#addPersonalBtn'),
+                transactionListPersonal: $('#transactionListPersonal'), setBudgetPersonal: $('#setBudgetPersonal'), clearPersonalBtn: $('#clearPersonalBtn'),
+                budgetTotalFamily: $('#budgetTotalFamily'), budgetRemainingFamily: $('#budgetRemainingFamily'),
+                progressPercentFamily: $('#progressPercentFamily'), progressFillFamily: $('#progressFillFamily'),
+                descFamily: $('#descFamily'), amountFamily: $('#amountFamily'), addFamilyBtn: $('#addFamilyBtn'),
+                transactionListFamily: $('#transactionListFamily'), setBudgetFamily: $('#setBudgetFamily'), clearFamilyBtn: $('#clearFamilyBtn'),
+                modalBackdrop: $('#modalBackdrop'), modalTitle: $('#modalTitle'), modalContent: $('#modalContent'),
+                exportWrapper: $('#exportWrapper'),
+                toastContainer: $('#toastContainer'),
+                sectionPersonal: $('#sectionPersonal'), sectionFamily: $('#sectionFamily'),
+                tabNav: $('#tabNav'),
+                overviewRemainingPersonal: $('#overviewRemainingPersonal'),
+                overviewRemainingFamily: $('#overviewRemainingFamily'),
+                totalSpentOverall: $('#totalSpentOverall'),
+                quickChipsPersonal: $('#quickChipsPersonal'), quickChipsFamily: $('#quickChipsFamily'),
+                bottomNav: $('#bottomNav'),
+                btnResetMonth: $('#btnResetMonth'),
+                btnQuickSettings: $('#btnQuickSettings'),
+                navInstall: $('#navInstall'),
+            };
+
+            let deferredPrompt;
+
+            // === UTILITIES ===
+            function formatCurrency(amt) {
+                try { return new Intl.NumberFormat('ar-EG', { style: 'currency', currency: 'EGP' }).format(amt); }
+                catch { return amt.toFixed(2) + ' ج.م'; }
+            }
+            function shortCurrency(amt) { return amt >= 1000 ? (amt / 1000).toFixed(1) + 'k' : amt.toFixed(0) + ' ج.م'; }
+            function today() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+            function formatDateAr(d) { const m = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر']; const dt = new Date(d); return `${dt.getDate()} ${m[dt.getMonth()]} ${dt.getFullYear()}`; }
+            function uid() { return Date.now() + Math.random().toString(36); }
+            function escapeHtml(t) { const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+
+            function toast(msg, type='info') {
+                const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+                if(type === 'success') t.style.background = '#10b981';
+                else if(type === 'error') t.style.background = '#f43f5e';
+                dom.toastContainer.appendChild(t);
+                setTimeout(() => { t.style.opacity='0'; t.style.transform='translateY(-20px)'; t.style.transition='0.3s'; setTimeout(()=>t.remove(),300); }, 2200);
+            }
+
+            // === DATA PERSISTENCE ===
+            function save() {
+                localStorage.setItem(STORAGE.pBudget, state.personal.budget);
+                localStorage.setItem(STORAGE.pTxns, JSON.stringify(state.personal.transactions));
+                localStorage.setItem(STORAGE.fBudget, state.family.budget);
+                localStorage.setItem(STORAGE.fTxns, JSON.stringify(state.family.transactions));
+                localStorage.setItem(STORAGE.tab, state.activeTab);
+            }
+
+            function load() {
+                state.personal.budget = parseFloat(localStorage.getItem(STORAGE.pBudget)) || 0;
+                state.personal.transactions = JSON.parse(localStorage.getItem(STORAGE.pTxns)) || [];
+                state.family.budget = parseFloat(localStorage.getItem(STORAGE.fBudget)) || 0;
+                state.family.transactions = JSON.parse(localStorage.getItem(STORAGE.fTxns)) || [];
+                state.activeTab = localStorage.getItem(STORAGE.tab) || 'personal';
+                if(!Array.isArray(state.personal.transactions)) state.personal.transactions = [];
+                if(!Array.isArray(state.family.transactions)) state.family.transactions = [];
+            }
+
+            // === COMPUTED ===
+            function spent(cat) { return state[cat].transactions.reduce((s,t)=>s+(+t.amount||0),0); }
+            function remaining(cat) { return state[cat].budget - spent(cat); }
+            function percentage(cat) { if(state[cat].budget<=0) return 0; return Math.min((spent(cat)/state[cat].budget)*100, 100); }
+
+            // === RENDER ===
+            function renderBudget(cat) {
+                const rem = remaining(cat), pct = percentage(cat);
+                const totalEl = cat==='personal'?dom.budgetTotalPersonal:dom.budgetTotalFamily;
+                const remEl = cat==='personal'?dom.budgetRemainingPersonal:dom.budgetRemainingFamily;
+                const pctEl = cat==='personal'?dom.progressPercentPersonal:dom.progressPercentFamily;
+                const fillEl = cat==='personal'?dom.progressFillPersonal:dom.progressFillFamily;
+
+                totalEl.textContent = formatCurrency(state[cat].budget);
+                remEl.textContent = formatCurrency(rem);
+                remEl.className = 'budget-number ' + (rem>0?'text-green':rem<0?'text-red':'text-amber');
+                pctEl.textContent = pct.toFixed(1)+'%';
+                fillEl.style.width = pct+'%';
+                fillEl.classList.remove('progress-safe','progress-warn','progress-danger');
+                if(pct<60) fillEl.classList.add('progress-safe');
+                else if(pct<85) fillEl.classList.add('progress-warn');
+                else fillEl.classList.add('progress-danger');
+            }
+
+            function renderTxns(cat) {
+                const listEl = cat==='personal'?dom.transactionListPersonal:dom.transactionListFamily;
+                const txns = [...state[cat].transactions].reverse();
+                listEl.innerHTML = '';
+                if(!txns.length) {
+                    listEl.innerHTML = '<li class="empty-state"><i class="fa-solid fa-receipt"></i><p>لا توجد مصروفات</p></li>';
+                    return;
+                }
+                txns.forEach(t=>{
+                    const li = document.createElement('li'); li.className='transaction-item';
+                    li.innerHTML = `
+                        <div class="transaction-info">
+                            <div class="transaction-desc">${escapeHtml(t.description)}</div>
+                            <div class="transaction-date">${formatDateAr(t.date)}</div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <span class="transaction-amount">- ${formatCurrency(t.amount)}</span>
+                            <button class="btn-danger-text del-txn" data-id="${t.id}" data-cat="${cat}"><i class="fa-solid fa-xmark"></i></button>
+                        </div>`;
+                    listEl.appendChild(li);
+                });
+                listEl.querySelectorAll('.del-txn').forEach(b=>b.addEventListener('click', (e)=>{
+                    const id = b.dataset.id, c = b.dataset.cat;
+                    state[c].transactions = state[c].transactions.filter(t=>t.id!==id);
+                    save(); renderAll(); toast('🗑️ تم الحذف');
+                }));
+            }
+
+            function renderOverview() {
+                const remP = remaining('personal'), remF = remaining('family');
+                dom.overviewRemainingPersonal.textContent = formatCurrency(remP);
+                dom.overviewRemainingPersonal.className = 'budget-number ' + (remP>0?'text-green':remP<0?'text-red':'text-amber');
+                dom.overviewRemainingFamily.textContent = formatCurrency(remF);
+                dom.overviewRemainingFamily.className = 'budget-number ' + (remF>0?'text-green':remF<0?'text-red':'text-amber');
+                dom.totalSpentOverall.textContent = formatCurrency(spent('personal') + spent('family'));
+            }
+
+            function renderBadges() {
+                dom.badgePersonal.textContent = shortCurrency(spent('personal'));
+                dom.badgeFamily.textContent = shortCurrency(spent('family'));
+            }
+
+            function renderAll() {
+                renderBudget('personal'); renderBudget('family');
+                renderTxns('personal'); renderTxns('family');
+                renderBadges(); renderOverview();
+            }
+
+            // === ACTIONS ===
+            function switchTab(tab) {
+                state.activeTab = tab; save();
+                dom.tabNav.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+                dom.tabNav.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+                dom.sectionPersonal.style.display = tab==='personal'?'':'none';
+                dom.sectionFamily.style.display = tab==='family'?'':'none';
+                dom.bottomNav.querySelectorAll('.bottom-nav-btn').forEach(b=>b.classList.remove('active'));
+                document.getElementById(tab==='personal'?'navPersonal':'navFamily').classList.add('active');
+                renderAll();
+            }
+
+            function addTxn(cat, desc, amt) {
+                if(!desc) return toast('أدخل وصفاً','error');
+                if(isNaN(amt)||amt<=0) return toast('مبلغ غير صحيح','error');
+                state[cat].transactions.push({ id:uid(), description:desc, amount:amt, date:today() });
+                save(); renderAll();
+                if(cat==='personal') { dom.descPersonal.value=''; dom.amountPersonal.value=''; }
+                else { dom.descFamily.value=''; dom.amountFamily.value=''; }
+                toast('تمت الإضافة','success');
+                if(remaining(cat)<0) toast('⚠️ تجاوزت الميزانية!','error');
+            }
+
+            function clearAll(cat) {
+                if(!state[cat].transactions.length) return toast('لا يوجد شيء');
+                openModal('تأكيد المسح', `
+                    <p style="text-align:center;margin-bottom:16px;">مسح جميع مصروفات ${cat==='personal'?'الشخصية':'العائلة'}؟</p>
+                    <div style="display:flex;gap:8px;">
+                        <button class="btn btn-primary flex-1" id="confirmClear">نعم</button>
+                        <button class="btn btn-outline flex-1" id="cancelClear">إلغاء</button>
+                    </div>`);
+                $('#confirmClear').onclick = ()=>{ state[cat].transactions=[]; save(); renderAll(); closeModal(); toast('تم المسح'); };
+                $('#cancelClear').onclick = closeModal;
+            }
+
+            function resetMonth() {
+                if(!state.personal.transactions.length && !state.family.transactions.length) return toast('لا توجد مصروفات لمسحها');
+                openModal('بداية شهر جديد', `
+                    <p style="text-align:center;margin-bottom:16px;">سيتم مسح جميع المصروفات للشخصية والعائلة، مع الاحتفاظ بالميزانيات الحالية. متابعة؟</p>
+                    <div style="display:flex;gap:8px;">
+                        <button class="btn btn-primary flex-1" id="confirmReset">تأكيد</button>
+                        <button class="btn btn-outline flex-1" id="cancelReset">إلغاء</button>
+                    </div>`);
+                $('#confirmReset').onclick = ()=>{
+                    state.personal.transactions = [];
+                    state.family.transactions = [];
+                    save(); renderAll(); closeModal();
+                    toast('🎉 شهر جديد سعيد! تم مسح المصروفات.');
+                };
+                $('#cancelReset').onclick = closeModal;
+            }
+
+            function quickSettingsModal() {
+                openModal('الإعدادات السريعة', `
+                    <div style="display:flex;flex-direction:column;gap:12px;">
+                        <button class="btn btn-outline w-100" id="qsSetPersonal">تعديل الميزانية الشخصية</button>
+                        <button class="btn btn-outline w-100" id="qsSetFamily">تعديل ميزانية العائلة</button>
+                        <button class="btn btn-outline w-100" id="qsCalculator">حاسبة الدخل</button>
+                        <button class="btn btn-outline w-100" id="qsExport">تصدير التقارير</button>
+                    </div>`);
+                $('#qsSetPersonal').onclick = ()=>{ closeModal(); setBudgetModal('personal'); };
+                $('#qsSetFamily').onclick = ()=>{ closeModal(); setBudgetModal('family'); };
+                $('#qsCalculator').onclick = ()=>{ closeModal(); openCalculator(); };
+                $('#qsExport').onclick = ()=>{ closeModal(); openExportOptions(); };
+            }
+
+            function setBudgetModal(cat) {
+                const name = cat==='personal'?'الشخصية':'البيت والعائلة';
+                openModal(`تحديد ميزانية ${name}`, `
+                    <div style="text-align:center;">
+                        <input type="number" class="form-input" id="budgetInput" value="${state[cat].budget}" step="1" min="0" style="font-size:1.3rem;text-align:center;margin-bottom:16px;">
+                        <div style="display:flex;gap:8px;">
+                            <button class="btn btn-primary flex-1" id="saveBudgetBtn">حفظ</button>
+                            <button class="btn btn-outline flex-1" id="cancelBudgetBtn">إلغاء</button>
+                        </div>
+                    </div>`);
+                $('#budgetInput').focus();
+                $('#saveBudgetBtn').onclick = ()=>{
+                    const v = parseFloat($('#budgetInput').value);
+                    if(isNaN(v)||v<0) return toast('قيمة غير صحيحة','error');
+                    state[cat].budget = v; save(); renderAll(); closeModal(); toast('✅ تم الحفظ');
+                };
+                $('#cancelBudgetBtn').onclick = closeModal;
+            }
+
+            // === CALCULATOR ===
+            function openCalculator() {
+                openModal('حاسبة الدخل المتعدد', `
+                    <div id="calcApp">
+                        <div id="incomeSources" style="max-height:180px;overflow-y:auto;margin-bottom:12px;"></div>
+                        <button class="btn btn-outline btn-sm w-100" id="addIncomeSource">+ إضافة مصدر دخل</button>
+                        <div class="budget-cell" style="margin:12px 0;"><span>الإجمالي: </span><strong id="calcTotal" style="font-family:var(--font-latin);">0 ج.م</strong></div>
+                        <div class="form-row" style="margin-bottom:10px;">
+                            <div class="form-group"><label>نسبة الشخصية %</label><input type="number" class="form-input" id="pctPersonal" value="40" min="0" max="100"></div>
+                            <div class="form-group"><label>نسبة العائلة %</label><input type="number" class="form-input" id="pctFamily" value="60" readonly></div>
+                        </div>
+                        <div class="budget-cell">👤 الشخصية: <span id="sharePersonal">0 ج.م</span></div>
+                        <div class="budget-cell" style="margin-bottom:12px;">🏠 العائلة: <span id="shareFamily">0 ج.م</span></div>
+                        <button class="btn btn-primary w-100" id="applyCalc">تطبيق على الميزانيات</button>
+                    </div>`);
+                let sources = [{id:uid(), name:'', amount:''}];
+                function renderSources() {
+                    const container = $('#incomeSources');
+                    container.innerHTML = sources.map((s,i)=>`
+                        <div class="form-row" style="margin-bottom:6px;">
+                            <input class="form-input src-name" placeholder="المصدر ${i+1}" value="${escapeHtml(s.name)}">
+                            <input class="form-input src-amount" type="number" placeholder="المبلغ" value="${s.amount}" style="max-width:100px;">
+                            ${sources.length>1?`<button class="btn-danger-text del-src" data-id="${s.id}"><i class="fa-solid fa-trash"></i></button>`:''}
+                        </div>`).join('');
+                    container.querySelectorAll('.src-name,.src-amount').forEach(inp=>inp.addEventListener('input', updateCalc));
+                    container.querySelectorAll('.del-src').forEach(b=>b.addEventListener('click', (e)=>{
+                        sources = sources.filter(s=>s.id!==b.dataset.id); renderSources(); updateCalc();
+                    }));
+                }
+                function updateCalc() {
+                    const names = $$('#incomeSources .src-name'), amounts = $$('#incomeSources .src-amount');
+                    let total=0; sources.forEach((s,i)=>{ s.name=names[i]?.value||''; s.amount=amounts[i]?.value||''; total+= +s.amount||0; });
+                    const pctP = +($('#pctPersonal')?.value||0); const pctF = Math.max(0,100-pctP);
+                    if($('#pctFamily')) $('#pctFamily').value = pctF;
+                    $('#calcTotal').textContent = formatCurrency(total);
+                    $('#sharePersonal').textContent = formatCurrency(total*pctP/100);
+                    $('#shareFamily').textContent = formatCurrency(total*pctF/100);
+                }
+                $('#addIncomeSource').onclick = ()=>{ sources.push({id:uid(),name:'',amount:''}); renderSources(); updateCalc(); };
+                $('#pctPersonal').oninput = ()=>{ let v=+$('#pctPersonal').value; v=Math.max(0,Math.min(100,v)); $('#pctPersonal').value=v; updateCalc(); };
+                $('#applyCalc').onclick = ()=>{
+                    const total = +($('#calcTotal').textContent.replace(/[^0-9.]/g,''))||0;
+                    const pctP = +($('#pctPersonal')?.value||0);
+                    if(total<=0) return toast('أدخل دخلاً صحيحاً','error');
+                    state.personal.budget = total*pctP/100; state.family.budget = total*(100-pctP)/100;
+                    save(); renderAll(); closeModal(); toast('✅ تم تطبيق الميزانيات');
+                };
+                renderSources(); updateCalc();
+            }
+
+            // === EXPORT ===
+            function buildExportHTML(cat) {
+                const d = state[cat]; const s = spent(cat); const r = remaining(cat); const p = percentage(cat);
+                const name = cat==='personal'?'المصاريف الشخصية':'مصاريف البيت والعائلة';
+                let rows = d.transactions.length?d.transactions.slice().reverse().map((t,i)=>`<tr><td>${i+1}</td><td>${escapeHtml(t.description)}</td><td>${formatDateAr(t.date)}</td><td>${formatCurrency(t.amount)}</td></tr>`).join(''):'<tr><td colspan="4" style="text-align:center;">لا توجد مصروفات</td></tr>';
+                return `<div style="font-family:'Cairo',sans-serif;direction:rtl;background:#0d0f14;color:#fff;padding:24px;border-radius:20px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;"><h2>${name}</h2><span>${formatCurrency(d.budget)}</span></div>
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">
+                        <div style="background:#1a1c23;padding:12px;border-radius:12px;text-align:center;"><div>الميزانية</div><strong>${formatCurrency(d.budget)}</strong></div>
+                        <div style="background:#1a1c23;padding:12px;border-radius:12px;text-align:center;"><div>المصروف</div><strong style="color:#f43f5e;">${formatCurrency(s)}</strong></div>
+                        <div style="background:#1a1c23;padding:12px;border-radius:12px;text-align:center;"><div>المتبقي</div><strong style="color:#10b981;">${formatCurrency(r)}</strong></div>
+                    </div>
+                    <table style="width:100%;border-collapse:collapse;margin-top:12px;"><thead><tr style="border-bottom:1px solid #2a2d37;"><th>#</th><th>الوصف</th><th>التاريخ</th><th>المبلغ</th></tr></thead><tbody>${rows}</tbody></table>
+                    <div style="margin-top:20px;text-align:center;font-size:0.7rem;color:#6b7280;">تطبيق متعقب المصاريف | Hazem K H Madi</div></div>`;
+            }
+
+            async function exportFile(cat, format) {
+                const html = buildExportHTML(cat); dom.exportWrapper.innerHTML = html;
+                dom.exportWrapper.style.position='relative'; dom.exportWrapper.style.left='auto'; dom.exportWrapper.style.zIndex='300'; dom.exportWrapper.style.opacity='1'; dom.exportWrapper.style.margin='20px auto'; dom.exportWrapper.style.width='720px';
+                await new Promise(r=>setTimeout(r,400));
+                try {
+                    const canvas = await html2canvas(dom.exportWrapper, {scale:2,backgroundColor:'#0d0f14',logging:false});
+                    if(format==='png') {
+                        const a=document.createElement('a'); a.download=`تقرير_${cat}_${today()}.png`; a.href=canvas.toDataURL(); a.click(); toast('📸 PNG تم');
+                    } else {
+                        const {jsPDF}=window.jspdf; const pdf=new jsPDF('p','mm','a4'); const w=210,h=(canvas.height*w)/canvas.width;
+                        pdf.addImage(canvas,'PNG',0,0,w,Math.min(h,297)); if(h>297){let rem=h-297;while(rem>0){pdf.addPage();pdf.addImage(canvas,'PNG',0,-297,w,h);rem-=297;}}
+                        pdf.save(`تقرير_${cat}_${today()}.pdf`); toast('📄 PDF تم');
+                    }
+                } catch(e) { toast('فشل التصدير','error'); console.error(e); }
+                dom.exportWrapper.style.position='absolute'; dom.exportWrapper.style.left='-9999px'; dom.exportWrapper.style.zIndex='-1'; dom.exportWrapper.style.opacity='0'; dom.exportWrapper.innerHTML='';
+            }
+
+            function openExportOptions() {
+                openModal('تصدير التقرير', `
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                        <button class="btn btn-outline exp-btn" data-cat="personal" data-f="png">📸 شخصي PNG</button>
+                        <button class="btn btn-outline exp-btn" data-cat="personal" data-f="pdf">📄 شخصي PDF</button>
+                        <button class="btn btn-outline exp-btn" data-cat="family" data-f="png">📸 عائلي PNG</button>
+                        <button class="btn btn-outline exp-btn" data-cat="family" data-f="pdf">📄 عائلي PDF</button>
+                    </div><button class="btn btn-outline w-100 mt-2" id="cancelExp">إلغاء</button>`);
+                $$('.exp-btn').forEach(b=>b.addEventListener('click',()=>{ closeModal(); exportFile(b.dataset.cat,b.dataset.f); }));
+                $('#cancelExp').onclick=closeModal;
+            }
+
+            // === MODAL HELPERS ===
+            function openModal(title, content) {
+                dom.modalTitle.textContent = title;
+                dom.modalContent.innerHTML = content;
+                dom.modalBackdrop.classList.add('active');
+            }
+            function closeModal() { dom.modalBackdrop.classList.remove('active'); }
+
+            // === PWA INSTALL LOGIC ===
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                dom.navInstall.style.display = 'flex';
+            });
+
+            window.addEventListener('appinstalled', () => {
+                deferredPrompt = null;
+                dom.navInstall.style.display = 'none';
+                toast('تم تثبيت التطبيق!', 'success');
+            });
+
+            function promptInstall() {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            toast('🎉 جاري التثبيت...', 'success');
+                        }
+                        deferredPrompt = null;
+                        dom.navInstall.style.display = 'none';
+                    });
+                } else {
+                    // iOS or unsupported fallback
+                    openModal('تثبيت التطبيق', `
+                        <div style="text-align:center;">
+                            <p style="margin-bottom:12px;">لتثبيت التطبيق على هاتفك:</p>
+                            <p><strong>📱 iPhone (iOS):</strong> اضغط على زر المشاركة <i class="fa-solid fa-square-arrow-up-right"></i> ثم "إضافة إلى الشاشة الرئيسية".</p>
+                            <p style="margin-top:8px;"><strong>🤖 Android:</strong> اضغط على القائمة (⋮) واختر "تثبيت التطبيق" أو "Add to Home screen".</p>
+                            <button class="btn btn-outline w-100 mt-3" id="closeInstallGuide">حسناً</button>
+                        </div>`);
+                    $('#closeInstallGuide').onclick = closeModal;
+                }
+            }
+
+            // === EVENT LISTENERS ===
+            dom.tabNav.addEventListener('click', e=>{ const btn=e.target.closest('.tab-btn'); if(btn) switchTab(btn.dataset.tab); });
+            dom.addPersonalBtn.addEventListener('click', ()=>addTxn('personal', dom.descPersonal.value.trim(), +dom.amountPersonal.value));
+            dom.addFamilyBtn.addEventListener('click', ()=>addTxn('family', dom.descFamily.value.trim(), +dom.amountFamily.value));
+            dom.setBudgetPersonal.onclick = ()=>setBudgetModal('personal');
+            dom.setBudgetFamily.onclick = ()=>setBudgetModal('family');
+            dom.clearPersonalBtn.onclick = ()=>clearAll('personal');
+            dom.clearFamilyBtn.onclick = ()=>clearAll('family');
+            dom.btnResetMonth.onclick = resetMonth;
+            dom.btnQuickSettings.onclick = quickSettingsModal;
+            dom.modalBackdrop.addEventListener('click', e=>{ if(e.target===dom.modalBackdrop) closeModal(); });
+            document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+
+            // Quick chips
+            dom.quickChipsPersonal.addEventListener('click', e=>{ const c=e.target.closest('.chip'); if(c) addTxn('personal', c.dataset.desc, +c.dataset.amount); });
+            dom.quickChipsFamily.addEventListener('click', e=>{ const c=e.target.closest('.chip'); if(c) addTxn('family', c.dataset.desc, +c.dataset.amount); });
+
+            // Bottom nav
+            document.getElementById('navPersonal').onclick = ()=>switchTab('personal');
+            document.getElementById('navFamily').onclick = ()=>switchTab('family');
+            document.getElementById('navCalculator').onclick = openCalculator;
+            document.getElementById('navExport').onclick = openExportOptions;
+            dom.navInstall.onclick = promptInstall;
+
+            // Enter key to add expense
+            dom.amountPersonal.addEventListener('keydown', e=>{ if(e.key==='Enter') addTxn('personal', dom.descPersonal.value.trim(), +dom.amountPersonal.value); });
+            dom.amountFamily.addEventListener('keydown', e=>{ if(e.key==='Enter') addTxn('family', dom.descFamily.value.trim(), +dom.amountFamily.value); });
+
+            // === INIT ===
+            load();
+            switchTab(state.activeTab);
+            renderAll();
+
+            // Service Worker
+            if ('serviceWorker' in navigator) {
+                const swCode = `self.addEventListener('install',e=>e.waitUntil(caches.open('v3').then(c=>c.addAll(['/'])).then(self.skipWaiting()))); self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));`;
+                navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode],{type:'application/javascript'}))).catch(()=>{});
+            }
+            // Web Manifest
+            const manifest = {
+                name: 'متعقب المصاريف',
+                short_name: 'المصاريف',
+                start_url: location.href,
+                display: 'standalone',
+                background_color: '#0d0f14',
+                theme_color: '#0d0f14',
+                icons: [{
+                    src: 'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192"><rect width="192" height="192" rx="32" fill="#0d0f14"/><text x="96" y="110" text-anchor="middle" font-size="80" fill="white">💷</text></svg>'),
+                    sizes: '192x192'
+                }]
+            };
+            const manifestLink = document.createElement('link');
+            manifestLink.rel = 'manifest';
+            manifestLink.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/json'}));
+            document.head.appendChild(manifestLink);
+        })();
+    </script>
+</body>
+</html>
