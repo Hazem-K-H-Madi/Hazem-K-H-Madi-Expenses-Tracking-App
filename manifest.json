@@ -1,20 +1,25 @@
 {
-  "name": "متعقب المصاريف",
-  "short_name": "المصاريف",
+  "name": "متعقب المصاريف | Expense Tracker",
+  "short_name": "متعقب المصاريف",
   "description": "تطبيق متعقب المصاريف الشخصية والبيت والعائلة - بالجنيه المصري",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0d0f14",
   "theme_color": "#0d0f14",
   "orientation": "portrait-primary",
+  "lang": "ar",
+  "dir": "rtl",
+  "categories": ["finance", "utilities"],
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='32' fill='%230d0f14'/%3E%3Ctext x='96' y='110' text-anchor='middle' font-size='80' fill='white'%3E💷%3C/text%3E%3C/svg%3E",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192'%3E%3Crect width='192' height='192' rx='32' fill='%230d0f14'/%3E%3Ctext x='96' y='110' text-anchor='middle' font-size='80' fill='white'%3E💷%3C/text%3E%3C/svg%3E",
       "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512'%3E%3Crect width='512' height='512' rx='64' fill='%230d0f14'/%3E%3Ctext x='256' y='290' text-anchor='middle' font-size='200' fill='white'%3E💷%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
     }
-  ],
-  "lang": "ar",
-  "dir": "rtl"
+  ]
 }
