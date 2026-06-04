@@ -1,520 +1,382 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark" data-accent="emerald">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تطبيق الإدارة المالية - Hazem K H Madi</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#4F46E5">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المحفظة الذكية | إدارة المصروفات الاحترافية</title>
     
+    <meta name="theme-color" content="#10b981">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2953/2953423.png">
+    <link rel="manifest" href="manifest.json">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    <style>
-        :root {
-            --primary: #4F46E5;
-            --primary-hover: #4338CA;
-            --bg-color: #F3F4F6;
-            --surface: #FFFFFF;
-            --text-main: #111827;
-            --text-muted: #6B7280;
-            --success: #10B981;
-            --danger: #EF4444;
-            --border: #E5E7EB;
-            --radius: 16px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        [data-theme="dark"] {
-            --bg-color: #111827;
-            --surface: #1F2937;
-            --text-main: #F9FAFB;
-            --text-muted: #9CA3AF;
-            --border: #374151;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            transition: var(--transition);
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* Sidebar & Navigation */
-        .sidebar {
-            width: 280px;
-            background: var(--surface);
-            border-left: 1px solid var(--border);
-            padding: 2rem 1rem;
-            display: flex;
-            flex-direction: column;
-            transition: var(--transition);
-            z-index: 100;
-        }
-
-        .brand {
-            font-size: 1.25rem;
-            font-weight: bold;
-            margin-bottom: 2rem;
-            text-align: center;
-            color: var(--primary);
-        }
-
-        .nav-item {
-            padding: 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: var(--radius);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            color: var(--text-muted);
-            transition: var(--transition);
-        }
-
-        .nav-item:hover, .nav-item.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: var(--shadow);
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 2rem;
-            position: relative;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
-        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
-        .btn-outline:hover { background: var(--bg-color); }
-
-        /* Dashboard Cards */
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .card {
-            background: var(--surface);
-            padding: 1.5rem;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-
-        .card-title { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem; }
-        .card-value { font-size: 2rem; font-weight: bold; color: var(--text-main); }
-        .text-success { color: var(--success); }
-        .text-danger { color: var(--danger); }
-
-        /* Charts */
-        .chart-container {
-            background: var(--surface);
-            padding: 1.5rem;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            margin-bottom: 2rem;
-            height: 350px;
-        }
-
-        /* Forms & Inputs */
-        .input-group { margin-bottom: 1rem; }
-        .input-group label { display: block; margin-bottom: 0.5rem; color: var(--text-main); font-weight: 500;}
-        .input-control {
-            width: 100%;
-            padding: 0.75rem;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background: var(--bg-color);
-            color: var(--text-main);
-            outline: none;
-            transition: var(--transition);
-        }
-        .input-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2); }
-
-        /* Sections */
-        .section { display: none; animation: fadeIn 0.4s ease-in-out; }
-        .section.active { display: block; }
-        
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Credentials Section */
-        .credentials-card {
-            background: linear-gradient(135deg, var(--surface) 0%, var(--bg-color) 100%);
-            border: 1px solid var(--border);
-            padding: 2rem;
-            border-radius: var(--radius);
-            text-align: center;
-            margin-top: 2rem;
-        }
-        .credentials-card img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid var(--primary);
-            margin-bottom: 1rem;
-        }
-        .creator-name { font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem; font-family: sans-serif; direction: ltr;}
-        .social-links a { color: var(--primary); margin: 0 0.5rem; text-decoration: none; font-size: 1.2rem; }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            body { flex-direction: column; }
-            .sidebar { width: 100%; padding: 1rem; border-left: none; border-bottom: 1px solid var(--border); flex-direction: row; overflow-x: auto; }
-            .nav-item { margin-bottom: 0; margin-left: 0.5rem; white-space: nowrap; }
-            .brand { display: none; }
-        }
-
-        /* Export Template (Hidden usually) */
-        #export-template { display: none; padding: 40px; background: white; color: black; direction: rtl; }
-        .exporting #export-template { display: block; }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <aside class="sidebar">
-        <div class="brand">إدارة الأموال</div>
-        <div class="nav-item active" onclick="switchTab('dashboard')"><i class="fas fa-home"></i> لوحة القيادة</div>
-        <div class="nav-item" onclick="switchTab('personal')"><i class="fas fa-user"></i> شخصي</div>
-        <div class="nav-item" onclick="switchTab('family')"><i class="fas fa-home-user"></i> المنزل</div>
-        <div class="nav-item" onclick="switchTab('calculator')"><i class="fas fa-calculator"></i> حاسبة الدخل</div>
-        <div class="nav-item" onclick="switchTab('settings')"><i class="fas fa-cog"></i> الإعدادات</div>
-    </aside>
+    <div id="app-loader" class="app-loader">
+        <div class="spinner"></div>
+        <p>جاري تحميل النظام المالي الذكي...</p>
+    </div>
 
-    <main class="main-content">
+    <div id="toast-container" class="toast-container"></div>
+
+    <div id="install-banner" class="install-banner hidden">
+        <div class="install-content">
+            <i class="fa-solid fa-wallet install-icon"></i>
+            <div class="install-text">
+                <h3>تثبيت تطبيق المحفظة الذكية</h3>
+                <p>قم بتثبيت التطبيق على جهازك للوصول السريع بدون إنترنت وتجربة مستخدم سلسة.</p>
+            </div>
+        </div>
+        <div class="install-actions">
+            <button id="btn-install-cancel" class="btn-secondary-sm">ليس الآن</button>
+            <button id="btn-install-confirm" class="btn-primary-sm">تثبيت الآن</button>
+        </div>
+    </div>
+
+    <div class="app-container">
         
-        <header class="header">
-            <h2>مرحباً، Hazem</h2>
-            <div>
-                <button class="btn btn-outline" id="installBtn" style="display: none;"><i class="fas fa-download"></i> تثبيت التطبيق</button>
-                <button class="btn btn-primary" onclick="exportReport()"><i class="fas fa-file-pdf"></i> تصدير تقرير</button>
+        <header class="app-header">
+            <div class="brand">
+                <div class="logo-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="brand-text">
+                    <h1>المحفظة الذكية</h1>
+                    <span class="version">إصدار التتبع المزدوج v2.0</span>
+                </div>
+            </div>
+            
+            <div class="header-actions">
+                <button id="btn-toggle-settings" class="icon-button" title="الإعدادات المتقدمة">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+                <button id="btn-install-shortcut" class="btn-install-shortcut hidden">
+                    <i class="fa-solid fa-download"></i> تثبيت التطبيق
+                </button>
             </div>
         </header>
 
-        <section id="dashboard" class="section active">
-            <div class="cards-grid">
-                <div class="card">
-                    <div class="card-title">إجمالي الرصيد المتبقي</div>
-                    <div class="card-value" id="totalBalance">0 ج.م</div>
+        <div id="settings-drawer" class="drawer hidden">
+            <div class="drawer-overlay"></div>
+            <div class="drawer-content">
+                <div class="drawer-header">
+                    <h2><i class="fa-solid fa-sliders"></i> إعدادات المظهر والنظام</h2>
+                    <button id="btn-close-settings" class="close-button">&times;</button>
                 </div>
-                <div class="card">
-                    <div class="card-title">مصاريف شخصية</div>
-                    <div class="card-value text-danger" id="totalPersonalExpense">0 ج.م</div>
+                <div class="drawer-body">
+                    <div class="setting-group">
+                        <label class="setting-label">نمط الألوان العام</label>
+                        <div class="theme-switch-container">
+                            <button class="theme-btn" data-theme-val="light"><i class="fa-solid fa-sun"></i> مضيء</button>
+                            <button class="theme-btn active" data-theme-val="dark"><i class="fa-solid fa-moon"></i> مظلم</button>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <label class="setting-label">اللون الرئيسي للنظام (Accent Color)</label>
+                        <div class="accent-picker">
+                            <button class="accent-dot emerald active" data-accent-val="emerald" title="أخضر زمردي"></button>
+                            <button class="accent-dot ocean" data-accent-val="ocean" title="أزرق محيطي"></button>
+                            <button class="accent-dot sunset" data-accent-val="sunset" title="برتقالي غروب الشمس"></button>
+                        </div>
+                    </div>
                 </div>
-                <div class="card">
-                    <div class="card-title">مصاريف المنزل</div>
-                    <div class="card-value text-danger" id="totalFamilyExpense">0 ج.م</div>
-                </div>
-            </div>
-            <div class="chart-container">
-                <canvas id="expenseChart"></canvas>
-            </div>
-        </section>
-
-        <section id="personal" class="section">
-            <div class="card">
-                <h3>إضافة مصروف شخصي</h3>
-                <br>
-                <div class="input-group">
-                    <label>المبلغ (ج.م)</label>
-                    <input type="number" id="p-amount" class="input-control" placeholder="أدخل المبلغ">
-                </div>
-                <div class="input-group">
-                    <label>الوصف</label>
-                    <input type="text" id="p-desc" class="input-control" placeholder="مثال: اشتراك إنترنت، قهوة...">
-                </div>
-                <button class="btn btn-primary" onclick="addExpense('personal')">إضافة</button>
-            </div>
-        </section>
-
-        <section id="family" class="section">
-            <div class="card">
-                <h3>إضافة مصروف للمنزل</h3>
-                <br>
-                <div class="input-group">
-                    <label>المبلغ (ج.م)</label>
-                    <input type="number" id="f-amount" class="input-control" placeholder="أدخل المبلغ">
-                </div>
-                <div class="input-group">
-                    <label>الوصف</label>
-                    <input type="text" id="f-desc" class="input-control" placeholder="مثال: فواتير كهرباء، بقالة...">
-                </div>
-                <button class="btn btn-primary" onclick="addExpense('family')">إضافة</button>
-            </div>
-        </section>
-
-        <section id="calculator" class="section">
-            <div class="card">
-                <h3>حاسبة توزيع الدخل الاحترافية</h3>
-                <p style="color: var(--text-muted); margin-bottom: 1rem;">أضف مصادر دخلك المتعددة وقم بتخصيصها لتغذية حساباتك.</p>
-                
-                <div class="input-group">
-                    <label>الدخل الأساسي / الراتب (ج.م)</label>
-                    <input type="number" id="calc-salary" class="input-control" value="0">
-                </div>
-                <div class="input-group">
-                    <label>مشاريع إضافية (Freelance) (ج.م)</label>
-                    <input type="number" id="calc-freelance" class="input-control" value="0">
-                </div>
-                <div class="input-group">
-                    <label>تخصيص للمنزل (%)</label>
-                    <input type="number" id="calc-percent" class="input-control" value="60" max="100">
-                </div>
-                <button class="btn btn-primary" onclick="calculateAndAllocate()">حساب وتوزيع</button>
-            </div>
-        </section>
-
-        <section id="settings" class="section">
-            <div class="card">
-                <h3>تخصيص الواجهة</h3>
-                <br>
-                <div class="input-group">
-                    <label>المظهر (Dark/Light Mode)</label>
-                    <button class="btn btn-outline" onclick="toggleTheme()"><i class="fas fa-moon"></i> تبديل المظهر</button>
-                </div>
-            </div>
-
-            <div class="credentials-card">
-                <img src="https://drive.google.com/uc?export=view&id=1C7BT9_FOkAysydVqegpxGoWfrv-A7SVR" alt="Hazem Madi" onerror="this.src='https://via.placeholder.com/120'">
-                <div class="creator-name">Hazem K H Madi</div>
-                <p style="color: var(--text-muted); margin-bottom: 1rem; font-family: sans-serif;">Senior Product Designer</p>
-                <div class="social-links">
-                    <a href="https://hazemkhmadi.framer.ai" target="_blank" title="Portfolio"><i class="fas fa-globe"></i></a>
-                    <a href="https://www.linkedin.com/in/hazem-k-h-madi" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                </div>
-                <p style="margin-top: 1rem; font-size: 0.9rem;">تم تصميم وتطوير هذه المنصة خصيصاً لتوفير تجربة مالية متطورة.</p>
-            </div>
-        </section>
-
-        <div id="export-template">
-            <h1 style="text-align: center; color: #4F46E5;">التقرير المالي المفصل</h1>
-            <h3 style="text-align: center; color: #6B7280; margin-bottom: 2rem;">بواسطة Hazem K H Madi</h3>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 2rem; border-bottom: 2px solid #E5E7EB; padding-bottom: 1rem;">
-                <div><strong>إجمالي الدخل:</strong> <span id="pdf-income"></span></div>
-                <div><strong>مصاريف شخصية:</strong> <span id="pdf-personal"></span></div>
-                <div><strong>مصاريف المنزل:</strong> <span id="pdf-family"></span></div>
             </div>
         </div>
 
-    </main>
-
-    <script>
-        // State Management
-        let state = JSON.parse(localStorage.getItem('financeAppState')) || {
-            totalIncome: 0,
-            personalExpenses: [],
-            familyExpenses: []
-        };
-
-        let myChart;
-
-        // Number Formatter
-        const formatMoney = (amount) => {
-            return new Intl.NumberFormat('ar-EG', { style: 'currency', currency: 'EGP' }).format(amount);
-        };
-
-        // Tab Switching Logic
-        function switchTab(tabId) {
-            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+        <main class="main-content">
             
-            document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
+            <section class="card income-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-money-bill-trend-up"></i> وحدة إدارة الدخل وتخصيص الميزانية</h2>
+                    <span class="badge">الذكاء المالي</span>
+                </div>
+                
+                <div class="income-grid">
+                    <div class="income-inputs">
+                        <h3><i class="fa-solid fa-wallet"></i> مصادر الدخل الشهرية</h3>
+                        <div class="form-group-row">
+                            <div class="form-group">
+                                <label for="inc-salary">الراتب الأساسي (ج.م)</label>
+                                <input type="number" id="inc-salary" min="0" placeholder="0.00" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="inc-freelance">العمل الحر / الإضافي</label>
+                                <input type="number" id="inc-freelance" min="0" placeholder="0.00" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="inc-investments">الاستثمارات / العوائد</label>
+                                <input type="number" id="inc-investments" min="0" placeholder="0.00" value="0">
+                            </div>
+                        </div>
+                        <div class="total-income-display">
+                            <span>إجمالي الدخل المتوفر:</span>
+                            <strong id="total-income-val">0.00</strong> <small>ج.م</small>
+                        </div>
+                    </div>
 
-        // Theme Toggling
-        function toggleTheme() {
-            const body = document.body;
-            const currentTheme = body.getAttribute('data-theme');
-            if (currentTheme === 'dark') {
-                body.removeAttribute('data-theme');
-                localStorage.setItem('theme', 'light');
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-            }
-            updateChart(); // Refresh chart colors
-        }
+                    <div class="allocation-engine">
+                        <h3><i class="fa-solid fa-pie-chart"></i> محرك تقسيم السيليكون الذكي</h3>
+                        <p class="section-desc">اسحب المؤشر لتوزيع إجمالي الدخل بين الحسابين المعزولين تماماً:</p>
+                        
+                        <div class="slider-container">
+                            <div class="slider-labels">
+                                <span>المصروفات الشخصية: <strong id="pct-personal">50%</strong></span>
+                                <span>مصروفات المنزل: <strong id="pct-family">50%</strong></span>
+                            </div>
+                            <input type="range" id="allocation-slider" min="0" max="100" value="50" class="custom-slider">
+                        </div>
 
-        // Initialize Theme from LocalStorage
-        if(localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
+                        <div class="allocation-cards">
+                            <div class="alloc-card personal">
+                                <span class="alloc-title">حصيلة المحفظة الشخصية</span>
+                                <div class="alloc-amount"><span id="val-alloc-personal">0.00</span> <small>ج.م</small></div>
+                            </div>
+                            <div class="alloc-card family">
+                                <span class="alloc-title">حصيلة ميزانية المنزل والعائلة</span>
+                                <div class="alloc-amount"><span id="val-alloc-family">0.00</span> <small>ج.م</small></div>
+                            </div>
+                        </div>
+                        
+                        <button id="btn-lock-allocation" class="btn-primary w-100 mt-3">
+                            <i class="fa-solid fa-lock"></i> اعتماد وتثبيت وتحديث الميزانيات التقديرية
+                        </button>
+                    </div>
+                </div>
+            </section>
 
-        // Core App Functions
-        function addExpense(type) {
-            const amountInput = document.getElementById(`${type === 'personal' ? 'p' : 'f'}-amount`);
-            const descInput = document.getElementById(`${type === 'personal' ? 'p' : 'f'}-desc`);
-            
-            const amount = parseFloat(amountInput.value);
-            const desc = descInput.value;
+            <section class="tab-system-container">
+                <div class="tab-navigation">
+                    <button id="tab-btn-personal" class="tab-button active" data-tab="personal">
+                        <i class="fa-solid fa-user-gear"></i> المصروفات الشخصية (المحفظة الخاصة)
+                    </button>
+                    <button id="tab-btn-family" class="tab-button" data-tab="family">
+                        <i class="fa-solid fa-house-user"></i> مصروفات المنزل والعائلة (الميزانية المشتركة)
+                    </button>
+                </div>
 
-            if (isNaN(amount) || amount <= 0 || !desc) {
-                alert("يرجى إدخال قيم صحيحة.");
-                return;
-            }
+                <div class="tab-content-wrapper">
+                    
+                    <div class="dashboard-stats-grid">
+                        <div class="stat-card allocated">
+                            <div class="stat-icon"><i class="fa-solid fa-layer-group"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">الميزانية المخصصة الكلية</span>
+                                <h2 class="stat-value" id="dash-allocated">0.00</h2>
+                                <span class="stat-unit">جنيه مصري</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card spent">
+                            <div class="stat-icon"><i class="fa-solid fa-money-bill-wave"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">إجمالي المبالغ المصروفة</span>
+                                <h2 class="stat-value" id="dash-spent">0.00</h2>
+                                <span class="stat-unit">جنيه مصري</span>
+                            </div>
+                        </div>
 
-            const expense = { id: Date.now(), amount, desc, date: new Date().toISOString() };
-            
-            if (type === 'personal') state.personalExpenses.push(expense);
-            else state.familyExpenses.push(expense);
+                        <div id="card-remaining" class="stat-card remaining">
+                            <div class="stat-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">الرصيد المتبقي المتاح</span>
+                                <h2 class="stat-value" id="dash-remaining">0.00</h2>
+                                <span class="stat-unit">جنيه مصري</span>
+                            </div>
+                            <div id="budget-warning-alert" class="budget-alert hidden">
+                                <i class="fa-solid fa-triangle-exclamation animate-pulse"></i> تحذير: انخفضت الميزانية المتاحة عن 15%!
+                            </div>
+                        </div>
+                    </div>
 
-            saveState();
-            updateUI();
-            
-            amountInput.value = '';
-            descInput.value = '';
-        }
+                    <div class="ledger-workspace">
+                        
+                        <div class="card operation-card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-square-plus"></i> تسجيل عملية مالية جديدة</h3>
+                            </div>
+                            <form id="expense-form" onsubmit="return false;">
+                                <div class="form-group">
+                                    <label for="exp-amount">قيمة المبلغ المالي المصروف (ج.م) *</label>
+                                    <div class="input-with-icon">
+                                        <i class="fa-solid fa-coins"></i>
+                                        <input type="number" id="exp-amount" min="0.01" step="0.01" required placeholder="0.00">
+                                    </div>
+                                </div>
 
-        function calculateAndAllocate() {
-            const salary = parseFloat(document.getElementById('calc-salary').value) || 0;
-            const freelance = parseFloat(document.getElementById('calc-freelance').value) || 0;
-            const familyPercent = parseFloat(document.getElementById('calc-percent').value) || 60;
+                                <div class="form-group">
+                                    <label for="exp-category">تصنيف وفئة المصروف *</label>
+                                    <select id="exp-category" required>
+                                        <option value="" disabled selected>اختر الفئة المستهدفة...</option>
+                                        <option value="الغذاء والبقالة">🍎 الغذاء والبقالة</option>
+                                        <option value="الفواتير والالتزامات">⚡ الفواتير والخدمات العامة</option>
+                                        <option value="الإيجار والسكن">🏠 الإيجار والمسكن</option>
+                                        <option value="المواصلات والسيارة">🚗 المواصلات والسيارة</option>
+                                        <option value="الترفيه والتسوق">🛒 الترفيه والتسوق</option>
+                                        <option value="الصحة والطوارئ">🩺 الرعاية الصحية والطوارئ</option>
+                                        <option value="التزامات عائلية">👨‍👩‍👦 التزامات ومصروفات دورية</option>
+                                        <option value="أخرى">📦 مصروفات نقدية متنوعة</option>
+                                    </select>
+                                </div>
 
-            const totalNewIncome = salary + freelance;
-            state.totalIncome += totalNewIncome;
-            
-            saveState();
-            updateUI();
-            alert(`تم إضافة ${formatMoney(totalNewIncome)} للرصيد بنجاح.`);
-            switchTab('dashboard');
-        }
+                                <div class="form-group">
+                                    <label for="exp-desc">البيان / الوصف التفصيلي</label>
+                                    <input type="text" id="exp-desc" placeholder="مثال: شراء مستلزمات الشهر من السوبرماركت">
+                                </div>
 
-        function getTotals() {
-            const pTotal = state.personalExpenses.reduce((sum, exp) => sum + exp.amount, 0);
-            const fTotal = state.familyExpenses.reduce((sum, exp) => sum + exp.amount, 0);
-            const balance = state.totalIncome - (pTotal + fTotal);
-            return { pTotal, fTotal, balance };
-        }
+                                <div class="form-group">
+                                    <label for="exp-date">تاريخ القيد المالي</label>
+                                    <input type="date" id="exp-date" required>
+                                </div>
 
-        function updateUI() {
-            const totals = getTotals();
-            
-            document.getElementById('totalBalance').innerText = formatMoney(totals.balance);
-            document.getElementById('totalPersonalExpense').innerText = formatMoney(totals.pTotal);
-            document.getElementById('totalFamilyExpense').innerText = formatMoney(totals.fTotal);
+                                <button type="submit" id="btn-add-expense" class="btn-primary w-100">
+                                    <i class="fa-solid fa-circle-check"></i> ترحيل وقيد العملية المالية
+                                </button>
+                            </form>
+                        </div>
 
-            updateChart(totals.pTotal, totals.fTotal, totals.balance);
-        }
+                        <div class="analytics-history-pane">
+                            <div class="card chart-card">
+                                <div class="card-header">
+                                    <h3><i class="fa-solid fa-chart-pie"></i> التحليل الهيكلي للمصروفات وفق الفئات</h3>
+                                </div>
+                                <div class="chart-wrapper">
+                                    <canvas id="categoryChart"></canvas>
+                                    <div id="chart-empty-state" class="empty-state hidden">
+                                        <i class="fa-solid fa-chart-line-blur"></i>
+                                        <p>لا توجد بيانات كافية لرسم المخطط البياني للمصروفات حالياً.</p>
+                                    </div>
+                                </div>
+                            </div>
 
-        function saveState() {
-            localStorage.setItem('financeAppState', JSON.stringify(state));
-        }
+                            <div class="card history-card">
+                                <div class="card-header">
+                                    <h3><i class="fa-solid fa-receipt"></i> سجل القيود المرجعية للعمليات الأخيرة</h3>
+                                    <span class="sub-badge" id="ledger-count">0 عمليات</span>
+                                </div>
+                                <div class="ledger-container">
+                                    <ul id="ledger-list" class="ledger-list">
+                                        </ul>
+                                    <div id="ledger-empty-state" class="empty-state">
+                                        <i class="fa-solid fa-folder-open"></i>
+                                        <p>السجل المالي نظيف تماماً! لم يتم قيد أي عمليات صرف مالي في هذه المحفظة بعد.</p>
+                                    </div>
+                                </div>
+                            </div>
 
-        // Chart.js Integration
-        function updateChart(pTotal = 0, fTotal = 0, balance = 0) {
-            const ctx = document.getElementById('expenseChart').getContext('2d');
-            const textColor = getComputedStyle(document.body).getPropertyValue('--text-main').trim();
-            
-            if (myChart) myChart.destroy();
+                        </div>
+                    </div>
+                </section>
 
-            myChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['المتبقي', 'مصاريف شخصية', 'مصاريف المنزل'],
-                    datasets: [{
-                        data: [Math.max(0, balance), pTotal, fTotal],
-                        backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
-                        borderWidth: 0,
-                        hoverOffset: 10
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom', labels: { color: textColor, font: { family: 'Segoe UI' } } }
-                    },
-                    cutout: '70%'
-                }
-            });
-        }
+                <section class="card export-platform-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-file-export"></i> محرك التقارير وتصدير كشوفات الحساب الرسمية</h2>
+                        <span class="badge badge-accent">مستندات معتمدة</span>
+                    </div>
+                    <div class="export-actions-row">
+                        <p class="export-notice">
+                            يقوم المحرك ببناء كشف حساب مالي مهيكل، معزول ومطول ومنظم ديناميكياً بصيغ تصدير عالية الجودة لتقديمها كتقارير ميزانية معتمدة وعائلية.
+                        </p>
+                        <div class="export-buttons">
+                            <button id="btn-export-png" class="btn-secondary">
+                                <i class="fa-solid fa-file-image"></i> تصدير التقرير كصورة بيانية PNG
+                            </button>
+                            <button id="btn-export-pdf" class="btn-primary">
+                                <i class="fa-solid fa-file-pdf"></i> تصدير كشف الحساب المالي كـ PDF
+                            </button>
+                        </div>
+                    </div>
+                </section>
+        </main>
 
-        // PDF Export Logic (Superior Custom Formatting)
-        function exportReport() {
-            const totals = getTotals();
-            document.getElementById('pdf-income').innerText = formatMoney(state.totalIncome);
-            document.getElementById('pdf-personal').innerText = formatMoney(totals.pTotal);
-            document.getElementById('pdf-family').innerText = formatMoney(totals.fTotal);
+        <footer class="app-footer">
+            <div class="footer-attribution">
+                <span class="credit-text">Built by Hazem K H Madi - Senior Product Designer</span>
+                <div class="footer-links">
+                    <a href="https://hazemkhmadi.framer.ai" target="_blank" rel="noopener noreferrer" class="footer-link-item" title="Portfolio Website">
+                        <i class="fa-solid fa-globe"></i> Portfolio
+                    </a>
+                    <a href="https://www.linkedin.com/in/hazem-k-h-madi" target="_blank" rel="noopener noreferrer" class="footer-link-item" title="LinkedIn Profile">
+                        <i class="fa-brands fa-linkedin"></i> LinkedIn
+                    </a>
+                    <a href="https://drive.google.com/file/d/1C7BT9_FOkAysydVqegpxGoWfrv-A7SVR/view?usp=drivesdk" target="_blank" rel="noopener noreferrer" class="footer-link-item" title="Credentials Verification">
+                        <i class="fa-solid fa-id-card"></i> Credentials
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </div>
 
-            const element = document.getElementById('export-template');
-            element.style.display = 'block';
+    <div id="hidden-print-template" class="hidden-print-container">
+        <div class="print-header">
+            <div class="print-brand">
+                <h1>المحفظة الذكية | كشف حساب مالي تفصيلي</h1>
+                <p>صادر عن نظام إدارة وتتبع النفقات والمصروفات المزدوجة التقدمي</p>
+            </div>
+            <div class="print-meta">
+                <div><strong>تاريخ التصدير والاستخراج:</strong> <span id="print-timestamp">2026-01-01</span></div>
+                <div><strong>نوع التقرير المالي:</strong> <span id="print-report-type">المصروفات الشخصية والمنزلية الكلية</span></div>
+            </div>
+        </div>
+        
+        <hr class="print-divider">
 
-            const opt = {
-                margin:       1,
-                filename:     `Financial_Report_Hazem_Madi_${new Date().toLocaleDateString()}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
+        <div class="print-summary-grid">
+            <div class="print-summary-box">
+                <h4>إجمالي الدخل الإجمالي المقيد</h4>
+                <p id="print-income-total">0.00 ج.م</p>
+            </div>
+            <div class="print-summary-box">
+                <h4>الميزانية المخصصة للقسم</h4>
+                <p id="print-allocated-total">0.00 ج.م</p>
+            </div>
+            <div class="print-summary-box">
+                <h4>إجمالي النفقات والمصروفات</h4>
+                <p id="print-spent-total">0.00 ج.م</p>
+            </div>
+            <div class="print-summary-box">
+                <h4>الرصيد المتبقي الصافي</h4>
+                <p id="print-remaining-total">0.00 ج.م</p>
+            </div>
+        </div>
 
-            html2pdf().set(opt).from(element).save().then(() => {
-                element.style.display = 'none';
-            });
-        }
+        <div class="print-details-section">
+            <h3>جدول القيود التفصيلية للعمليات المرجعية المجرّدة</h3>
+            <table class="print-table">
+                <thead>
+                    <tr>
+                        <th>التاريخ</th>
+                        <th>الفئة والتصنيف</th>
+                        <th>البيان والوصف التفصيلي</th>
+                        <th>المبلغ المالي المقتطع</th>
+                    </tr>
+                </thead>
+                <tbody id="print-table-rows">
+                    </tbody>
+            </table>
+        </div>
 
-        // PWA Install Logic
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            const installBtn = document.getElementById('installBtn');
-            installBtn.style.display = 'inline-flex';
-            
-            installBtn.addEventListener('click', async () => {
-                installBtn.style.display = 'none';
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                deferredPrompt = null;
-            });
-        });
+        <div class="print-footer-branding">
+            <div class="branding-credits">
+                <p class="en-credit">Built by Hazem K H Madi - Senior Product Designer</p>
+                <p class="links-credit">Portfolio: hazemkhmadi.framer.ai | Contact Enabled</p>
+            </div>
+            <div class="branding-verification">
+                <span class="stamp-placeholder">نظام مالي رقمي معتمد كلياً</span>
+            </div>
+        </div>
+    </div>
 
-        // Initialize App
-        updateUI();
-
-        // Register Service Worker for PWA
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW setup failed: ', err));
-            });
-        }
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
