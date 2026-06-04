@@ -1,9 +1,8 @@
 /**
- * Smart Wallet - Ultimate Fintech Core Engine (v3.0)
+ * Smart Wallet - Ultimate Fintech Core Engine (v3.1)
  * Architecture: Cryptographic Storage, Offline Support, Auto-Lock Security, & Data Portability
  */
 
-// 1. إدارة الحالة والنظام الأمني للمنتج
 const SecurityEngine = {
     encrypt: (data) => {
         try {
@@ -33,15 +32,14 @@ let appState = {
     activeTab: 'register',
     theme: 'dark',
     accent: 'emerald',
-    securePIN: null // حفظ رمز القفل إذا تم تفعيله
+    securePIN: null
 };
 
 let financialChartInstance = null;
 let transactionToDeleteIndex = null;
 let autoLockTimeout = null;
-const LOCK_TIME_LIMIT = 5 * 60 * 1000; // 5 دقائق خمول قبل القفل التلقائي
+const LOCK_TIME_LIMIT = 5 * 60 * 1000; 
 
-// 2. محرك التنبيهات والاهتزاز
 const FeedbackManager = {
     showToast: (message, type = 'success') => {
         const container = document.getElementById('toastContainer');
@@ -65,7 +63,6 @@ const FeedbackManager = {
     }
 };
 
-// 3. محرك الأمان التلقائي وقفل التطبيق (Auto-Lock Shield)
 const LockManager = {
     resetTimer: () => {
         if (!appState.securePIN) return;
@@ -77,8 +74,8 @@ const LockManager = {
         const screen = document.getElementById('securityLockScreen');
         if (screen) {
             screen.classList.remove('hidden');
-            document.getElementById('pinInput').value = '';
-            document.getElementById('pinInput').focus();
+            const pinInp = document.getElementById('pinInput');
+            if(pinInp) { pinInp.value = ''; pinInp.focus(); }
         }
     },
     unlockApp: () => {
@@ -98,6 +95,7 @@ const LockManager = {
             StorageManager.saveData();
             FeedbackManager.showToast("تم تفعيل قفل الأمان الذكي بنجاح");
             LockManager.resetTimer();
+            AppEngine.updateUI();
         } else if (newPIN) {
             FeedbackManager.showToast("خطأ: يجب أن يتكون الرمز من 4 أرقام فقط", 'error');
         }
@@ -109,13 +107,13 @@ const LockManager = {
             StorageManager.saveData();
             clearTimeout(autoLockTimeout);
             FeedbackManager.showToast("تم إلغاء قفل الأمان بنجاح");
+            AppEngine.updateUI();
         } else if (confirmPIN) {
             FeedbackManager.showToast("الرمز غير صحيح، لم يتم إلغاء القفل", 'error');
         }
     }
 };
 
-// 4. إدارة البيانات والنسخ الاحتياطي (Data Portability Hub)
 const StorageManager = {
     saveData: () => {
         const encryptedData = SecurityEngine.encrypt(appState);
@@ -132,7 +130,6 @@ const StorageManager = {
         try {
             const dataStr = SecurityEngine.encrypt(appState);
             const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(JSON.stringify({ backup: dataStr, timestamp: new Date().toISOString() }));
-            
             const exportFileDefaultName = `smart_wallet_backup_${new Date().toISOString().split('T')[0]}.json`;
             const linkElement = document.createElement('a');
             linkElement.setAttribute('href', dataUri);
@@ -160,9 +157,7 @@ const StorageManager = {
                         AppEngine.updateUI();
                         FeedbackManager.showToast("تم استيراد البيانات ومزامنة محفظتك بنجاح");
                         if (appState.securePIN) LockManager.lockApp();
-                    } else {
-                        throw new Error();
-                    }
+                    } else { throw new Error(); }
                 }
             } catch (err) {
                 FeedbackManager.showToast("الملف تالف أو غير متوافق مع نظام التشفير", 'error');
@@ -172,7 +167,6 @@ const StorageManager = {
     }
 };
 
-// 5. إدارة النوافذ المنبثقة والتأكيدات
 const ModalManager = {
     openDeleteConfirmation: (index) => {
         transactionToDeleteIndex = index;
@@ -193,7 +187,6 @@ const ModalManager = {
     }
 };
 
-// 6. محرك التطبيق الأساسي والتحديثات
 const AppEngine = {
     init: () => {
         StorageManager.loadData();
@@ -201,11 +194,17 @@ const AppEngine = {
         const savedTab = sessionStorage.getItem('activeTab');
         if (savedTab) appState.activeTab = savedTab;
 
+        // وضع القيد الاحتياطي للتاريخ الافتراضي لليوم لحقل الإدخال
+        const txDateInput = document.getElementById('txDate');
+        if(txDateInput && !txDateInput.value) {
+            txDateInput.value = new Date().toISOString().split('T')[0];
+        }
+
         AppEngine.applyThemeAndAccent();
         AppEngine.bindEvents();
         AppEngine.updateUI();
+        AppEngine.switchTab(appState.activeTab);
         
-        // تفعيل مؤقت الأمان التلقائي ورصد حركة المستخدم
         if (appState.securePIN) {
             LockManager.lockApp();
             ['click', 'mousemove', 'keypress', 'touchstart'].forEach(evt => {
@@ -236,8 +235,33 @@ const AppEngine = {
         document.getElementById('transactionForm')?.addEventListener('submit', AppEngine.handleTransactionSubmit);
         document.getElementById('confirmDeleteBtn')?.addEventListener('click', ModalManager.confirmDelete);
         document.getElementById('cancelDeleteBtn')?.addEventListener('click', ModalManager.closeDeleteConfirmation);
+        document.getElementById('closeDeleteModalOverlay')?.addEventListener('click', ModalManager.closeDeleteConfirmation);
         
-        // أزرار الحماية المضافة والنسخ الاحتياطي
+        // ربط أزرار إدارة درج الإعدادات الجانبي بدقة وإصلاح التوقف الأساسي
+        document.getElementById('openSettingsBtn')?.addEventListener('click', () => {
+            document.getElementById('settingsDrawer')?.classList.remove('hidden');
+        });
+        ['closeSettingsBtn', 'closeSettingsOverlay'].forEach(id => {
+            document.getElementById(id)?.addEventListener('click', () => {
+                document.getElementById('settingsDrawer')?.classList.add('hidden');
+            });
+        });
+
+        // تحويل المظهر والألوان تفاعلياً
+        document.getElementById('themeDarkBtn')?.addEventListener('click', () => { AppEngine.changeTheme('dark'); });
+        document.getElementById('themeLightBtn')?.addEventListener('click', () => { AppEngine.changeTheme('light'); });
+        
+        document.querySelectorAll('.accent-dot').forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                const acc = e.currentTarget.getAttribute('data-accent');
+                document.querySelectorAll('.accent-dot').forEach(d => d.classList.remove('active'));
+                e.currentTarget.classList.add('active');
+                appState.accent = acc;
+                StorageManager.saveData();
+                AppEngine.applyThemeAndAccent();
+            });
+        });
+
         document.getElementById('btnUnlockApp')?.addEventListener('click', LockManager.unlockApp);
         document.getElementById('pinInput')?.addEventListener('keypress', (e) => { if(e.key === 'Enter') LockManager.unlockApp(); });
         document.getElementById('btnExportBackup')?.addEventListener('click', StorageManager.exportBackup);
@@ -245,6 +269,14 @@ const AppEngine = {
         document.getElementById('btnToggleSecurity')?.addEventListener('click', () => {
             appState.securePIN ? LockManager.removePIN() : LockManager.setupPIN();
         });
+    },
+
+    changeTheme: (themeName) => {
+        appState.theme = themeName;
+        document.getElementById('themeDarkBtn')?.classList.toggle('active', themeName === 'dark');
+        document.getElementById('themeLightBtn')?.classList.toggle('active', themeName === 'light');
+        StorageManager.saveData();
+        AppEngine.applyThemeAndAccent();
     },
 
     handleIncomeChange: () => {
@@ -284,8 +316,11 @@ const AppEngine = {
         document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
 
-        document.querySelector(`.tab-button[data-tab="${tabId}"]`)?.classList.add('active');
-        document.getElementById(`${tabId}Pane`)?.classList.remove('hidden');
+        const targetBtn = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
+        if(targetBtn) targetBtn.classList.add('active');
+        
+        const targetPane = document.getElementById(`${tabId}Pane`);
+        if(targetPane) targetPane.classList.remove('hidden');
 
         if (tabId === 'analytics') setTimeout(() => AppEngine.renderAnalyticsChart(), 50);
     },
@@ -308,16 +343,16 @@ const AppEngine = {
         const totalExpenses = appState.ledger.reduce((sum, item) => sum + item.amount, 0);
         const remainingBudget = totalIncome - totalExpenses;
 
-        document.getElementById('totalIncomeText').innerText = totalIncome.toFixed(2);
-        document.getElementById('personalAllocText').innerText = personalBudget.toFixed(2);
-        document.getElementById('familyAllocText').innerText = familyBudget.toFixed(2);
+        if(document.getElementById('totalIncomeText')) document.getElementById('totalIncomeText').innerText = totalIncome.toFixed(2);
+        if(document.getElementById('personalAllocText')) document.getElementById('personalAllocText').innerText = personalBudget.toFixed(2);
+        if(document.getElementById('familyAllocText')) document.getElementById('familyAllocText').innerText = familyBudget.toFixed(2);
         
-        document.getElementById('dashboardTotalIncome').innerText = totalIncome.toFixed(2);
-        document.getElementById('dashboardExpenses').innerText = totalExpenses.toFixed(2);
-        document.getElementById('dashboardRemaining').innerText = remainingBudget.toFixed(2);
+        if(document.getElementById('dashboardTotalIncome')) document.getElementById('dashboardTotalIncome').innerText = totalIncome.toFixed(2);
+        if(document.getElementById('dashboardExpenses')) document.getElementById('dashboardExpenses').innerText = totalExpenses.toFixed(2);
+        if(document.getElementById('dashboardRemaining')) document.getElementById('dashboardRemaining').innerText = remainingBudget.toFixed(2);
 
-        document.getElementById('personalRatioLabel').innerText = `${appState.allocationRatio}%`;
-        document.getElementById('familyRatioLabel').innerText = `${100 - appState.allocationRatio}%`;
+        if(document.getElementById('personalRatioLabel')) document.getElementById('personalRatioLabel').innerText = `${appState.allocationRatio}%`;
+        if(document.getElementById('familyRatioLabel')) document.getElementById('familyRatioLabel').innerText = `${100 - appState.allocationRatio}%`;
 
         const remainingCard = document.getElementById('remainingCard');
         const alertBanner = document.getElementById('budgetAlertBanner');
@@ -330,7 +365,6 @@ const AppEngine = {
             alertBanner?.classList.add('hidden');
         }
 
-        // تحديث حالة زر القفل في الإعدادات الجانبية للـ UI
         const secureBtn = document.getElementById('btnToggleSecurity');
         if (secureBtn) {
             secureBtn.innerHTML = appState.securePIN ? 
@@ -339,6 +373,13 @@ const AppEngine = {
             secureBtn.style.background = appState.securePIN ? 'rgba(239, 68, 68, 0.15)' : 'var(--accent-light)';
             secureBtn.style.color = appState.securePIN ? '#ef4444' : 'var(--accent)';
         }
+
+        // تحديث حالة نقاط الألوان النشطة في واجهة الإعدادات الجانبية
+        document.querySelectorAll('.accent-dot').forEach(d => {
+            d.classList.toggle('active', d.getAttribute('data-accent') === appState.accent);
+        });
+        document.getElementById('themeDarkBtn')?.classList.toggle('active', appState.theme === 'dark');
+        document.getElementById('themeLightBtn')?.classList.toggle('active', appState.theme === 'light');
 
         AppEngine.renderLedger();
         if (appState.activeTab === 'analytics') AppEngine.renderAnalyticsChart();
@@ -393,7 +434,9 @@ const AppEngine = {
     },
 
     renderAnalyticsChart: () => {
-        const ctx = document.getElementById('analyticsChart')?.getContext('2d');
+        const canvas = document.getElementById('analyticsChart');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
         const categoriesData = { housing: 0, food: 0, transport: 0, bills: 0, health: 0, entertainment: 0, shopping: 0, other: 0 };
