@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميزانية يونيو 2026</title>
+    <title>ميزانية يونيو 2026 المطورة</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#2c3e50">
     <link rel="apple-touch-icon" href="icon-192.png">
@@ -16,6 +16,7 @@
             --primary: #2c3e50;
             --accent: #27ae60;
             --danger: #c0392b;
+            --warning: #f39c12;
         }
 
         body {
@@ -23,7 +24,7 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            padding: 20px;
+            padding: 15px;
         }
 
         .container {
@@ -31,9 +32,11 @@
             margin: 0 auto;
         }
 
-        h1, h2 {
+        h1 {
             text-align: center;
             color: var(--primary);
+            font-size: 1.6rem;
+            margin-bottom: 20px;
         }
 
         .card {
@@ -50,8 +53,7 @@
             padding-bottom: 8px;
             margin-bottom: 15px;
             color: var(--primary);
-            display: flex;
-            justify-content: space-between;
+            font-weight: bold;
         }
 
         .input-group {
@@ -62,17 +64,72 @@
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
-        input[type="number"] {
+        input {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 8px;
             box-sizing: border-box;
             font-size: 1rem;
+        }
+
+        .budget-input {
+            font-weight: bold;
+            background-color: #fcfcfc;
             text-align: center;
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        /* تصميم قائمة المصاريف الديناميكية */
+        .expense-list {
+            margin-top: 15px;
+        }
+
+        .expense-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f9f9f9;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-right: 4px solid var(--primary);
+        }
+
+        .expense-item input[type="text"] {
+            flex: 2;
+        }
+
+        .expense-item input[type="number"] {
+            flex: 1;
+            text-align: center;
+        }
+
+        .btn-delete {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-add {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 10px;
+            font-size: 0.95rem;
         }
 
         .result-box {
@@ -86,7 +143,6 @@
         }
 
         .highlight-green { color: var(--accent); }
-        .highlight-blue { color: #2980b9; }
 
         .total-card {
             background: var(--primary);
@@ -95,17 +151,17 @@
             padding: 20px;
             border-radius: 15px;
             font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .total-card span {
             display: block;
-            font-size: 1.8rem;
+            font-size: 1.9rem;
             font-weight: bold;
             margin-top: 10px;
             color: #2ecc71;
         }
 
-        /* زر التثبيت الخاص بالـ PWA */
         #installBtn {
             display: none;
             width: 100%;
@@ -124,53 +180,48 @@
 <body>
 
 <div class="container">
-    <h1>📊 مدير الميزانية الشخصية</h1>
+    <h1>📊 مدير الميزانية الذكي (يونيو 2026)</h1>
     <button id="installBtn">📲 تثبيت التطبيق على الهاتف</button>
 
+    <!-- قسم مصاريف البيت -->
     <div class="card">
-        <div class="section-title">
-            <span>🏠 مصاريف البيت (يونيو 6/2026)</span>
-        </div>
+        <div class="section-title">🏠 مصاريف البيت</div>
         
         <div class="input-group">
             <label>💰 إجمالي المبلغ المرصود للبيت:</label>
-            <input type="number" id="house_budget" value="27000" oninput="calculateBudget()">
+            <input type="number" id="house_budget" class="budget-input" value="27000" oninput="calculateAndSave()">
         </div>
 
-        <hr>
-
-        <div class="input-group"><label>• المصروف الشهري لماما:</label><input type="number" id="h_mama" value="3500" oninput="calculateBudget()"></div>
-        <div class="input-group"><label>• منظفات وشامبو ومعجون:</label><input type="number" id="h_cleaning" value="1000" oninput="calculateBudget()"></div>
-        <div class="input-group"><label>• أرز (مصري/بسمتي) وخميرة:</label><input type="number" id="h_rice" value="400" oninput="calculateBudget()"></div>
-        <div class="input-group"><label>• مواصلات (حسام وفارس):</label><input type="number" id="h_transport" value="250" oninput="calculateBudget()"></div>
-        <div class="input-group"><label>• ديون البيت لشهر مايو 5:</label><input type="number" id="h_debts" value="1150" oninput="calculateBudget()"></div>
+        <label>📝 بنود المصاريف الحالية (يمكنك التعديل مباشرة):</label>
+        <div id="house_expenses_container" class="expense-list"></div>
+        
+        <button class="btn-add" onclick="addExpenseRow('house')">➕ إضافة بند مصروف جديد للبيت</button>
 
         <div class="result-box">
             المبلغ المتبقي من مصروف البيت: <span id="house_remaining" class="highlight-green">0</span> جنيه
         </div>
     </div>
 
+    <!-- قسم مصاريف حازم الشخصية -->
     <div class="card">
-        <div class="section-title">
-            <span>🧑 مصاريف حازم الشخصية</span>
-        </div>
+        <div class="section-title">🧑 مصاريف حازم الشخصية</div>
 
         <div class="input-group">
             <label>💰 إجمالي المبلغ المرصود لحازم:</label>
-            <input type="number" id="hazem_budget" value="9000" oninput="calculateBudget()">
+            <input type="number" id="hazem_budget" class="budget-input" value="9000" oninput="calculateAndSave()">
         </div>
 
-        <hr>
-
-        <div class="input-group"><label>• حلاقة:</label><input type="number" id="z_barber" value="200" oninput="calculateBudget()"></div>
-        <div class="input-group"><label>• عطر:</label><input type="number" id="z_perfume" value="700" oninput="calculateBudget()"></div>
-        <div class="input-group"><label>• طلعات ومصاريف خارجية وجانبية:</label><input type="number" id="z_outings" value="1100" oninput="calculateBudget()"></div>
+        <label>📝 بنود المصاريف الحالية (يمكنك التعديل مباشرة):</label>
+        <div id="hazem_expenses_container" class="expense-list"></div>
+        
+        <button class="btn-add" onclick="addExpenseRow('hazem')">➕ إضافة بند مصروف جديد لحازم</button>
 
         <div class="result-box">
             المبلغ المتبقي من مصروف حازم: <span id="hazem_remaining" class="highlight-green">0</span> جنيه
         </div>
     </div>
 
+    <!-- الإجمالي الكلي في البنك وإنستاباي -->
     <div class="total-card">
         إجمالي المتبقي (البنك + إنستاباي) حتى الآن
         <span id="grand_total">0 جنيه</span>
@@ -178,66 +229,120 @@
 </div>
 
 <script>
-    // الحقول التي نريد حفظ بياناتها تلقائياً
-    const fields = [
-        'house_budget', 'h_mama', 'h_cleaning', 'h_rice', 'h_transport', 'h_debts',
-        'hazem_budget', 'z_barber', 'z_perfume', 'z_outings'
+    // البيانات الافتراضية للتطبيق في أول فتحة له على الهاتف
+    const defaultHouseExpenses = [
+        { name: "المصروف الشهري المرصود لماما", amount: 3500 },
+        { name: "صابون غسيل وجسم ويدين وشامبو ومعجون", amount: 1000 },
+        { name: "أرز مصري وأرز بسمتي وخميرة", amount: 400 },
+        { name: "مواصلات مشوار حسام وفارس ذهاب وإياب", amount: 250 },
+        { name: "ديون البيت لشهر مايو 5/2026", amount: 1150 }
     ];
 
-    // تحميل البيانات المحفوظة عند فتح التطبيق
+    const defaultHazemExpenses = [
+        { name: "حلاقة", amount: 200 },
+        { name: "عطر", amount: 700 },
+        { name: "طلعات ومصاريف خارجية وجانبية", amount: 1100 }
+    ];
+
+    // تحميل البيانات المحفوظة أو تعيين الافتراضية
     window.onload = function() {
-        fields.forEach(field => {
-            const savedValue = localStorage.getItem(field);
-            if (savedValue !== null) {
-                document.getElementById(field).value = savedValue;
-            }
-        });
-        calculateBudget();
+        if (!localStorage.getItem('house_budget')) {
+            localStorage.setItem('house_budget', '27000');
+            localStorage.setItem('hazem_budget', '9000');
+            localStorage.setItem('house_expenses', JSON.stringify(defaultHouseExpenses));
+            localStorage.setItem('hazem_expenses', JSON.stringify(defaultHazemExpenses));
+        }
+
+        document.getElementById('house_budget').value = localStorage.getItem('house_budget');
+        document.getElementById('hazem_budget').value = localStorage.getItem('hazem_budget');
+
+        renderExpenses('house');
+        renderExpenses('hazem');
+        calculateAndSave();
     };
 
-    // دالة الحساب وحفظ البيانات التلقائي
-    function calculateBudget() {
-        // قراءة القيم
-        const houseBudget = parseFloat(document.getElementById('house_budget').value) || 0;
-        const hMama = parseFloat(document.getElementById('h_mama').value) || 0;
-        const hCleaning = parseFloat(document.getElementById('h_cleaning').value) || 0;
-        const hRice = parseFloat(document.getElementById('h_rice').value) || 0;
-        const hTransport = parseFloat(document.getElementById('h_transport').value) || 0;
-        const hDebts = parseFloat(document.getElementById('h_debts').value) || 0;
+    // دالة بناء وعرض أسطر المصاريف بناءً على البيانات المحفوظة
+    function renderExpenses(type) {
+        const container = document.getElementById(`${type}_expenses_container`);
+        container.innerHTML = '';
+        const expenses = JSON.parse(localStorage.getItem(`${type}_expenses`)) || [];
 
-        const hazemBudget = parseFloat(document.getElementById('hazem_budget').value) || 0;
-        const zBarber = parseFloat(document.getElementById('z_barber').value) || 0;
-        const zPerfume = parseFloat(document.getElementById('z_perfume').value) || 0;
-        const zOutings = parseFloat(document.getElementById('z_outings').value) || 0;
-
-        // حفظ القيم الحالية في كاش الهاتف المحلي (localStorage)
-        fields.forEach(field => {
-            localStorage.setItem(field, document.getElementById(field).value);
+        expenses.forEach((expense, index) => {
+            const row = document.createElement('div');
+            row.className = 'expense-item';
+            row.innerHTML = `
+                <input type="text" value="${expense.name}" placeholder="اسم البند" oninput="updateExpenseData('${type}', ${index}, 'name', this.value)">
+                <input type="number" value="${expense.amount}" placeholder="المبلغ" oninput="updateExpenseData('${type}', ${index}, 'amount', this.value)">
+                <button class="btn-delete" onclick="deleteExpenseRow('${type}', ${index})">🗑️</button>
+            `;
+            container.appendChild(row);
         });
+    }
 
-        // العمليات الحسابية
-        const houseExpenses = hMama + hCleaning + hRice + hTransport + hDebts;
-        const houseRemaining = houseBudget - houseExpenses;
+    // إضافة سطر مصروف جديد فارغ
+    function addExpenseRow(type) {
+        const expenses = JSON.parse(localStorage.getItem(`${type}_expenses`)) || [];
+        expenses.push({ name: '', amount: 0 });
+        localStorage.setItem(`${type}_expenses`, JSON.stringify(expenses));
+        renderExpenses(type);
+        calculateAndSave();
+    }
 
-        const hazemExpenses = zBarber + zPerfume + zOutings;
-        const hazemRemaining = hazemBudget - hazemExpenses;
+    // حذف سطر مصروف بالكامل
+    function deleteExpenseRow(type, index) {
+        const expenses = JSON.parse(localStorage.getItem(`${type}_expenses`)) || [];
+        expenses.splice(index, 1);
+        localStorage.setItem(`${type}_expenses`, JSON.stringify(expenses));
+        renderExpenses(type);
+        calculateAndSave();
+    }
+
+    // تعديل البيانات عند الكتابة المباشرة داخل الخانات
+    function updateExpenseData(type, index, field, value) {
+        const expenses = JSON.parse(localStorage.getItem(`${type}_expenses`)) || [];
+        if (field === 'amount') {
+            expenses[index][field] = parseFloat(value) || 0;
+        } else {
+            expenses[index][field] = value;
+        }
+        localStorage.setItem(`${type}_expenses`, JSON.stringify(expenses));
+        calculateAndSave(); // تحديث فوري للإجماليات أثناء الكتابة
+    }
+
+    // الحساب الشامل وحفظ الميزانية الإجمالية
+    function calculateAndSave() {
+        const houseBudget = parseFloat(document.getElementById('house_budget').value) || 0;
+        const hazemBudget = parseFloat(document.getElementById('hazem_budget').value) || 0;
+
+        localStorage.setItem('house_budget', houseBudget);
+        localStorage.setItem('hazem_budget', hazemBudget);
+
+        // حساب مصاريف البيت
+        const houseExpensesList = JSON.parse(localStorage.getItem('house_expenses')) || [];
+        const totalHouseExpenses = houseExpensesList.reduce((sum, item) => sum + (item.amount || 0), 0);
+        const houseRemaining = houseBudget - totalHouseExpenses;
+
+        // حساب مصاريف حازم
+        const hazemExpensesList = JSON.parse(localStorage.getItem('hazem_expenses')) || [];
+        const totalHazemExpenses = hazemExpensesList.reduce((sum, item) => sum + (item.amount || 0), 0);
+        const hazemRemaining = hazemBudget - totalHazemExpenses;
 
         const grandTotal = houseRemaining + hazemRemaining;
 
-        // عرض النتائج في الواجهة
+        // العرض في الواجهة
         document.getElementById('house_remaining').innerText = houseRemaining.toLocaleString('ar-EG');
         document.getElementById('hazem_remaining').innerText = hazemRemaining.toLocaleString('ar-EG');
         document.getElementById('grand_total').innerText = grandTotal.toLocaleString('ar-EG') + " جنيه";
     }
 
-    // تفعيل الـ Service Worker لتشغيل التطبيق بدون إنترنت
+    // تشغيل الـ PWA بدون إنترنت
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js')
-        .then(() => console.log("Service Worker Registered"))
-        .catch(err => console.log("Service Worker Failed", err));
+        .then(() => console.log("Service Worker Active"))
+        .catch(err => console.log("Service Worker Error", err));
     }
 
-    // كود زر تثبيت التطبيق على شاشة الأندرويد
+    // إعدادات زر التثبيت للأندرويد
     let deferredPrompt;
     const installBtn = document.getElementById('installBtn');
 
@@ -251,9 +356,7 @@
         if (deferredPrompt) {
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === 'accepted') {
-                installBtn.style.style.display = 'none';
-            }
+            if (outcome === 'accepted') installBtn.style.display = 'none';
             deferredPrompt = null;
         }
     });
