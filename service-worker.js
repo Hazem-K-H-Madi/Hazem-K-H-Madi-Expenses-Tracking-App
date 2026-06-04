@@ -1,69 +1,72 @@
 /**
- * PWA Service Worker Network Isolation Engine
- * Implements Instant-Load Cache First Optimization Architecture Strategy
+ * Resilient Cache-First Service Worker Engine
+ * Provides Instant Load and Total Offline Autonomy
  */
 
-const CACHE_NAME = 'fin-pwa-v1-engine-assets';
+const CACHE_NAME = 'HAZEM_FINTECH_CACHE_V1';
 const ASSETS_TO_CACHE = [
     'index.html',
     'styles.css',
     'app.js',
     'manifest.json',
-    'https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap'
+    'icons/icon-192.png',
+    'icons/icon-512.png'
 ];
 
-// SW Installation Phase: Force Structural Assets Into Core Local Cache Storage
-self.addEventListener('install', (e) => {
-    e.waitUntil(
+// مرحلة التثبيت المبدئي وحظر الموارد الأساسية في الذاكرة المعزولة
+self.addEventListener('install', (event) => {
+    event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
+            console.log('عزل وتأمين كاش الموارد الفينتك الثابتة...');
             return cache.addAll(ASSETS_TO_CACHE);
-        }).then(() => {
-            return self.skipWaiting();
-        })
+        }).then(() => self.skipWaiting())
     );
 });
 
-// SW Activation Phase: Clean Out Outdated Historic Version Stacks Instantly
-self.addEventListener('activate', (e) => {
-    e.waitUntil(
-        caches.keys().then((keys) => {
+// تفعيل وتطهير الإصدارات السابقة لضمان عدم تعارض البيانات أو جمود الواجهات
+self.addEventListener('activate', (event) => {
+    event.waitUntil(
+        caches.keys().then((cacheNames) => {
             return Promise.all(
-                keys.map((key) => {
-                    if (key !== CACHE_NAME) {
-                        return caches.delete(key);
+                cacheNames.map((cache) => {
+                    if (cache !== CACHE_NAME) {
+                        console.log('تنظيف وتدمير الكاش القديم المتهالك:', cache);
+                        return caches.delete(cache);
                     }
                 })
             );
-        }).then(() => {
-            return self.clients.claim();
-        })
+        }).then(() => self.clients.claim())
     );
 });
 
-// SW Intercept Fetch Handling: Serve Offline Cache with Zero Network Overhead Network Fallback
-self.addEventListener('fetch', (e) => {
-    // Restrict processing scope only onto native relative web fetch queries
-    if (!e.request.url.startsWith(self.location.origin) && !e.request.url.startsWith('https://fonts.')) {
-        return;
-    }
+// استراتيجية الجلب الذكية (Cache-First with Network Fallback Strategy)
+self.addEventListener('fetch', (event) => {
+    // عدم تتبع أو اعتراض طلبات الامتدادات الخارجية أو روابط التحقق الخارجية لعدم إعاقة الأداء
+    if (!event.request.url.startsWith(self.location.origin)) return;
 
-    e.respondWith(
-        caches.match(e.request).then((cachedResponse) => {
+    event.respondWith(
+        caches.match(event.request).then((cachedResponse) => {
             if (cachedResponse) {
                 return cachedResponse;
             }
-            return fetch(e.request).then((networkResponse) => {
+            return fetch(event.request).then((networkResponse) => {
                 if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
                     return networkResponse;
                 }
+                
+                // نسخ المورد الجديد في الكاش ديناميكياً لتأمين الطلبات المستقبلية
                 const responseToCache = networkResponse.clone();
                 caches.open(CACHE_NAME).then((cache) => {
-                    cache.put(e.request, responseToCache);
+                    cache.put(event.request, responseToCache);
                 });
+
                 return networkResponse;
-            }).catch(() => {
-                // Fallback graceful degradation configuration profiles could go here
             });
+        }).catch(() => {
+            // توفير مستند الأمان البديل في حال السقوط التام للاتصال وعدم العثور على المورد
+            if (event.request.mode === 'navigate') {
+                return caches.match('index.html');
+            }
         })
     );
 });
