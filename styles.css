@@ -1,22 +1,26 @@
 /* ==========================================================================
-   Fintech Design System Tokens & Global Configuration
+   Design System Tokens & Advanced Architecture Core Setup
    ========================================================================== */
 :root {
-    /* الرموز والمحددات المكانية الفراغية (Modular Spatial Scale) */
+    /* Fluid Structural Grid Spacers Scale */
     --space-2xs: 4px;
     --space-xs: 8px;
     --space-sm: 12px;
     --space-md: 16px;
     --space-lg: 24px;
     --space-xl: 32px;
-    --radius-sm: 8px;
-    --radius-md: 16px;
-    --radius-lg: 24px;
+    --space-2xl: 48px;
 
-    /* هندسة الألوان - الوضع المضيء الافتراضي (Default Premium Light Mode) */
-    --bg-app: #f8fafc;
-    --bg-card: #ffffff;
-    --bg-surface: #f1f5f9;
+    /* Physics & Dynamic Micro-Interactions Spring Elastic Curve */
+    --spring-physics: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --transition-smooth: cubic-bezier(0.25, 1, 0.5, 1);
+    --anim-speed-fast: 150ms;
+    --anim-speed-mid: 320ms;
+
+    /* Light Mode Tokens Map Configuration (WCAG AA Compliant Target) */
+    --bg-surface-primary: #f6f8fa;
+    --bg-surface-card: #ffffff;
+    --bg-surface-nav: #eef2f5;
     --text-primary: #0f172a;
     --text-secondary: #475569;
     --text-muted: #94a3b8;
@@ -24,182 +28,358 @@
     --color-primary: #2563eb;
     --color-primary-hover: #1d4ed8;
     --color-success: #10b981;
-    --color-success-surface: #ecfdf5;
+    --color-success-bg: #ecfdf5;
     --color-danger: #ef4444;
-    --color-danger-surface: #fef2f2;
+    --color-danger-bg: #fef2f2;
     --color-warning: #f59e0b;
-    --color-warning-surface: #fffbeb;
+    --color-warning-bg: #fffbeb;
+    --color-accent-purple: #8b5cf6;
 
-    /* بنية الظلال الموزعة وطبقات الانتشار الفيزيائي (Layered Diffused Shadows) */
-    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05);
-    --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
-    --shadow-lg: 0 25px 50px -12px rgba(15, 23, 42, 0.08);
-
-    /* منحنيات الحركة المعتمدة على الفيزياء النابضة (Spring Physics Timing Function) */
-    --transition-spring: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    --transition-smooth: all 0.2s ease;
+    /* Layered Diffusion Shadows Map */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.06), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    
+    --border-radius-sm: 8px;
+    --border-radius-md: 16px;
+    --border-radius-lg: 24px;
+    --border-radius-full: 9999px;
+    
+    --border-color: #e2e8f0;
 }
 
-/* محددات إعدادات الوضع المظلم الفاخر عند تفعيله (Rich Dark Mode Override) */
+/* Dark Mode Tokens Variant Remapping overrides */
 [data-theme="dark"] {
-    --bg-app: #0b0f19;
-    --bg-card: #151f32;
-    --bg-surface: #1e293b;
+    --bg-surface-primary: #0b0f19;
+    --bg-surface-card: #151f32;
+    --bg-surface-nav: #1e293b;
     --text-primary: #f8fafc;
     --text-secondary: #cbd5e1;
     --text-muted: #64748b;
     
     --color-primary: #3b82f6;
     --color-primary-hover: #60a5fa;
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
-    --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+    --color-success: #34d399;
+    --color-success-bg: #064e3b;
+    --color-danger: #f87171;
+    --color-danger-bg: #7f1d1d;
+    --color-warning: #fbbf24;
+    --color-warning-bg: #78350f;
+    
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    
+    --border-color: #334155;
 }
 
 /* ==========================================================================
-   القواعد العامة وتصفير البيئة والخطوط المصممة للأنظمة المالية
+   Global Reset & Base Foundations
    ========================================================================== */
-* {
+*, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
-    background-color: var(--bg-app);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--bg-surface-primary);
     color: var(--text-primary);
     direction: rtl;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    line-height: 1.5;
 }
 
-.hidden { display: none !important; }
-
-/* ==========================================================================
-   سترة التحميل والإقلاع البدائية (Initial Skeleton Boot Loader)
-   ========================================================================== */
-.boot-loader {
-    position: fixed;
-    inset: 0;
-    background-color: var(--bg-app);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
-.spinner {
-    width: 48px;
-    height: 48px;
-    border: 4px solid var(--bg-surface);
-    border-top-color: var(--color-primary);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin-bottom: var(--space-md);
-}
-.boot-text {
-    font-weight: 600;
-    color: var(--text-secondary);
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ==========================================================================
-   تخطيط الواجهة وهندسة العناصر الرئيسية
-   ========================================================================== */
-.app-wrapper {
+/* Main Container Shell Framework */
+.app-container {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    padding-bottom: 70px; /* لتوفير مساحة لالتصاق التذييل الثابت */
+    max-width: 768px;
+    margin: 0 auto;
+    background-color: var(--bg-surface-primary);
+    position: relative;
+    padding-bottom: 90px; /* Offset to prevent structural overlap with persistent sticky footer */
 }
 
-.main-header {
-    background-color: var(--bg-card);
-    border-bottom: 1px solid var(--bg-surface);
-    padding: var(--space-md) var(--space-lg);
+/* ==========================================================================
+   Header Subsystem & Premium Navigation Components
+   ========================================================================== */
+.app-header {
+    background-color: var(--bg-surface-card);
+    padding: var(--space-md) var(--space-md) var(--space-xs) var(--space-md);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    sticky: top;
-    z-index: 100;
-    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--space-md);
 }
-.header-brand h1 {
-    font-size: 1.25rem;
+
+.brand-zone h1 {
+    font-size: 1.3rem;
     font-weight: 800;
-    letter-spacing: -0.5px;
-    display: inline-block;
+    letter-spacing: -0.025em;
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
 }
-.badge-live {
-    font-size: 0.7rem;
-    background-color: var(--color-success-surface);
-    color: var(--color-success);
-    padding: 2px 8px;
-    border-radius: 20px;
-    margin-right: var(--space-xs);
-    font-weight: bold;
+
+.badge-beta {
+    font-size: 0.65rem;
+    background-color: var(--color-primary);
+    color: #ffffff;
+    padding: var(--space-2xs) var(--space-xs);
+    border-radius: var(--border-radius-full);
 }
-.header-actions {
+
+.date-subtitle {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.action-zone {
     display: flex;
     gap: var(--space-xs);
 }
 
-.icon-btn {
+.btn-icon {
     background: none;
-    border: none;
-    color: var(--text-secondary);
-    padding: var(--space-xs);
-    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    width: 40px;
+    height: 40px;
+    border-radius: var(--border-radius-md);
     cursor: pointer;
-    transition: var(--transition-smooth);
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
-}
-.icon-btn:hover {
-    background-color: var(--bg-surface);
-    color: var(--text-primary);
+    color: var(--text-secondary);
+    transition: background-color var(--anim-speed-fast) var(--transition-smooth);
 }
 
-/* محتوى التحكم والشبكة الجارية */
-.main-content {
-    max-width: 1400px;
-    width: 100%;
-    margin: 0 auto;
-    padding: var(--space-md);
+.btn-icon:hover {
+    background-color: var(--bg-surface-nav);
+}
+
+.btn-icon svg {
+    fill: currentColor;
+}
+
+/* Gestural Context Sliding Navigator Switcher */
+.context-navigator {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-lg);
+    background-color: var(--bg-surface-nav);
+    padding: var(--space-2xs);
+    border-radius: var(--border-radius-md);
+    position: relative;
+    isolation: isolate;
 }
 
-/* ==========================================================================
-   المكونات والبطاقات المالية وعناصر النماذج والمدخلات
-   ========================================================================== */
-.card {
-    background-color: var(--bg-card);
-    border-radius: var(--radius-md);
-    padding: var(--space-lg);
-    box-shadow: var(--shadow-md);
-    border: 1px solid rgba(15, 23, 42, 0.04);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.section-title {
-    font-size: 1.1rem;
+.nav-tab {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.9rem;
     font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: var(--space-md);
+    color: var(--text-secondary);
+    cursor: pointer;
+    text-align: center;
+    transition: color var(--anim-speed-mid) var(--transition-smooth);
+    z-index: 2;
     position: relative;
 }
 
-/* أداة تقسيم وتوزيع الإيرادات والسيولة المتطورة */
-.income-inputs-grid {
+.nav-tab.active {
+    color: var(--color-primary);
+}
+
+.tab-slider-bg {
+    position: absolute;
+    top: var(--space-2xs);
+    bottom: var(--space-2xs);
+    right: var(--space-2xs);
+    width: calc(50% - var(--space-2xs));
+    background-color: var(--bg-surface-card);
+    border-radius: calc(var(--border-radius-md) - 4px);
+    box-shadow: var(--shadow-sm);
+    z-index: 1;
+    transition: transform var(--anim-speed-mid) var(--spring-physics);
+    transform-origin: right center;
+}
+
+/* Handle state sliding transform execution safely */
+.context-navigator[data-active-context="family"] .tab-slider-bg {
+    transform: translateX(calc(-100% - var(--space-xs)));
+}
+
+/* ==========================================================================
+   Main Layout Framework & Typography Blocks
+   ========================================================================== */
+.app-main-content {
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.card-wrapper {
+    background-color: var(--bg-surface-card);
+    border-radius: var(--border-radius-md);
+    padding: var(--space-md);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+
+h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    margin-bottom: var(--space-md);
+    color: var(--text-primary);
+}
+
+/* Dashboard Financial Summary Component Card layout design */
+.dashboard-summary-card {
+    background: linear-gradient(135deg, var(--bg-surface-card) 0%, var(--bg-surface-nav) 100%);
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.balance-display-group {
+    margin-bottom: var(--space-md);
+}
+
+.label-muted {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    display: block;
+    margin-bottom: var(--space-2xs);
+}
+
+.dynamic-balance-counter {
+    font-size: 2.2rem;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+.currency-label {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-right: var(--space-2xs);
+}
+
+.dashboard-metrics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: 1fr 1fr;
     gap: var(--space-md);
     margin-bottom: var(--space-md);
+}
+
+.metric-tile {
+    background-color: var(--bg-surface-card);
+    padding: var(--space-sm);
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.tile-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: var(--space-2xs);
+}
+
+.tile-value {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.text-warning { color: var(--color-warning); }
+.text-danger { color: var(--color-danger); }
+.text-success { color: var(--color-success); }
+
+/* SVG Progress Tracker Components */
+.budget-progress-container {
+    margin-top: var(--space-md);
+}
+
+.progress-bar-track {
+    width: 100%;
+    height: 8px;
+    background-color: var(--border-color);
+    border-radius: var(--border-radius-full);
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent-purple) 100%);
+    border-radius: var(--border-radius-full);
+    width: 100%;
+    transition: width var(--anim-speed-mid) var(--transition-smooth);
+}
+
+.progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-top: var(--space-2xs);
+}
+
+/* Collapsible Grid Matrix Configuration */
+.collapsible-section .section-trigger-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.collapsible-section .toggle-icon {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    transition: transform var(--anim-speed-fast) var(--transition-smooth);
+}
+
+.collapsible-section .section-content-collapsible {
+    margin-top: var(--space-md);
+    transition: max-height var(--anim-speed-mid) ease-in-out, opacity var(--anim-speed-mid) ease;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ==========================================================================
+   Advanced Form Architecture Controls
+   ========================================================================== */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
 }
 
 .form-group {
@@ -207,529 +387,612 @@ body {
     flex-direction: column;
     gap: var(--space-2xs);
 }
-.form-group label {
-    font-size: 0.85rem;
-    font-weight: 600;
+
+.full-width-span {
+    grid-column: span 2;
+}
+
+label {
+    font-size: 0.8rem;
+    font-weight: 700;
     color: var(--text-secondary);
 }
-.form-control {
+
+input[type="number"],
+input[type="text"],
+input[type="datetime-local"],
+select {
+    width: 100%;
+    padding: var(--space-sm);
+    font-size: 0.9rem;
+    font-weight: 600;
+    background-color: var(--bg-surface-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    color: var(--text-primary);
+    transition: border-color var(--anim-speed-fast) var(--transition-smooth), box-shadow var(--anim-speed-fast) var(--transition-smooth);
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Custom Tactical Checkbox Element styling */
+.checkbox-label-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-xs);
+    cursor: pointer;
+    margin-top: var(--space-md);
+}
+
+.checkbox-label-wrapper input {
+    display: none;
+}
+
+.custom-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    display: inline-block;
+    position: relative;
+    background-color: var(--bg-surface-primary);
+    transition: all var(--anim-speed-fast) var(--transition-smooth);
+}
+
+.checkbox-label-wrapper input:checked + .custom-checkbox {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.checkbox-label-wrapper input:checked + .custom-checkbox::after {
+    content: "✓";
+    color: white;
+    font-size: 0.75rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+}
+
+/* Interactive Sliders Engine */
+.range-slider-container {
+    background-color: var(--bg-surface-primary);
+    padding: var(--space-sm);
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--border-color);
+}
+
+.slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-xs);
+}
+
+.premium-range-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: var(--border-radius-full);
+    background: var(--border-color);
+    outline: none;
+}
+
+.premium-range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: var(--border-radius-full);
+    background: var(--color-primary);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: transform 100ms var(--spring-physics);
+}
+
+.premium-range-slider::-webkit-slider-thumb:active {
+    transform: scale(1.2);
+}
+
+/* Button Mechanics Matrix definitions */
+button[type="submit"],
+.btn-primary, .btn-success, .btn-secondary, .btn-secondary-danger, .btn-primary-accent {
     width: 100%;
     padding: var(--space-sm) var(--space-md);
-    background-color: var(--bg-surface);
-    border: 2px solid transparent;
-    border-radius: var(--radius-sm);
-    color: var(--text-primary);
-    font-size: 0.95rem;
-    font-weight: 600;
-    outline: none;
-    transition: var(--transition-smooth);
-}
-.form-control:focus {
-    border-color: var(--color-primary);
-    background-color: var(--bg-card);
-}
-.form-checkbox-group {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xs);
-    margin: var(--space-sm) 0;
-}
-.checkbox-control {
-    width: 18px;
-    height: 18px;
-    accent-color: var(--color-primary);
-}
-
-.splitter-control-wrapper {
-    background-color: var(--bg-surface);
-    padding: var(--space-md);
-    border-radius: var(--radius-sm);
-    margin-bottom: var(--space-md);
-}
-.splitter-labels {
-    display: flex;
-    justify-content: space-between;
     font-size: 0.9rem;
-    margin-bottom: var(--space-xs);
-    color: var(--text-secondary);
-}
-.slider-control {
-    width: 100%;
-    accent-color: var(--color-primary);
-    cursor: pointer;
-}
-
-/* الأزرار وأنماطها السيالة */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-sm) var(--space-lg);
-    font-size: 0.95rem;
     font-weight: 700;
-    border-radius: var(--radius-sm);
+    border-radius: var(--border-radius-sm);
     border: none;
     cursor: pointer;
-    transition: var(--transition-smooth);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     gap: var(--space-xs);
+    transition: all var(--anim-speed-fast) var(--transition-smooth);
 }
-.btn-primary { background-color: var(--color-primary); color: #ffffff; }
+
+.btn-primary { background-color: var(--color-primary); color: white; }
 .btn-primary:hover { background-color: var(--color-primary-hover); }
-.btn-success { background-color: var(--color-success); color: #ffffff; }
-.btn-danger { background-color: var(--color-danger); color: #ffffff; }
-.btn-secondary { background-color: var(--bg-surface); color: var(--text-secondary); }
-.btn-secondary:hover { background-color: var(--text-muted); color: #ffffff; }
-.btn-secondary-danger { background-color: var(--color-danger-surface); color: var(--color-danger); }
-.btn-small { padding: var(--space-2xs) var(--space-sm); font-size: 0.8rem; }
-.full-width { width: 100%; }
-.flex-grow { flex: 1; }
-.form-actions-cluster { display: flex; gap: var(--space-sm); margin-top: var(--space-md); }
+.btn-success { background-color: var(--color-success); color: white; }
+.btn-success:hover { opacity: 0.9; }
+.btn-secondary { background-color: var(--bg-surface-nav); color: var(--text-primary); border: 1px solid var(--border-color); }
+.btn-secondary-danger { background-color: var(--color-danger-bg); color: var(--color-danger); border: 1px solid var(--border-color); }
+.btn-primary-accent { background-color: var(--color-accent-purple); color: white; }
 
 /* ==========================================================================
-   المربعات والبلاطات التحليلية ومؤشرات الرصيد والعد التنازلي التفاعلي
+   Analytics Body & Micro SVG Geometry Elements
    ========================================================================== */
-.balances-dashboard {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+.analytics-body-layout {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
     gap: var(--space-md);
+    flex-wrap: wrap;
 }
-.balance-tile {
-    background-color: var(--bg-card);
-    border-radius: var(--radius-md);
-    padding: var(--space-lg);
-    box-shadow: var(--shadow-md);
-    border: 1px solid rgba(15, 23, 42, 0.04);
+
+.chart-visualization-frame {
+    position: relative;
+    width: 130px;
+    height: 130px;
+}
+
+.circular-svg-chart {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.chart-bg-circle {
+    fill: none;
+    stroke: var(--bg-surface-nav);
+    stroke-width: 3.8;
+}
+
+.chart-segment-arc {
+    fill: none;
+    stroke-width: 3.8;
+    stroke-linecap: round;
+    transition: stroke-dasharray var(--anim-speed-mid) ease-in-out, stroke var(--anim-speed-mid) ease;
+}
+
+.chart-center-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.overlay-title { font-size: 0.65rem; color: var(--text-muted); display: block; }
+.overlay-value { font-size: 1rem; font-weight: 800; color: var(--text-primary); }
+
+.chart-legend-container {
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
-    position: relative;
-    overflow: hidden;
-}
-.balance-tile::before {
-    content: '';
-    position: absolute;
-    top: 0; right: 0; bottom: 0;
-    width: 6px;
-}
-.personal-tile::before { background-color: var(--color-primary); }
-.family-tile::before { background-color: var(--color-warning); }
-
-.tile-header {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--text-secondary);
-}
-.icon-tag {
-    font-size: 0.75rem;
-    padding: 2px 10px;
-    border-radius: 12px;
-    background-color: var(--bg-surface);
-}
-.balance-counter {
-    font-size: 2rem;
-    font-weight: 900;
-    letter-spacing: -1px;
-}
-.tile-footer {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    border-top: 1px solid var(--bg-surface);
-    padding-top: var(--space-xs);
-}
-.tile-footer strong { color: var(--text-secondary); font-weight: 700; }
-
-/* تبويب السياقات والمبدل التفاعلي المعزول */
-.context-tab-switcher {
-    display: flex;
-    background-color: var(--bg-surface);
-    padding: var(--space-2xs);
-    border-radius: var(--radius-md);
     gap: var(--space-2xs);
-}
-.tab-btn {
-    flex: 1;
-    padding: var(--space-sm);
-    background: none;
-    border: none;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text-secondary);
-    cursor: pointer;
-    border-radius: var(--radius-sm);
-    transition: var(--transition-spring);
-}
-.tab-btn.active {
-    background-color: var(--bg-card);
-    color: var(--text-primary);
-    box-shadow: var(--shadow-sm);
+    min-width: 140px;
 }
 
-/* المخطط التحليلي وتوزيع الأوزان المالية عبر SVG */
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-    gap: var(--space-lg);
-}
-@media (max-width: 500px) {
-    .dashboard-grid { grid-template-columns: 1fr; }
-}
-
-.analytical-header {
+.legend-item {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--space-md);
-}
-.chart-viewport {
-    min-height: 220px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    gap: var(--space-xs);
+    font-size: 0.75rem;
+    font-weight: 600;
 }
 
-/* تصفية ومطابقة سجلات العمليات الجارية وحالات العرض */
-.filter-controls-cluster {
+.legend-bullet {
+    width: 10px;
+    height: 10px;
+    border-radius: var(--border-radius-full);
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Interactive Streams Matrix, Gestures, & Filter Chips
+   ========================================================================== */
+.filter-control-matrix {
     display: flex;
     flex-direction: column;
     gap: var(--space-xs);
-    margin-bottom: var(--space-md);
 }
-.category-chips-scroll {
+
+.filter-chips-scroll {
     display: flex;
     gap: var(--space-2xs);
     overflow-x: auto;
     padding-bottom: var(--space-2xs);
-    scroll-behavior: smooth;
+    scrollbar-width: none;
 }
-.category-chips-scroll::-webkit-scrollbar { height: 4px; }
-.category-chips-scroll::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 4px; }
+
+.filter-chips-scroll::-webkit-scrollbar { display: none; }
 
 .chip {
-    white-space: nowrap;
-    padding: 6px 14px;
-    background-color: var(--bg-surface);
-    border: none;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
+    background-color: var(--bg-surface-card);
+    border: 1px solid var(--border-color);
+    padding: var(--space-2xs) var(--space-sm);
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: var(--border-radius-full);
     color: var(--text-secondary);
+    white-space: nowrap;
     cursor: pointer;
-    transition: var(--transition-smooth);
-}
-.chip.active, .chip:hover {
-    background-color: var(--text-primary);
-    color: var(--bg-card);
+    transition: all var(--anim-speed-fast) var(--transition-smooth);
 }
 
-.records-header-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: var(--space-md);
-    margin-bottom: var(--space-sm);
-    border-bottom: 1px solid var(--bg-surface);
-    padding-bottom: var(--space-xs);
+.chip.active {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
 }
-.records-header-meta h3 { font-size: 0.95rem; font-weight: 700; }
 
-.records-viewport {
+.quick-utilities-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xs);
+}
+
+/* Ledger Streaming Elements Layering */
+.ledger-records-stream-container {
     display: flex;
     flex-direction: column;
     gap: var(--space-xs);
-    max-height: 500px;
-    overflow-y: auto;
-    padding-left: 2px;
 }
 
-/* هيكل صف العملية وتفاعلات اللمس والسحب (Swipe-to-Action) */
-.transaction-row-wrapper {
+.ledger-header-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 var(--space-2xs);
+}
+
+.ledger-header-summary h4 { font-size: 0.85rem; font-weight: 800; }
+.count-badge { font-size: 0.7rem; background-color: var(--bg-surface-nav); color: var(--text-secondary); padding: 2px 8px; border-radius: var(--border-radius-full); font-weight: 700; }
+
+.ledger-scroll-zone {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+/* Interactive Swipe Layer Blueprint Structure */
+.tx-swipe-row-viewport {
     position: relative;
     overflow: hidden;
-    border-radius: var(--radius-sm);
-    background-color: var(--color-danger); /* لون الخلفية عند السحب للحذف */
+    border-radius: var(--border-radius-md);
+    background-color: var(--color-danger); /* Delete context underlay reveal background */
+    box-shadow: var(--shadow-sm);
 }
 
-.transaction-row {
-    background-color: var(--bg-surface);
-    padding: var(--space-sm) var(--space-md);
+.tx-record-surface-card {
+    background-color: var(--bg-surface-card);
+    padding: var(--space-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: transform 0.2s ease-out;
     position: relative;
-    z-index: 2;
+    z-index: 10;
+    transition: transform 50ms linear; /* Fast micro-tracking attachment during touchmove */
     cursor: pointer;
-    user-select: none;
-}
-.row-details-side {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-.row-main-line {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xs);
-}
-.row-category-badge {
-    font-size: 0.75rem;
-    font-weight: bold;
-    padding: 2px 8px;
-    border-radius: 4px;
-    background-color: rgba(15, 23, 42, 0.08);
-}
-.row-recurring-badge {
-    font-size: 0.65rem;
-    background-color: var(--color-warning-surface);
-    color: var(--color-warning);
-    padding: 1px 4px;
-    border-radius: 2px;
-    font-weight: bold;
-}
-.row-notes {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    margin-top: 2px;
-}
-.row-timestamp {
-    font-size: 0.7rem;
-    color: var(--text-muted);
-}
-.row-amount-side {
-    font-size: 1.05rem;
-    font-weight: 800;
-    color: var(--color-danger);
 }
 
-.swipe-action-trigger {
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 80px;
-    background-color: var(--color-danger);
-    color: #ffffff;
+.tx-left-meta-cluster {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.tx-category-icon-wrapper {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--border-radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
+    font-size: 1.1rem;
+    font-weight: normal;
+}
+
+/* Dynamic Faction Semantic Class Injections mappings */
+.cat-food { background-color: #ffedd5; color: #ea580c; }
+.cat-bills { background-color: #dbeafe; color: #2563eb; }
+.cat-health { background-color: #fee2e2; color: #dc2626; }
+.cat-transport { background-color: #e0f2fe; color: #0284c7; }
+.cat-entertainment { background-color: #f3e8ff; color: #9333ea; }
+.cat-other { background-color: #f1f5f9; color: #475569; }
+
+.tx-details-stack h5 { font-size: 0.9rem; font-weight: 800; color: var(--text-primary); }
+.tx-details-stack .tx-sub-meta { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+.recurring-indicator-tag { font-size: 0.6rem; background-color: var(--color-warning-bg); color: var(--color-warning); padding: 1px 4px; border-radius: 4px; margin-right: var(--space-2xs); }
+
+.tx-right-value-cluster {
+    text-align: left;
+}
+
+.tx-financial-amount {
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+/* Swipe Left Quick Context Actions Structure overlays */
+.swipe-delete-reveal-underlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 80px;
+    background-color: var(--color-danger);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 0.85rem;
+    font-weight: 700;
     z-index: 1;
 }
 
-/* الحالة الفارغة اللطيفة وصور الشبح الهيكلية Shimmer Skeletons */
-.empty-state-box {
-    text-align: center;
-    padding: var(--space-xl) var(--space-md);
-    color: var(--text-muted);
-}
-.empty-state-box svg {
-    width: 64px; height: 64px; fill: currentColor; margin-bottom: var(--space-md); opacity: 0.4;
+/* ==========================================================================
+   State Injections & Dynamic Skeletons Blueprint
+   ========================================================================== */
+.skeleton-shimmer-card {
+    height: 74px;
+    background: linear-gradient(90deg, var(--bg-surface-card) 25%, var(--bg-surface-nav) 50%, var(--bg-surface-card) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer-run 1.5s infinite linear;
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
 }
 
-.shimmer-row {
-    height: 60px;
-    background: linear-gradient(90deg, var(--bg-surface) 25%, var(--text-muted) 50%, var(--bg-surface) 75%);
-    background-size: 200% 100%;
-    animation: shimmer-pulse 1.5s infinite;
-    border-radius: var(--radius-sm);
-}
-@keyframes shimmer-pulse {
+@keyframes skeleton-shimmer-run {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
 }
 
+.empty-state-frame {
+    padding: var(--space-2xl) var(--space-md);
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.empty-state-frame svg {
+    width: 64px;
+    height: 64px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    margin-bottom: var(--space-md);
+    opacity: 0.6;
+}
+
+.empty-state-frame p {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
 /* ==========================================================================
-   اللوحة الانزلاقية الزجاجية ومستندات توثيق المطور
+   Modals, Slide-Overs, and Toast Portals Base Layouts
    ========================================================================== */
-.slideover-overlay {
+.backdrop-blur-overlay {
     position: fixed;
     inset: 0;
     background-color: rgba(15, 23, 42, 0.4);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    z-index: 1000;
+    z-index: 200;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
+    align-items: flex-end; /* Mobile Bottom Sheet Native Layout default style */
 }
-.slideover-sheet {
+
+/* Slide-Over Menu Overrides Variant Rules */
+.backdrop-blur-overlay:has(.slide-over-panel-container) {
+    justify-content: flex-start;
+}
+
+.slide-over-panel-container {
     width: 100%;
-    max-width: 420px;
-    background-color: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    max-width: 380px;
     height: 100%;
-    box-shadow: var(--shadow-lg);
+    background-color: var(--bg-surface-card);
+    box-shadow: var(--shadow-xl);
+    padding: var(--space-lg);
     display: flex;
     flex-direction: column;
-    animation: slideLeft var(--transition-spring);
-}
-[data-theme="dark"] .slideover-sheet {
-    background-color: rgba(21, 31, 50, 0.85);
+    animation: panel-slide-in-rtl var(--anim-speed-mid) var(--spring-physics);
 }
 
-@keyframes slideLeft {
-    from { transform: translateX(100%); }
-    to { transform: translateX(0); }
+@keyframes panel-slide-in-rtl {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(0); }
 }
 
-.slideover-header {
-    padding: var(--space-lg);
-    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+.slide-panel-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-.slideover-header h2 { font-size: 1.2rem; font-weight: 800; }
-.slideover-body {
-    padding: var(--space-lg);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xl);
-    overflow-y: auto;
+    margin-bottom: var(--space-lg);
 }
 
-.settings-section {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
-}
-.settings-section h3 { font-size: 1rem; font-weight: 700; }
-.settings-desc { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4; }
-
-.ios-guide-box {
-    background-color: var(--color-warning-surface);
-    border: 1px dashed var(--color-warning);
-    padding: var(--space-md);
-    border-radius: var(--radius-sm);
-    margin-top: var(--space-xs);
-}
-.ios-guide-box h4 { font-size: 0.85rem; color: var(--color-warning); margin-bottom: 4px; }
-.ios-guide-box ol { padding-right: var(--space-md); font-size: 0.8rem; color: var(--text-secondary); }
-
-/* بطاقة المطور الإلزامية الخاصة بالسيد حازم ماضي */
-.developer-credit-card {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    color: #ffffff;
-    padding: var(--space-lg);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-md);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    direction: ltr; /* التزاماً بأن تكون التفاصيل باللغة الإنجليزية كما طُلب */
-}
-.developer-credit-card h3 {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--color-primary);
-    margin-bottom: var(--space-xs);
-}
-.dev-name { font-size: 1.15rem; font-weight: 800; margin-bottom: 2px; }
-.dev-role { font-size: 0.85rem; color: #94a3b8; margin-bottom: var(--space-md); }
-.dev-links { display: flex; flex-direction: column; gap: var(--space-xs); }
-.dev-link-anchor {
-    font-size: 0.8rem;
-    color: #3b82f6;
-    text-decoration: none;
-    transition: var(--transition-smooth);
-    display: inline-flex;
-    align-items: center;
-}
-.dev-link-anchor:hover { color: #60a5fa; text-decoration: underline; }
-
-/* التذييل الدائم التابع للواجهة */
-.app-sticky-footer {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    background-color: var(--bg-card);
-    border-top: 1px solid var(--bg-surface);
-    padding: var(--space-sm) var(--space-md);
-    text-align: center;
-    z-index: 90;
-    box-shadow: 0 -4px 10px rgba(0,0,0,0.02);
-}
-.footer-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-xs);
-    flex-wrap: wrap;
-    font-size: 0.8rem;
+.btn-close-panel {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
     color: var(--text-secondary);
 }
-.footer-content .divider { color: var(--text-muted); }
-.attribution-text a {
-    color: var(--color-primary);
-    text-decoration: none;
-    font-weight: bold;
+
+/* Bottom Sheet Architectural Portal Structure */
+.bottom-sheet-modal-container {
+    width: 100%;
+    max-width: 768px;
+    background-color: var(--bg-surface-card);
+    border-top-left-radius: var(--border-radius-lg);
+    border-top-right-radius: var(--border-radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-xl);
+    animation: sheet-slide-up-mobile var(--anim-speed-mid) var(--spring-physics);
 }
 
-/* ==========================================================================
-   نظام حقن التنبيهات اللحظية (Toast Alerts Architecture)
-   ========================================================================== */
-.toast-hub {
+@keyframes sheet-slide-up-mobile {
+    0% { transform: translateY(100%); }
+    100% { transform: translateY(0); }
+}
+
+.sheet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-lg);
+}
+
+/* Designer Profiles Elements Card inside slides */
+.designer-profile-large {
+    text-align: center;
+    padding: var(--space-md) 0;
+}
+
+.avatar-placeholder {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent-purple) 100%);
+    color: white;
+    border-radius: var(--border-radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    margin: 0 auto var(--space-sm) auto;
+    font-size: 1.4rem;
+}
+
+.profile-title { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-top: var(--space-2xs); }
+.separator-line { border: 0; height: 1px; background-color: var(--border-color); margin: var(--space-md) 0; }
+h5 { font-size: 0.85rem; font-weight: 800; margin-bottom: var(--space-xs); }
+.pwa-install-zone { margin-top: var(--space-lg); }
+.ios-alert-text { font-size: 0.75rem; color: var(--text-secondary); background-color: var(--bg-surface-nav); padding: var(--space-sm); border-radius: var(--border-radius-sm); margin-top: var(--space-xs); line-height: 1.4; }
+
+/* Toast Carrier Broadcaster Layer Array layout */
+.toast-broadcaster-container {
     position: fixed;
-    bottom: 80px;
+    bottom: 100px;
     left: var(--space-md);
+    right: var(--space-md);
     display: flex;
     flex-direction: column;
     gap: var(--space-xs);
-    z-index: 10000;
+    z-index: 300;
     pointer-events: none;
 }
-.toast-instance {
-    pointer-events: auto;
+
+.toast-message-card {
     background-color: var(--text-primary);
-    color: var(--bg-card);
-    padding: var(--space-sm) var(--space-lg);
-    border-radius: var(--radius-sm);
+    color: var(--bg-surface-card);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--border-radius-sm);
+    font-size: 0.8rem;
+    font-weight: 700;
     box-shadow: var(--shadow-lg);
-    font-size: 0.9rem;
-    font-weight: 600;
-    min-width: 280px;
-    animation: toastIn 0.3s ease forwards;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: auto;
+    animation: toast-fly-in var(--anim-speed-fast) var(--spring-physics);
 }
-@keyframes toastIn {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+
+@keyframes toast-fly-in {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
 }
 
 /* ==========================================================================
-   قواعد الاستهداف الإعلامي والطباعة الإدارية النظيفة (Print Media Queries)
+   Persistent Sticky Footer Layout Component
    ========================================================================== */
-@media print {
-    body { background: #ffffff !important; color: #000000 !important; direction: rtl !important; }
-    .main-header, .income-splitter-card, .context-tab-switcher, .icon-btn,
-    #transaction-form, .filter-controls-cluster, .btn, .app-sticky-footer, .slideover-overlay {
-        display: none !important;
-    }
-    .app-wrapper { padding: 0 !important; }
-    .card { box-shadow: none !important; border: none !important; padding: 0 !important; }
-    .dashboard-grid { grid-template-columns: 1fr !important; }
-    
-    /* إعداد مستند كشف الحساب الخفي المخصص للطباعة الإدارية */
-    .print-document-layout {
-        display: block !important;
-        padding: 30px !important;
-    }
-    .print-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-    .print-table th, .print-table td {
-        border: 1px solid #000000;
-        padding: 10px;
-        text-align: right;
-    }
-    .print-header-block {
-        text-align: center;
-        margin-bottom: 30px;
-        border-bottom: 3px double #000000;
-        padding-bottom: 15px;
+.app-sticky-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border-color);
+    padding: var(--space-sm) var(--space-md);
+    z-index: 90;
+}
+
+[data-theme="dark"] .app-sticky-footer {
+    background-color: rgba(21, 31, 50, 0.85);
+}
+
+.attribution-card-mini {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    max-width: 768px;
+    margin: 0 auto;
+}
+
+.credit-text-line { font-size: 0.75rem; color: var(--text-primary); }
+.links-cluster { display: flex; justify-content: center; gap: var(--space-xs); font-size: 0.65rem; font-weight: 700; }
+.links-cluster a { color: var(--color-primary); text-decoration: none; transition: color var(--anim-speed-fast) ease; }
+.links-cluster a:hover { color: var(--color-primary-hover); text-decoration: underline; }
+.links-cluster .divider { color: var(--text-muted); }
+
+/* ==========================================================================
+   Responsive Structural Breakdown Tablet viewports
+   ========================================================================== */
+@media (min-width: 480px) {
+    .slide-over-panel-container {
+        border-top-right-radius: var(--border-radius-lg);
+        border-bottom-right-radius: var(--border-radius-lg);
     }
 }
 
-.print-document-layout { display: none; }
+/* ==========================================================================
+   Print CSS Engine - Hidden Layout Infrastructure Optimization for Official Statement
+   ========================================================================== */
+@media print {
+    body * { display: none !important; }
+    #print-administrative-shadow-dom, #print-administrative-shadow-dom * { display: block !important; }
+    #print-administrative-shadow-dom {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 40px;
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        direction: rtl;
+    }
+    .print-document-header {
+        text-align: center;
+        border-bottom: 3px double #000000;
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+    }
+    .print-document-header h2 { font-size: 24px; font-weight: bold; margin-bottom: 5px; }
+    .print-meta-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; font-size: 12px; border: 1px solid #000000; padding: 15px; }
+    .print-data-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    .print-data-table th, .print-data-table td { border: 1px solid #000000; padding: 10px; text-align: right; font-size: 12px; }
+    .print-data-table th { background-color: #f2f2f2 !important; font-weight: bold; }
+    .print-summary-footer { margin-top: 30px; text-align: left; font-size: 14px; font-weight: bold; }
+    .print-credit-block-english {
+        margin-top: 60px;
+        border-top: 1px dashed #000000;
+        padding-top: 20px;
+        text-align: center;
+        font-family: Arial, sans-serif;
+        font-size: 11px;
+        font-weight: bold;
+    }
+}
