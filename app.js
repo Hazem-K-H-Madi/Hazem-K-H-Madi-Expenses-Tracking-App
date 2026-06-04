@@ -1,861 +1,1056 @@
 /**
- * Core Production Application Scripting Architecture
- * Architecture Scope: Offline-First State Management, Optimistic Updates UI Lifecycle,
- * Financial Forecasting Calculators, Custom Embedded Inline SVG Graph Engines.
+ * المستشار المالي الذكي - الروح البرمجية والمحرك الأساسي للعمليات
+ * المطور: Hazem K H Madi - Senior Product Designer
+ * نظام مالي متكامل مبني بمعايير فنتك عالمية وحسابات معزولة بالكامل.
  */
 
-(function () {
-    'use strict';
-
-    // 1. Immutable Shared Constants Mapping
-    const CATEGORIES = ["غذاء وتطوير", "فواتير والتزامات", "صحة ورعاية", "تعليم ونمو", "ترفيه ونمط حياة", "أخرى"];
-    const CATEGORY_COLORS = {
-        "غذاء وتطوير": "#2563eb",
-        "فواتير والتزامات": "#8b5cf6",
-        "صحة ورعاية": "#10b981",
-        "تعليم ونمو": "#f59e0b",
-        "ترفيه ونمط حياة": "#ef4444",
-        "أخرى": "#64748b"
-    };
-
-    // 2. Central Micro-State Application Context
-    let appState = {
-        personal: { income: 0, expenses: [] },
-        family: { income: 0, expenses: [] },
-        activeTab: 'personal',
+// ==========================================================================
+// 1. STATE CONFIGURATION & APPLICATION CONTEXTS
+// ==========================================================================
+const AppState = {
+    currentContext: 'personal', // الخيارات المتاحة: 'personal' | 'family'
+    personal: {
+        balance: 0.00,
+        transactions: [],
+        recurring: []
+    },
+    family: {
+        balance: 0.00,
+        transactions: [],
+        recurring: []
+    },
+    ui: {
         theme: 'light',
-        allocationRatio: 50, // Percent allocated to Personal, remainder to Family
-        activeCategoryFilter: null
-    };
-
-    // A memory mirror used to execute rapid UI Rollbacks if Database Write pipeline encounters exception states
-    let stateMemoryMirror = null;
-
-    // 3. Application Lifecycle Event Listeners Initialization Hook
-    document.addEventListener("DOMContentLoaded", () => {
-        initializeApplicationCore();
-    });
-
-    function initializeApplicationCore() {
-        loadStateFromLocalStorage();
-        applySystemThemeContext();
-        registerDOMEvents();
-        renderGlobalDashboardViews();
-        checkRecurringBillingDueStatus();
-        initializePWAServiceEngine();
+        deferredPrompt: null,
+        activeSwipeRow: null,
+        swipeStartX: 0,
+        swipeCurrentX: 0
     }
+};
 
-    // 4. Persistence & Safe Execution Layer
-    function loadStateFromLocalStorage() {
-        try {
-            const rawStoredData = localStorage.getItem("HAZEM_FINTECH_PWA_STATE");
-            if (rawStoredData) {
-                const parsedData = JSON.parse(rawStoredData);
-                // Schema matching validation check
-                if (parsedData.personal && parsedData.family) {
-                    appState = { ...appState, ...parsedData };
+// فئات وألوان التصنيفات لربط الرسوم البيانية المتجهة SVG بدقة عالية
+const CategoryColorMap = {
+    'غذاء': '#f59e0b',
+    'تسوق': '#ec4899',
+    'مواصلات': '#3b82f6',
+    'سكن': '#8b5cf6',
+    'فواتير': '#06b6d4',
+    'صحة': '#ef4444',
+    'ترفيه': '#10b981',
+    'أخرى': '#64748b'
+};
+
+// ==========================================================================
+// 2. INDUSTRIAL-GRADE ASYNCHRONOUS LOCAL STORAGE (IndexedDB Wrapper)
+// ==========================================================================
+const LocalDB = {
+    DB_NAME: 'SmartFinancierDB',
+    DB_VERSION: 1,
+    
+    init() {
+        return new Promise((resolve, reject) => {
+            if (!window.indexedDB) {
+                // Fallback built on namespace separation if IndexedDB fails entirely
+                this.isFallback = true;
+                resolve();
+                return;
+            }
+            
+            const request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
+            
+            request.onerror = () => {
+                this.isFallback = true;
+                resolve();
+            };
+            
+            request.onsuccess = (event) => {
+                this.db = event.target.result;
+                resolve();
+            };
+            
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                if (!db.objectStoreNames.contains('financial_state')) {
+                    db.createObjectStore('financial_state');
                 }
-            } else {
-                // Instantiating initial seed empty-state parameters
-                appState.personal = { income: 5000, expenses: [] };
-                appState.family = { income: 5000, expenses: [] };
-            }
-            snapshotStateToMirror();
-        } catch (storageException) {
-            triggerNotificationToast("خطأ أثناء تحميل مخزن البيانات المحلي. تم بدء جلسة آمنة.");
-        }
-    }
-
-    function saveStateToStoragePipeline() {
-        try {
-            localStorage.setItem("HAZEM_FINTECH_PWA_STATE", JSON.stringify(appState));
-            snapshotStateToMirror();
-            return true;
-        } catch (writeException) {
-            return false; // Signals structural writing exception
-        }
-    }
-
-    function snapshotStateToMirror() {
-        stateMemoryMirror = JSON.parse(JSON.stringify(appState));
-    }
-
-    function executeOptimisticRollback(errorMessage) {
-        appState = JSON.parse(JSON.stringify(stateMemoryMirror));
-        triggerNotificationToast(errorMessage || "فشلت معالجة العملية المزامنة للبيانات. تم استعادة الحالة السابقة.");
-        renderGlobalDashboardViews();
-    }
-
-    // 5. High-Fidelity UI Presentation Rendering Loop
-    function renderGlobalDashboardViews() {
-        const activeContext = appState[appState.activeTab];
-        
-        // Render Dynamic Metrics Counters
-        calculateAndAnimateBalanceMetrics(activeContext);
-        
-        // Execute Calculations Engines
-        executeBurnRateForecastingMetrics(activeContext);
-        
-        // Build Categorized SVG Metrics Arc Charts
-        renderCategorizedAnalyticsSVGCharts(activeContext);
-        
-        // Build Filter Navigation Toolbar Category Chips
-        renderCategoryFilterChipsInterface(activeContext);
-        
-        // Render Active Ledger List Views
-        renderLedgerTransactionElements(activeContext);
-    }
-
-    function calculateAndAnimateBalanceMetrics(context) {
-        const totalAllocatedIncome = Number(context.income || 0);
-        const totalCalculatedExpenses = context.expenses.reduce((sum, item) => sum + Number(item.amount), 0);
-        const netDecrementingRemainingBalance = totalAllocatedIncome - totalCalculatedExpenses;
-
-        document.getElementById("allocated-income-display").textContent = totalAllocatedIncome.toLocaleString('ar-EG');
-        document.getElementById("total-expenses-display").textContent = totalCalculatedExpenses.toLocaleString('ar-EG');
-        
-        // Animate counter execution frame
-        animateCounterSequence("balance-counter", netDecrementingRemainingBalance);
-    }
-
-    function animateCounterSequence(elementId, terminalTargetValue) {
-        const elementReference = document.getElementById(elementId);
-        const initialCurrentValue = parseFloat(elementReference.textContent.replace(/[^0-9.-]/g, '')) || 0;
-        const animationDuration = 450; // Milliseconds duration frame
-        let animationStartTimestamp = null;
-
-        function executionStep(currentTimestamp) {
-            if (!animationStartTimestamp) animationStartTimestamp = currentTimestamp;
-            const absoluteElapsedProgress = currentTimestamp - animationStartTimestamp;
-            const progressRatio = Math.min(absoluteElapsedProgress / animationDuration, 1);
-            
-            // Ease-out cubic formula transformation mapping
-            const transformationEaseRatio = 1 - Math.pow(1 - progressRatio, 3);
-            const calculatedInterpolatedFrameValue = initialCurrentValue + (transformationEaseRatio * (terminalTargetValue - initialCurrentValue));
-            
-            elementReference.textContent = Math.round(calculatedInterpolatedFrameValue).toLocaleString('ar-EG');
-
-            if (absoluteElapsedProgress < animationDuration) {
-                window.requestAnimationFrame(executionStep);
-            } else {
-                elementReference.textContent = Math.round(terminalTargetValue).toLocaleString('ar-EG');
-            }
-        }
-        window.requestAnimationFrame(executionStep);
-    }
-
-    function executeBurnRateForecastingMetrics(context) {
-        const burnRateValueNode = document.getElementById("burn-rate-value");
-        const runwayPredictionValueNode = document.getElementById("runway-prediction-value");
-        
-        const currentCalendarDate = new Date();
-        const activeDayCounterIndex = currentCalendarDate.getDate();
-        
-        const cumulativeExpensesSum = context.expenses.reduce((sum, item) => sum + Number(item.amount), 0);
-        const calculatedDailyBurnRate = activeDayCounterIndex > 0 ? (cumulativeExpensesSum / activeDayCounterIndex) : cumulativeExpensesSum;
-        
-        burnRateValueNode.textContent = Math.round(calculatedDailyBurnRate).toLocaleString('ar-EG');
-
-        const availableLiquidityNetBalance = Number(context.income || 0) - cumulativeExpensesSum;
-
-        if (calculatedDailyBurnRate <= 0) {
-            runwayPredictionValueNode.textContent = "مستقر - لا يوجد استهلاك نشط";
-            runwayPredictionValueNode.className = "node-value text-success";
-            return;
-        }
-
-        const projectedRemainingRunwayDays = Math.floor(availableLiquidityNetBalance / calculatedDailyBurnRate);
-
-        if (availableLiquidityNetBalance <= 0) {
-            runwayPredictionValueNode.textContent = "تم استنفاذ كامل الميزانية المتاحة";
-            runwayPredictionValueNode.className = "node-value text-danger";
-        } else if (projectedRemainingRunwayDays <= 5) {
-            runwayPredictionValueNode.textContent = `خطر النفاذ الداهم (خلال ${projectedRemainingRunwayDays.toLocaleString('ar-EG')} أيام)`;
-            runwayPredictionValueNode.className = "node-value text-danger";
-        } else if (projectedRemainingRunwayDays <= 15) {
-            runwayPredictionValueNode.textContent = `تحذير استهلاك مرتفع (${projectedRemainingRunwayDays.toLocaleString('ar-EG')} أيام متبقية)`;
-            runwayPredictionValueNode.className = "node-value text-warning";
-        } else {
-            runwayPredictionValueNode.textContent = `مستقر ومتزن لكافة الشهر الحالي (${projectedRemainingRunwayDays.toLocaleString('ar-EG')} يوم)`;
-            runwayPredictionValueNode.className = "node-value text-success";
-        }
-    }
-
-    function renderCategorizedAnalyticsSVGCharts(context) {
-        const chartWrapperNode = document.getElementById("svg-chart-wrapper");
-        const legendContainerNode = document.getElementById("chart-legend-container");
-        
-        chartWrapperNode.innerHTML = "";
-        legendContainerNode.innerHTML = "";
-
-        // Build metric hash matrices map mapping items allocation distribution sizes
-        const functionalCategoryMapHash = {};
-        CATEGORIES.forEach(cat => functionalCategoryMapHash[cat] = 0);
-        
-        let aggregateSumVal = 0;
-        context.expenses.forEach(item => {
-            if (functionalCategoryMapHash[item.category] !== undefined) {
-                functionalCategoryMapHash[item.category] += Number(item.amount);
-                aggregateSumVal += Number(item.amount);
-            }
+            };
         });
+    },
 
-        if (aggregateSumVal === 0) {
-            chartWrapperNode.innerHTML = `
-                <div class="chart-center-label">
-                    <span class="center-num">٠٪</span>
-                    <span class="center-txt">لا توجد مصاريف</span>
-                </div>
-            `;
-            return;
-        }
-
-        // Programmatic lightweight mathematical parsing and drawing of compound native high-performance SVGs
-        const svgElementWrapper = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        svgElementWrapper.setAttribute("width", "100%");
-        svgElementWrapper.setAttribute("height", "100%");
-        svgElementWrapper.setAttribute("viewBox", "0 0 42 42");
-        svgElementWrapper.setAttribute("class", "chart-svg-element");
-
-        const baseTrackingCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        baseTrackingCircle.setAttribute("cx", "21");
-        baseTrackingCircle.setAttribute("cy", "21");
-        baseTrackingCircle.setAttribute("r", "15.91549430918954");
-        baseTrackingCircle.setAttribute("class", "chart-base-circle");
-        svgElementWrapper.appendChild(baseTrackingCircle);
-
-        let cumulativeArcOffsetPercentage = 0;
-
-        CATEGORIES.forEach(categoryName => {
-            const calculatedCategorySum = functionalCategoryMapHash[categoryName];
-            if (calculatedCategorySum <= 0) return;
-
-            const categoryPercentageRatio = (calculatedCategorySum / aggregateSumVal) * 100;
-            const arcStrokeDashValue = categoryPercentageRatio;
-            const arcStrokeOffsetInverseValue = 100 - cumulativeArcOffsetPercentage + 25; // Adjusted structural orientation mapping
-
-            const analyticalCategoryArc = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            analyticalCategoryArc.setAttribute("cx", "21");
-            analyticalCategoryArc.setAttribute("cy", "21");
-            analyticalCategoryArc.setAttribute("r", "15.91549430918954");
-            analyticalCategoryArc.setAttribute("class", "chart-progress-arc");
-            analyticalCategoryArc.setAttribute("stroke", CATEGORY_COLORS[categoryName]);
-            analyticalCategoryArc.setAttribute("stroke-dasharray", `${arcStrokeDashValue} ${100 - arcStrokeDashValue}`);
-            // Modifying explicit SVG mathematical offset mapping paths structural rendering loops
-            analyticalCategoryArc.setAttribute("stroke-dashoffset", String(arcStrokeOffsetInverseValue % 100));
-            
-            svgElementWrapper.appendChild(analyticalCategoryArc);
-            cumulativeArcOffsetPercentage += categoryPercentageRatio;
-
-            // Injected dynamic legend items labels configurations elements matching active colors
-            const legendItemElement = document.createElement("div");
-            legendItemElement.className = "legend-item";
-            legendItemElement.innerHTML = `
-                <span class="legend-color-dot" style="background-color: ${CATEGORY_COLORS[categoryName]}"></span>
-                <span>${categoryName} (${Math.round(categoryPercentageRatio).toLocaleString('ar-EG')}%)</span>
-            `;
-            legendContainerNode.appendChild(legendItemElement);
-        });
-
-        const labelOverlayDOMWrapper = document.createElement("div");
-        labelOverlayDOMWrapper.className = "chart-center-label";
-        labelOverlayDOMWrapper.innerHTML = `
-            <span class="center-num">${aggregateSumVal.toLocaleString('ar-EG')}</span>
-            <span class="center-txt">ج.م مسجلة</span>
-        `;
-
-        chartWrapperNode.appendChild(svgElementWrapper);
-        chartWrapperNode.appendChild(labelOverlayDOMWrapper);
-    }
-
-    function renderCategoryFilterChipsInterface(context) {
-        const filterWrapperNode = document.getElementById("category-filter-chips");
-        filterWrapperNode.innerHTML = "";
-
-        // Build active global all chip selector tag layout node
-        const globalAllChipNode = document.createElement("span");
-        globalAllChipNode.className = `chip ${appState.activeCategoryFilter === null ? 'active' : ''}`;
-        globalAllChipNode.textContent = "الكل القياسي";
-        globalAllChipNode.addEventListener("click", () => {
-            appState.activeCategoryFilter = null;
-            renderGlobalDashboardViews();
-        });
-        filterWrapperNode.appendChild(globalAllChipNode);
-
-        // Find and iterate distinct present operational tracking classification segments elements matrices rules
-        const presentActiveCategoryHashSet = new Set(context.expenses.map(item => item.category));
-        
-        CATEGORIES.forEach(catName => {
-            if (!presentActiveCategoryHashSet.has(catName)) return;
-
-            const structuredFilterChipElement = document.createElement("span");
-            structuredFilterChipElement.className = `chip ${appState.activeCategoryFilter === catName ? 'active' : ''}`;
-            structuredFilterChipElement.textContent = catName;
-            structuredFilterChipElement.addEventListener("click", () => {
-                appState.activeCategoryFilter = (appState.activeCategoryFilter === catName) ? null : catName;
-                renderGlobalDashboardViews();
-            });
-            filterWrapperNode.appendChild(structuredFilterChipElement);
-        });
-    }
-
-    function renderLedgerTransactionElements(context) {
-        const ledgerContainerListRoot = document.getElementById("transaction-list-root");
-        const emptyStateInterfaceView = document.getElementById("empty-state-view");
-        const searchInputNodeTextQuery = document.getElementById("search-input").value.trim().toLowerCase();
-
-        ledgerContainerListRoot.innerHTML = "";
-
-        // Filter and evaluate entries using complex criteria
-        let computedFilterRecordCollection = context.expenses.filter(item => {
-            const matchesCategoryConstraint = (appState.activeCategoryFilter === null || item.category === appState.activeCategoryFilter);
-            const matchesTextSearchQuery = (!searchInputNodeTextQuery || 
-                item.notes.toLowerCase().includes(searchInputNodeTextQuery) || 
-                item.category.toLowerCase().includes(searchInputNodeTextQuery));
-            return matchesCategoryConstraint && matchesTextSearchQuery;
-        });
-
-        // Ensure proper ordered array sorting sequencing sequence mapping
-        computedFilterRecordCollection.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-        if (computedFilterRecordCollection.length === 0) {
-            emptyStateInterfaceView.classList.remove("hidden");
-            ledgerContainerListRoot.classList.add("hidden");
-            return;
-        }
-
-        emptyStateInterfaceView.classList.add("hidden");
-        ledgerContainerListRoot.classList.remove("hidden");
-
-        // Use DocumentFragment to optimize memory overhead and render at a smooth 120fps
-        const DOMPipelineDocumentFragment = document.createDocumentFragment();
-
-        computedFilterRecordCollection.forEach(transactionNodeRecord => {
-            const rowItemWrapperContainer = document.createElement("li");
-            rowItemWrapperContainer.className = "tx-row-item-wrapper";
-            rowItemWrapperContainer.dataset.id = transactionNodeRecord.id;
-
-            // Constructing backend action background container panel layout views template layers
-            const backendSwipeRevealPanel = document.createElement("div");
-            backendSwipeRevealPanel.className = "swipe-action-reveal-backend";
-            backendSwipeRevealPanel.innerHTML = `<span>مسح وحذف فوري الأثر</span>`;
-            rowItemWrapperContainer.appendChild(backendSwipeRevealPanel);
-
-            // Foreground tactile swipe-interactive animation layer surface card element block wrapper elements
-            const foregroundInteractiveSurface = document.createElement("div");
-            foregroundInteractiveSurface.className = "tx-row-interactive-surface";
-            
-            const operationalFormattedDate = new Date(transactionNodeRecord.timestamp).toLocaleDateString('ar-EG', {
-                month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
-            });
-
-            foregroundInteractiveSurface.innerHTML = `
-                <div class="tx-meta-info-block">
-                    <div class="tx-category-icon-avatar" style="color: ${CATEGORY_COLORS[transactionNodeRecord.category]}; background-color: ${CATEGORY_COLORS[transactionNodeRecord.category]}15">
-                        ${transactionNodeRecord.category.charAt(0)}
-                    </div>
-                    <div class="tx-text-headers">
-                        <span class="tx-headline-title">${transactionNodeRecord.notes || transactionNodeRecord.category}</span>
-                        <span class="tx-sub-timestamp-meta">${operationalFormattedDate}</span>
-                    </div>
-                </div>
-                <div class="tx-monetary-value-block">
-                    <span class="tx-amount-numeric">${Number(transactionNodeRecord.amount).toLocaleString('ar-EG')} ج.م</span>
-                    ${transactionNodeRecord.isRecurring ? `<span class="badge-recurring">التزام دوري</span>` : ''}
-                </div>
-            `;
-
-            // Append gesture event listener attachments hooks
-            attachMobileSwipeGestureTrackers(foregroundInteractiveSurface, transactionNodeRecord.id);
-
-            rowItemWrapperContainer.appendChild(foregroundInteractiveSurface);
-            DOMPipelineDocumentFragment.appendChild(rowItemWrapperContainer);
-        });
-
-        ledgerContainerListRoot.appendChild(DOMPipelineDocumentFragment);
-    }
-
-    // 6. Mobile Viewport Tactile Touch Gestures & Haptic Feedback Engine
-    function attachMobileSwipeGestureTrackers(surfaceElement, transactionRecordId) {
-        let initialTouchXCoordinate = 0;
-        let deltaCurrentXMoveDistance = 0;
-        let isSwipeGestureCapturedActive = false;
-        const minimumSwipeExecutionThreshold = -90; // Pixels distance triggered leftwards
-
-        surfaceElement.addEventListener("touchstart", (touchEvent) => {
-            initialTouchXCoordinate = touchEvent.touches[0].clientX;
-            isSwipeGestureCapturedActive = true;
-            surfaceElement.style.transition = "none"; // Explicitly clear easing animations frames to match exact hardware tracing
-        }, { passive: true });
-
-        surfaceElement.addEventListener("touchmove", (touchEvent) => {
-            if (!isSwipeGestureCapturedActive) return;
-            const activeTraceCurrentX = touchEvent.touches[0].clientX;
-            deltaCurrentXMoveDistance = activeTraceCurrentX - initialTouchXCoordinate;
-
-            // Restricting structural swipe orientation layout patterns tracking logic leftwards parameters constraints
-            if (deltaCurrentXMoveDistance > 0) deltaCurrentXMoveDistance = 0; // Constrain rightwards mutations
-            if (deltaCurrentXMoveDistance < -140) deltaCurrentXMoveDistance = -140; // Max constraint range limit boundaries
-
-            surfaceElement.style.transform = `translate3d(${deltaCurrentXMoveDistance}px, 0, 0)`;
-        }, { passive: true });
-
-        surfaceElement.addEventListener("touchend", () => {
-            isSwipeGestureCapturedActive = false;
-            surfaceElement.style.transition = "transform 0.2s ease";
-
-            if (deltaCurrentXMoveDistance <= minimumSwipeExecutionThreshold) {
-                // Lock swipe position and execute immediate cascading delete operations pipelines
-                surfaceElement.style.transform = "translate3d(-100%, 0, 0)";
-                triggerTactileMobileHapticTapFeedback();
-                executeTransactionRecordDeletion(transactionRecordId);
-            } else {
-                // Cancel translation parameters and return layout objects back cleanly
-                surfaceElement.style.transform = "translate3d(0,0,0)";
-            }
-            deltaCurrentXMoveDistance = 0;
-        });
-
-        // Click interaction path routes straight to opening inline alteration edit configuration dashboards portals views
-        surfaceElement.addEventListener("click", (clickEvent) => {
-            // Prevent interference from swipe states
-            if (Math.abs(deltaCurrentXMoveDistance) > 5) return;
-            openMutationModalPortalDashboardInterface('edit', transactionRecordId);
-        });
-    }
-
-    function triggerTactileMobileHapticTapFeedback() {
-        if (window.navigator && window.navigator.vibrate) {
-            window.navigator.vibrate(10); // Standard discrete precision haptic feedback duration frame length
-        }
-    }
-
-    // 7. High-Fidelity CRUD Mutator Implementations Core Loops (Optimistic UI Frameworks)
-    function executeTransactionMutationPipeline(formSubmissionEvent) {
-        formSubmissionEvent.preventDefault();
-
-        const targetMutationIdKey = document.getElementById("mutation-target-id").value;
-        const inputEnteredAmount = parseFloat(document.getElementById("tx-amount").value);
-        const inputSelectedCategory = document.getElementById("tx-category").value;
-        const inputEnteredTimestamp = document.getElementById("tx-timestamp").value;
-        const inputCheckboxRecurringStatus = document.getElementById("tx-recurring").checked;
-        const inputNotesTextDescription = document.getElementById("tx-notes").value.trim();
-
-        if (isNaN(inputEnteredAmount) || inputEnteredAmount <= 0) {
-            triggerNotificationToast("يرجى إدخال قيمة مالية صالحة ومطابقة.");
-            return;
-        }
-
-        const currentActiveContext = appState[appState.activeTab];
-
-        // Model structural template maps
-        const mutatedRecordObject = {
-            id: targetMutationIdKey || "TX_NODE_" + Date.now() + Math.random().toString(36).substr(2, 5),
-            amount: inputEnteredAmount,
-            category: inputSelectedCategory,
-            timestamp: inputEnteredTimestamp,
-            isRecurring: inputCheckboxRecurringStatus,
-            notes: inputNotesTextDescription
+    async saveState() {
+        const payload = {
+            personal: AppState.personal,
+            family: AppState.family,
+            theme: AppState.ui.theme
         };
 
-        if (targetMutationIdKey) {
-            // Processing operational structural updates edits paths elements matching targets keys
-            const targetingIndexMatch = currentActiveContext.expenses.findIndex(item => item.id === targetMutationIdKey);
-            if (targetingIndexMatch !== -1) currentActiveContext.expenses[targetingIndexMatch] = mutatedRecordObject;
-        } else {
-            // Prepend transaction array entry record item elements
-            currentActiveContext.expenses.unshift(mutatedRecordObject);
-        }
-
-        // Trigger Optimistic Layout Refreshes immediately before awaiting secondary asynchronous IO persistence checks
-        renderGlobalDashboardViews();
-        closeModalPortalDashboardInterface();
-        triggerTactileMobileHapticTapFeedback();
-        triggerNotificationToast(targetMutationIdKey ? "تمت تعديل العملية وحفظ التغييرات بنجاح" : "تم تسجيل وإضافة المصروف بنجاح");
-
-        // Sync operation to persistent storage engine
-        setTimeout(() => {
-            const operationPersistenceResultStatus = saveStateToStoragePipeline();
-            if (!operationPersistenceResultStatus) {
-                executeOptimisticRollback("فشل تخزين البيانات محلياً. تم إلغاء العملية لضمان سلامة محفظتك.");
-            }
-        }, 30);
-    }
-
-    function executeTransactionRecordDeletion(targetRecordId) {
-        const targetingActiveContext = appState[appState.activeTab];
-        const backupTargetRecordIndex = targetingActiveContext.expenses.findIndex(item => item.id === targetRecordId);
-        
-        if (backupTargetRecordIndex === -1) return;
-
-        // Perform immediate optimistic arrays transformations removal routines
-        targetingActiveContext.expenses.splice(backupTargetRecordIndex, 1);
-        renderGlobalDashboardViews();
-        triggerNotificationToast("تم حذف القيد المعاملاتي من السجل التشغيلي");
-
-        // Persist deletion modifications layouts changes
-        setTimeout(() => {
-            const deletionWriteResultStatus = saveStateToStoragePipeline();
-            if (!deletionWriteResultStatus) {
-                executeOptimisticRollback("تعذر إتمام عملية مسح السجلات محلياً. تم التراجع واستعادة القيد المالي المفقود.");
-            }
-        }, 30);
-    }
-
-    function executeIncomeAllocationSplittingRouting(formSplitterSubmitEvent) {
-        formSplitterSubmitEvent.preventDefault();
-
-        const amountSalary = parseFloat(document.getElementById("income-salary").value) || 0;
-        const amountFreelance = parseFloat(document.getElementById("income-freelance").value) || 0;
-        const amountPassive = parseFloat(document.getElementById("income-passive").value) || 0;
-
-        const aggregateConsolidatedIncomesSum = amountSalary + amountFreelance + amountPassive;
-
-        if (aggregateConsolidatedIncomesSum <= 0) {
-            triggerNotificationToast("يرجى إدخال عوائد أو مصادر دخل إضافية لتفعيل الحساب التوزيعي.");
+        if (this.isFallback) {
+            localStorage.setItem('core_fin_state', JSON.stringify(payload));
             return;
         }
 
-        const personalAllocationPercentSize = appState.allocationRatio;
-        const familyAllocationPercentSize = 100 - personalAllocationPercentSize;
-
-        // Apply mathematical routing allocations straight onto specific parameters blocks context
-        appState.personal.income = Math.round(aggregateConsolidatedIncomesSum * (personalAllocationPercentSize / 100));
-        appState.family.income = Math.round(aggregateConsolidatedIncomesSum * (familyAllocationPercentSize / 100));
-
-        renderGlobalDashboardViews();
-        triggerNotificationToast("تمت معالجة التدفقات المالية وتوزيع السيولة بنجاح وعبر القنوات المحددة.");
-
-        setTimeout(() => {
-            if (!saveStateToStoragePipeline()) {
-                executeOptimisticRollback("فشلت مزامنة قيم الدخل التوزيعية الجديدة.");
+        return new Promise((resolve) => {
+            try {
+                const transaction = this.db.transaction(['financial_state'], 'readwrite');
+                const store = transaction.objectStore('financial_state');
+                const request = store.put(payload, 'global_state');
+                request.onsuccess = () => resolve(true);
+                request.onerror = () => resolve(false);
+            } catch (e) {
+                localStorage.setItem('core_fin_state', JSON.stringify(payload));
+                resolve(true);
             }
-        }, 20);
-    }
+        });
+    },
 
-    function checkRecurringBillingDueStatus() {
-        const currentActiveContext = appState[appState.activeTab];
-        const structuralRecurringItemsDueCollection = currentActiveContext.expenses.filter(item => item.isRecurring);
-        const notificationZoneElementNode = document.getElementById("recurring-billing-zone");
-
-        if (structuralRecurringItemsDueCollection.length > 0) {
-            notificationZoneElementNode.classList.remove("hidden");
-        } else {
-            notificationZoneElementNode.classList.add("hidden");
+    async loadState() {
+        if (this.isFallback) {
+            const raw = localStorage.getItem('core_fin_state');
+            return raw ? JSON.parse(raw) : null;
         }
-    }
 
-    function executeBatchProcessingRecurringDeductions() {
-        const activeTrackingContext = appState[appState.activeTab];
-        const structuralRecurringItemsDueCollection = activeTrackingContext.expenses.filter(item => item.isRecurring);
-
-        if (structuralRecurringItemsDueCollection.length === 0) return;
-
-        // Process rapid iteration loops duplicating and appending fresh execution cycles records matching the current date
-        const currentStandardISODateString = new Date().toISOString().substring(0, 16);
-        
-        structuralRecurringItemsDueCollection.forEach(originalBillTemplate => {
-            const duplicatedClonedBillRecordInstance = {
-                id: "TX_NODE_" + Date.now() + Math.random().toString(36).substr(2, 5),
-                amount: originalBillTemplate.amount,
-                category: originalBillTemplate.category,
-                timestamp: currentStandardISODateString,
-                isRecurring: false, // Generated instance remains single processing transactional entry point object
-                notes: `تطبيق تلقائي دوري: ${originalBillTemplate.notes || originalBillTemplate.category}`
-            };
-            activeTrackingContext.expenses.unshift(duplicatedClonedBillRecordInstance);
+        return new Promise((resolve) => {
+            try {
+                const transaction = this.db.transaction(['financial_state'], 'readonly');
+                const store = transaction.objectStore('financial_state');
+                const request = store.get('global_state');
+                request.onsuccess = (event) => resolve(event.target.result || null);
+                request.onerror = () => resolve(null);
+            } catch (e) {
+                const raw = localStorage.getItem('core_fin_state');
+                resolve(raw ? JSON.parse(raw) : null);
+            }
         });
+    }
+};
 
-        renderGlobalDashboardViews();
-        triggerNotificationToast(`تمت معالجة وخصم عدد (${structuralRecurringItemsDueCollection.length.toLocaleString('ar-EG')}) فواتير والتزامات دورية مجدولة.`);
-        document.getElementById("recurring-billing-zone").classList.add("hidden");
+// ==========================================================================
+// 3. HARDWARE CAPABILITIES & MICRO-INTERACTIONS ENGINE
+// ==========================================================================
+const HardwareEngine = {
+    triggerHapticFeedback() {
+        if ('vibrate' in navigator) {
+            navigator.vibrate(10); // Subtle physical click confirmation tactile response
+        }
+    },
+    
+    showToast(message, mode = 'success') {
+        const hub = document.getElementById('toast-notifications-hub');
+        if (!hub) return;
 
+        const toast = document.createElement('div');
+        toast.className = `toast-alert-node ${mode === 'success' ? 'success-mode' : 'danger-mode'}`;
+        toast.textContent = message;
+
+        hub.appendChild(toast);
+        
+        // Asynchronous structural clearing loop to avoid garbage leaks
         setTimeout(() => {
-            saveStateToStoragePipeline();
-        }, 30);
+            toast.style.opacity = '0';
+            setTimeout(() => { toast.remove(); }, 300);
+        }, 3500);
     }
+};
 
-    // 8. Administrative Enterprise Financial Document Export Engine Layout Mapper
-    function generateOfficialStatementReportAdminPrint() {
-        const activeScopeLabel = appState.activeTab === 'personal' ? 'المصروفات الشخصية المباشرة' : 'مصروفات المنزل والعائلة المشتركة';
-        const targetingContext = appState[appState.activeTab];
-        const printCanvasContainerPortal = document.getElementById("hidden-print-canvas");
+// ==========================================================================
+// 4. FINANCIAL CALCULATIONS & VELOCITY TICKER ENGINE
+// ==========================================================================
+const FinanceCalculator = {
+    /**
+     * حساب وتحديث الرصيد التفاعلي بتأثير حركي سلس (requestAnimationFrame)
+     */
+    animateCounter(elementId, startValue, endValue, duration = 400) {
+        const obj = document.getElementById(elementId);
+        if (!obj) return;
         
-        const timestampGenerationLabel = new Date().toLocaleString('ar-EG', {
-            calendar: 'gregory', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+        const startTime = performance.now();
+        
+        function updateNumber(now) {
+            const progress = Math.min((now - startTime) / duration, 1);
+            const currentValue = startValue + progress * (endValue - startValue);
+            
+            // التنسيق المالي المعتمد للغة العربية والأرقام المتناسقة
+            obj.textContent = currentValue.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            
+            if (progress < 1) {
+                requestAnimationFrame(updateNumber);
+            }
+        }
+        requestAnimationFrame(updateNumber);
+    },
+
+    recalculateAndRefreshUI() {
+        const context = AppState.currentContext;
+        const currentData = AppState[context];
+        
+        // 1. حساب الرصيد الإجمالي بناءً على المدخلات والمصروفات
+        let previousDisplayedBalance = parseFloat(document.getElementById('main-balance-ticker').textContent.replace(/,/g, '')) || 0;
+        
+        let calculatedIncomes = currentData.transactions
+            .filter(t => t.type === 'INCOME')
+            .reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
+            
+        let calculatedExpenses = currentData.transactions
+            .filter(t => t.type === 'EXPENSE')
+            .reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
+
+        currentData.balance = calculatedIncomes - calculatedExpenses;
+        
+        // تشغيل عداد الرصيد التنازلي أو التصاعدي
+        this.animateCounter('main-balance-ticker', previousDisplayedBalance, currentData.balance);
+        
+        // 2. تشغيل محرك تحليلات حرق الميزانية وفترة النفاذ المتوقعة (Burn-Rate Forecasting)
+        this.evaluateSpendingBurnRate(calculatedExpenses, currentData.balance);
+        
+        // 3. تحديث مؤشرات ومقاييس الصرف الخطية
+        this.updateLinearProgressMeters(calculatedIncomes, calculatedExpenses);
+        
+        // 4. إعادة بناء الرسم البياني الدائري عالي الأداء SVG
+        this.renderDistributionDonutChart(currentData.transactions, calculatedExpenses);
+        
+        // 5. تحديث وتصفية قائمة السجلات المالية الظاهرية
+        UIEngine.renderTransactionLedgerFeed();
+    },
+
+    evaluateSpendingBurnRate(totalExpenses, remainingBalance) {
+        const burnRateValueEl = document.getElementById('burn-rate-value');
+        const exhaustionDateValueEl = document.getElementById('exhaustion-date-value');
+        
+        const today = new Date();
+        const currentDay = today.getDate(); // اليوم الحالي من الشهر الحالي
+        
+        // حساب متوسط الصرف اليومي الفعلي للشهر الحالي
+        const dailyBurn = currentDay > 0 ? (totalExpenses / currentDay) : totalExpenses;
+        burnRateValueEl.textContent = `${dailyBurn.toFixed(2)} ج.م/يوم`;
+
+        if (remainingBalance <= 0) {
+            exhaustionDateValueEl.textContent = 'الميزانية منتهية حالياً';
+            exhaustionDateValueEl.style.color = 'var(--color-danger)';
+            return;
+        }
+
+        if (dailyBurn === 0) {
+            exhaustionDateValueEl.textContent = 'مستقر تماماً (لا يوجد صرف)';
+            exhaustionDateValueEl.style.color = 'var(--color-success)';
+            return;
+        }
+
+        // كم يوم متبقي بناءً على معدل الاستهلاك الحالي
+        const daysRemainingBeforeCrash = remainingBalance / dailyBurn;
+        const projectExhaustionDay = Math.ceil(currentDay + daysRemainingBeforeCrash);
+        
+        if (daysRemainingBeforeCrash <= 3) {
+            exhaustionDateValueEl.textContent = `حرجة! خلال ${Math.ceil(daysRemainingBeforeCrash)} أيام (يوم ${projectExhaustionDay})`;
+            exhaustionDateValueEl.style.color = 'var(--color-danger)';
+        } else if (daysRemainingBeforeCrash <= 7) {
+            exhaustionDateValueEl.textContent = `تحذير! متوقع يوم ${projectExhaustionDay}`;
+            exhaustionDateValueEl.style.color = 'var(--color-warning)';
+        } else {
+            exhaustionDateValueEl.textContent = `آمن (يوم ${projectExhaustionDay} من الشهر)`;
+            exhaustionDateValueEl.style.color = 'var(--color-success)';
+        }
+    },
+
+    updateLinearProgressMeters(income, expense) {
+        const fillBudget = document.getElementById('meter-fill-budget');
+        const meterText = document.getElementById('meter-budget-text');
+        
+        meterText.textContent = `${expense.toFixed(2)} / ${income.toFixed(2)} ج.م`;
+        
+        if (income === 0) {
+            fillBudget.style.width = '0%';
+            return;
+        }
+
+        const consumptionRatio = (expense / income) * 100;
+        fillBudget.style.width = `${Math.min(consumptionRatio, 100)}%`;
+        
+        // تعديل ألوان المؤشر ديناميكياً حسب خطورة وحجم الصرف
+        fillBudget.className = 'meter-fill';
+        if (consumptionRatio < 60) {
+            fillBudget.classList.add('success');
+        } else if (consumptionRatio < 85) {
+            fillBudget.classList.add('warning');
+        } else {
+            fillBudget.classList.add('danger');
+        }
+    },
+
+    renderDistributionDonutChart(transactions, totalExpenses) {
+        const segmentsGroup = document.getElementById('donut-segments-group');
+        const legendContainer = document.getElementById('chart-legend-container');
+        const centerTotalText = document.getElementById('chart-center-total-text');
+        
+        segmentsGroup.innerHTML = '';
+        legendContainer.innerHTML = '';
+        centerTotalText.textContent = `${totalExpenses.toLocaleString('en-US', { maximumFractionDigits: 0 })} ج.م`;
+
+        const expensesOnly = transactions.filter(t => t.type === 'EXPENSE');
+        
+        if (expensesOnly.length === 0 || totalExpenses === 0) {
+            // Render basic empty/neutral spacer ring inside view space
+            const baseCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            baseCircle.setAttribute('cx', '100');
+            baseCircle.setAttribute('cy', '100');
+            baseCircle.setAttribute('r', '70');
+            baseCircle.setAttribute('fill', 'transparent');
+            baseCircle.setAttribute('stroke', 'var(--color-surface-variant)');
+            baseCircle.setAttribute('stroke-width', '20');
+            segmentsGroup.appendChild(baseCircle);
+            return;
+        }
+
+        // تجميع وتلخيص المصروفات طبقاً للفئات المحددة
+        const categoryTotals = {};
+        expensesOnly.forEach(t => {
+            categoryTotals[t.category] = (categoryTotals[t.category] || 0) + parseFloat(t.amount || 0);
         });
 
-        let dataTableRowsMarkupHTMLBuffer = "";
-        let calculatedAggregateCostSum = 0;
+        const radius = 70;
+        const circumference = 2 * Math.PI * radius; // 2 * 3.14159 * 70 = ~439.82
+        let accumulatedAngleOffset = 0;
 
-        targetingContext.expenses.forEach((recordItem, indexValue) => {
-            calculatedAggregateCostSum += Number(recordItem.amount);
-            dataTableRowsMarkupHTMLBuffer += `
-                <tr>
-                    <td>${(indexValue + 1).toLocaleString('ar-EG')}</td>
-                    <td>${recordItem.category}</td>
-                    <td>${new Date(recordItem.timestamp).toLocaleDateString('ar-EG')}</td>
-                    <td>${recordItem.notes || '—'}</td>
-                    <td style="font-weight: bold; color: #dc2626;">${Number(recordItem.amount).toLocaleString('ar-EG')} ج.م</td>
-                </tr>
+        Object.keys(categoryTotals).forEach(category => {
+            const amount = categoryTotals[category];
+            const percentage = (amount / totalExpenses) * 100;
+            const strokeDasharrayOffset = circumference - (circumference * percentage) / 100;
+            
+            // إنشاء ورسم القوس المتجه SVG لكل فئة مالية مستقلة
+            const circleSegment = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circleSegment.setAttribute('cx', '100');
+            circleSegment.setAttribute('cy', '100');
+            circleSegment.setAttribute('r', radius.toString());
+            circleSegment.setAttribute('fill', 'transparent');
+            circleSegment.setAttribute('stroke', CategoryColorMap[category] || '#64748b');
+            circleSegment.setAttribute('stroke-width', '20');
+            circleSegment.setAttribute('stroke-dasharray', circumference.toString());
+            circleSegment.setAttribute('stroke-dashoffset', strokeDasharrayOffset.toString());
+            circleSegment.setAttribute('transform', `rotate(${accumulatedAngleOffset} 100 100)`);
+            circleSegment.style.transition = 'stroke-dashoffset 0.5s ease-in-out';
+            
+            segmentsGroup.appendChild(circleSegment);
+            
+            // دحرجة زاوية البدء للقوس القادم لضمان عدم التداخل والتطابق
+            accumulatedAngleOffset += (percentage / 100) * 360;
+
+            // حقن وبناء صف الدليل التفصيلي للرسم البياني ديناميكياً
+            const legendRow = document.createElement('div');
+            legendRow.className = 'legend-row-item';
+            legendRow.innerHTML = `
+                <div class="legend-indicator-pill-group">
+                    <span class="color-dot-pill" style="background-color: ${CategoryColorMap[category] || '#64748b'}"></span>
+                    <span class="legend-label-text">${category}</span>
+                </div>
+                <span class="legend-value-shunt">${percentage.toFixed(0)}% (${amount.toFixed(0)} ج.م)</span>
+            `;
+            legendContainer.appendChild(legendRow);
+        });
+    }
+};
+
+// ==========================================================================
+// 5. REVOLUTIONARY GESTURE ENGINE (Interactive Pointer/Touch Sweeping)
+// ==========================================================================
+const GestureEngine = {
+    initTouchDelegation(containerSelector) {
+        const container = document.querySelector(containerSelector);
+        if (!container) return;
+
+        // الاستعانة بـ Event Delegation لربط أحداث اللمس بالمرجع الأب لتوفير موارد الذاكرة
+        container.addEventListener('touchstart', (e) => {
+            const surface = e.target.closest('.tx-item-row-surface');
+            if (!surface) return;
+            
+            AppState.ui.activeSwipeRow = surface;
+            AppState.ui.swipeStartX = e.touches[0].clientX;
+            surface.style.transition = 'none'; // تعطيل الحركات مؤقتاً أثناء التمرير اللحظي باليد
+        }, { passive: true });
+
+        container.addEventListener('touchmove', (e) => {
+            const surface = AppState.ui.activeSwipeRow;
+            if (!surface) return;
+
+            AppState.ui.swipeCurrentX = e.touches[0].clientX;
+            const deltaX = AppState.ui.swipeCurrentX - AppState.ui.swipeStartX;
+            
+            // قصر السحب فقط على الاتجاه الأيسر لكشف خيار الحذف السريع في واجهات الاستخدام RTL
+            if (deltaX < 0 && deltaX > -120) {
+                surface.style.transform = `translate3d(${deltaX}px, 0, 0)`;
+            }
+        }, { passive: true });
+
+        container.addEventListener('touchend', () => {
+            const surface = AppState.ui.activeSwipeRow;
+            if (!surface) return;
+
+            surface.style.transition = 'transform 0.25s var(--spring-easing)';
+            const deltaX = AppState.ui.swipeCurrentX - AppState.ui.swipeStartX;
+            
+            if (deltaX < -65) {
+                // تجاوز عتبة التمرير المطلوبة بنجاح -> فتح وإظهار الخيار بشكل كامل
+                surface.style.transform = `translate3d(-80px, 0, 0)`;
+            } else {
+                // فشل في تجاوز العتبة -> ارتداد العنصر للوضع الطبيعي فوراً
+                surface.style.transform = `translate3d(0, 0, 0)`;
+            }
+            AppState.ui.activeSwipeRow = null;
+        }, { passive: true });
+    }
+};
+
+// ==========================================================================
+// 6. RICH UI/UX LIFECYCLE MANAGEMENT ENGINE
+// ==========================================================================
+const UIEngine = {
+    initDOMHooks() {
+        // الروابط والتحويلات الخاصة بتبديل الحسابات المالية (Context Switcher)
+        document.getElementById('tab-personal').addEventListener('click', (e) => this.switchContext('personal', e.currentTarget));
+        document.getElementById('tab-family').addEventListener('click', (e) => this.switchContext('family', e.currentTarget));
+        
+        // المحولات والروابط الخاصة بالمظهر الداكن والناري
+        document.getElementById('theme-toggle').addEventListener('click', () => this.toggleApplicationTheme());
+        
+        // التحكم في فتح النوافذ المنبثقة والـ Bottom Sheets التفاعلية
+        document.getElementById('settings-trigger').addEventListener('click', () => this.openModalSheet('modal-settings-panel'));
+        document.getElementById('trigger-add-transaction-modal').addEventListener('click', () => {
+            document.getElementById('core-transaction-submission-form').reset();
+            document.getElementById('tx-edit-id-hidden').value = '';
+            document.getElementById('modal-tx-title').textContent = 'تسجيل معاملة مالية جديدة';
+            document.getElementById('tx-date-input').value = new Date().toISOString().split('T')[0];
+            this.openModalSheet('modal-transaction-form');
+        });
+        document.getElementById('trigger-recurring-manager').addEventListener('click', () => {
+            this.populateRecurringManagerWorkspace();
+            this.openModalSheet('modal-recurring-manager');
+        });
+
+        // روابط الإغلاق الشاملة لكافة النوافذ عبر الـ Dataset Targets
+        document.querySelectorAll('[data-close-target]').forEach(btn => {
+            btn.addEventListener('click', () => this.closeModalSheet(btn.getAttribute('data-close-target')));
+        });
+
+        // معالجة تبديل نوع المعاملة المالية داخل النموذج الداخلي (مصروف / دخل)
+        document.querySelectorAll('.mode-selector-intent .segment-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.mode-selector-intent .segment-btn').forEach(b => b.classList.remove('active', 'mode-expense-btn', 'mode-income-btn'));
+                const target = e.currentTarget;
+                target.classList.add('active');
+                const type = target.getAttribute('data-type');
+                
+                const catGroup = document.getElementById('tx-category-group');
+                const catSelect = document.getElementById('tx-category-select');
+                
+                if (type === 'EXPENSE') {
+                    target.classList.add('mode-expense-btn');
+                    catGroup.style.display = 'flex';
+                    catSelect.required = true;
+                } else {
+                    target.classList.add('mode-income-btn');
+                    catGroup.style.display = 'none';
+                    catSelect.required = false;
+                }
+            });
+        });
+
+        // إتاحة توسيع أداة توزيع الدخل متعدد المصادر بروية وحركة ناعمة
+        document.getElementById('toggle-splitter-btn').addEventListener('click', (e) => {
+            const panel = document.getElementById('splitter-collapsible-content');
+            panel.classList.toggle('hidden');
+            e.currentTarget.textContent = panel.classList.contains('hidden') ? 'توسيع الأداة' : 'طي الأداة';
+        });
+
+        // إدارة ديناميكية لإضافة سطور مصادر الدخل داخل الموزع المالي
+        document.getElementById('add-income-stream-row').addEventListener('click', () => this.injectNewIncomeStreamInputFieldRow());
+        document.getElementById('income-rows-container').addEventListener('click', (e) => {
+            if (e.target.classList.contains('remove-income-row-btn')) {
+                const rows = document.querySelectorAll('.income-input-row');
+                if (rows.length > 1) {
+                    e.target.closest('.income-input-row').remove();
+                    this.calculateLiveIncomeSplitterPreviews();
+                } else {
+                    HardwareEngine.showToast('يجب أن يتواجد مصدر دخل واحد على الأقل في القائمة.', 'danger');
+                }
+            }
+        });
+
+        // ربط شريط التوزيع بحدث التحديث اللحظي للمعاينة الحسابية
+        document.getElementById('allocation-ratio-slider').addEventListener('input', () => this.calculateLiveIncomeSplitterPreviews());
+        document.getElementById('income-rows-container').addEventListener('input', () => this.calculateLiveIncomeSplitterPreviews());
+
+        // تأكيد وحفظ التوزيع وضخه في الأرصدة الحالية المعزولة
+        document.getElementById('income-splitter-form').addEventListener('submit', (e) => this.handleIncomeSplitterCommitment(e));
+
+        // معالجة الفلترة والبحث اللحظي المتقدم في السجل
+        document.getElementById('transaction-search-input').addEventListener('input', () => this.renderTransactionLedgerFeed());
+        document.getElementById('filter-category-select').addEventListener('change', () => this.renderTransactionLedgerFeed());
+        document.getElementById('filter-date-start').addEventListener('input', () => this.renderTransactionLedgerFeed());
+        document.getElementById('filter-date-end').addEventListener('input', () => this.renderTransactionLedgerFeed());
+
+        // معالجة إرسال النموذج الرئيسي للمعاملات المالية (Optimistic CRUD Core Framework)
+        document.getElementById('core-transaction-submission-form').addEventListener('submit', (e) => this.handleCoreTransactionFormSubmission(e));
+
+        // معالجة حذف وتعديل السجلات عبر الضغط والـ Event Delegation
+        const virtualList = document.getElementById('transactions-virtual-list');
+        virtualList.addEventListener('click', (e) => {
+            const underlayDelete = e.target.closest('.tx-swipe-underlay-action');
+            if (underlayDelete) {
+                const txId = underlayDelete.getAttribute('data-id');
+                this.executeOptimisticDeleteTransaction(txId);
+                return;
+            }
+
+            const surfaceRow = e.target.closest('.tx-item-row-surface');
+            if (surfaceRow) {
+                // في حال نقر السجل، فتح خيار التعديل الشامل عبر الـ Bottom Sheet المخصص
+                const txId = surfaceRow.getAttribute('data-id');
+                this.invokeEditTransactionModeIntoForm(txId);
+            }
+        });
+
+        // تشغيل المعالجة الجمعية للفواتير الدورية بنقرة واحدة لقسم العمليات المستحق
+        document.getElementById('batch-process-recurring-btn').addEventListener('click', () => this.executeBatchProcessRecurringBills());
+
+        // محرك تصدير كشوفات الحساب الرسمية المطبوعة
+        document.getElementById('trigger-export-statement').addEventListener('click', () => this.generateStructuredFinancialStatementBlob());
+
+        // محرك تطهير وتنظيف قواعد البيانات النووي الكامل (Nuclear Clean Reset)
+        document.getElementById('system-wipe-nuclear-btn').addEventListener('click', () => this.executeNuclearSystemDatabaseWipe());
+    },
+
+    switchContext(targetContext, element) {
+        if (AppState.currentContext === targetContext) return;
+        
+        HardwareEngine.triggerHapticFeedback();
+        
+        document.querySelectorAll('.segmented-control [role="tab"]').forEach(btn => btn.classList.remove('active'));
+        element.classList.add('active');
+        
+        AppState.currentContext = targetContext;
+        
+        // إعادة تهيئة محركات الفلترة والبحث لتجنب تشتيت السجل المالي المعزول الجديد
+        document.getElementById('transaction-search-input').value = '';
+        document.getElementById('filter-category-select').value = 'ALL';
+        document.getElementById('filter-date-start').value = '';
+        document.getElementById('filter-date-end').value = '';
+
+        FinanceCalculator.recalculateAndRefreshUI();
+    },
+
+    toggleApplicationTheme() {
+        const body = document.body;
+        const metaColor = document.getElementById('theme-meta-color');
+        
+        if (body.classList.contains('dark-mode')) {
+            body.classList.remove('dark-mode');
+            AppState.ui.theme = 'light';
+            if (metaColor) metaColor.setAttribute('content', '#f8fafc');
+            document.querySelector('.sun-icon').style.display = 'block';
+            document.querySelector('.moon-icon').style.display = 'none';
+        } else {
+            body.classList.add('dark-mode');
+            AppState.ui.theme = 'dark';
+            if (metaColor) metaColor.setAttribute('content', '#090d16');
+            document.querySelector('.sun-icon').style.display = 'none';
+            document.querySelector('.moon-icon').style.display = 'block';
+        }
+        LocalDB.saveState();
+    },
+
+    openModalSheet(modalId) {
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
+        modal.classList.remove('hidden');
+    },
+
+    closeModalSheet(modalId) {
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
+        modal.classList.add('hidden');
+    },
+
+    injectNewIncomeStreamInputFieldRow() {
+        const container = document.getElementById('income-rows-container');
+        const nextId = performance.now();
+        
+        const row = document.createElement('div');
+        row.className = 'income-input-row';
+        row.setAttribute('data-row-id', nextId.toString());
+        row.innerHTML = `
+            <div class="form-group flex-2">
+                <label class="form-label">مصدر الدخل (راتب، عمل حر، استثمار)</label>
+                <input type="text" class="form-input income-source-title" placeholder="مصدر إضافي" required>
+            </div>
+            <div class="form-group flex-1">
+                <label class="form-label">المبلغ (ج.م)</label>
+                <input type="number" class="form-input income-source-amount" min="0" step="0.01" placeholder="0.00" required>
+            </div>
+            <button type="button" class="remove-income-row-btn" aria-label="حذف المصدر">×</button>
+        `;
+        container.appendChild(row);
+    },
+
+    calculateLiveIncomeSplitterPreviews() {
+        const rows = document.querySelectorAll('.income-input-row');
+        let totalAggregatedIncome = 0;
+        
+        rows.forEach(row => {
+            const amtVal = parseFloat(row.querySelector('.income-source-amount').value) || 0;
+            totalAggregatedIncome += amtVal;
+        });
+
+        const sliderRatio = parseInt(document.getElementById('allocation-ratio-slider').value) || 0;
+        const pctPersonal = sliderRatio;
+        const pctFamily = 100 - sliderRatio;
+
+        document.getElementById('pct-personal-label').textContent = pctPersonal.toString();
+        document.getElementById('pct-family-label').textContent = pctFamily.toString();
+
+        const amtPersonal = (totalAggregatedIncome * pctPersonal) / 100;
+        const amtFamily = (totalAggregatedIncome * pctFamily) / 100;
+
+        document.getElementById('preview-amt-personal').textContent = `${amtPersonal.toFixed(2)} ج.م`;
+        document.getElementById('preview-amt-family').textContent = `${amtFamily.toFixed(2)} ج.م`;
+    },
+
+    async handleIncomeSplitterCommitment(e) {
+        e.preventDefault();
+        
+        const rows = document.querySelectorAll('.income-input-row');
+        let totalAggregatedIncome = 0;
+        const descriptions = [];
+
+        for (let row of rows) {
+            const titleInput = row.querySelector('.income-source-title');
+            const amtInput = row.querySelector('.income-source-amount');
+            
+            if (!titleInput.value.trim() || !amtInput.value || parseFloat(amtInput.value) <= 0) {
+                HardwareEngine.showToast('يرجى ملء جميع حقول مصادر الدخل بقيم صحيحة وأكبر من الصفر.', 'danger');
+                return;
+            }
+            
+            totalAggregatedIncome += parseFloat(amtInput.value);
+            descriptions.push(titleInput.value.trim());
+        }
+
+        const sliderRatio = parseInt(document.getElementById('allocation-ratio-slider').value) || 0;
+        const amtPersonal = (totalAggregatedIncome * sliderRatio) / 100;
+        const amtFamily = (totalAggregatedIncome * (100 - sliderRatio)) / 100;
+
+        const timestamp = new Date().toISOString();
+        const baseDescription = `حقن عبر موزع الدخل المعياري [${descriptions.join(' + ')}]`;
+
+        // حقن الحصص النقدية بطريقة تضمن عدم تداخل أو تسريب الحسابات لبعضها
+        if (amtPersonal > 0) {
+            AppState.personal.transactions.unshift({
+                id: 'TX-' + performance.now() + '-P',
+                type: 'INCOME',
+                amount: amtPersonal,
+                category: 'أخرى',
+                date: timestamp.split('T')[0],
+                notes: `${baseDescription} - حصة الحساب الشخصي بقيمة ${sliderRatio}%`,
+                isRecurring: false
+            });
+        }
+
+        if (amtFamily > 0) {
+            AppState.family.transactions.unshift({
+                id: 'TX-' + performance.now() + '-F',
+                type: 'INCOME',
+                amount: amtFamily,
+                category: 'أخرى',
+                date: timestamp.split('T')[0],
+                notes: `${baseDescription} - حصة العائلة والمنزل بقيمة ${100 - sliderRatio}%`,
+                isRecurring: false
+            });
+        }
+
+        HardwareEngine.triggerHapticFeedback();
+        HardwareEngine.showToast('تم ضخ وتوزيع التدفقات المالية بنجاح داخل الخزائن المعزولة.');
+        
+        // إعادة تهيئة وضبط المدخلات بالكامل بعد اكتمال التوزيع والضخ الحسابي
+        document.getElementById('income-splitter-form').reset();
+        const container = document.getElementById('income-rows-container');
+        container.innerHTML = `
+            <div class="income-input-row" data-row-id="0">
+                <div class="form-group flex-2">
+                    <label class="form-label">مصدر الدخل (راتب، عمل حر، استثمار)</label>
+                    <input type="text" class="form-input income-source-title" placeholder="مثال: الراتب الأساسي" required>
+                </div>
+                <div class="form-group flex-1">
+                    <label class="form-label">المبلغ (ج.م)</label>
+                    <input type="number" class="form-input income-source-amount" min="0" step="0.01" placeholder="0.00" required>
+                </div>
+                <button type="button" class="remove-income-row-btn" aria-label="حذف المصدر">×</button>
+            </div>
+        `;
+        this.calculateLiveIncomeSplitterPreviews();
+        document.getElementById('splitter-collapsible-content').classList.add('hidden');
+        document.getElementById('toggle-splitter-btn').textContent = 'توسيع الأداة';
+
+        // حفظ وتحديث الأداء محلياً وإعادة رسم اللوحات
+        FinanceCalculator.recalculateAndRefreshUI();
+        await LocalDB.saveState();
+    },
+
+    async handleCoreTransactionFormSubmission(e) {
+        e.preventDefault();
+        
+        const context = AppState.currentContext;
+        const editId = document.getElementById('tx-edit-id-hidden').value;
+        const isExpense = document.querySelector('.mode-selector-intent .segment-btn.active').getAttribute('data-type') === 'EXPENSE';
+        
+        const amount = parseFloat(document.getElementById('tx-amount-input').value) || 0;
+        const category = isExpense ? document.getElementById('tx-category-select').value : 'أخرى';
+        const date = document.getElementById('tx-date-input').value;
+        const notes = document.getElementById('tx-notes-input').value.trim() || 'معاملة مالية مبهمة';
+        const isRecurring = document.getElementById('tx-is-recurring').checked;
+
+        if (amount <= 0 || (isExpense && !category) || !date) {
+            HardwareEngine.showToast('يرجى التحقق من استيفاء كافة الحقول والمبالغ الإلزامية المطلوبة أولاً.', 'danger');
+            return;
+        }
+
+        // نسخ احتياطية للحالة في حال التراجع عن التحديث اللحظي التفاؤلي (Optimistic UI Rollback)
+        const previousTransactionsBackup = [...AppState[context].transactions];
+        
+        if (editId) {
+            // نمط تحديث وحفظ تعديلات معاملة مسبقة ومسجلة تاريخياً
+            const index = AppState[context].transactions.findIndex(t => t.id === editId);
+            if (index !== -1) {
+                AppState[context].transactions[index] = {
+                    id: editId,
+                    type: isExpense ? 'EXPENSE' : 'INCOME',
+                    amount: amount,
+                    category: category,
+                    date: date,
+                    notes: notes,
+                    isRecurring: isRecurring
+                };
+            }
+            HardwareEngine.showToast('تم حفظ تعديلات المعاملة بنجاح.');
+        } else {
+            // نمط إنشاء وضخ معطيات معاملة مالية جديدة كلياً
+            const newTransaction = {
+                id: 'TX-' + performance.now(),
+                type: isExpense ? 'EXPENSE' : 'INCOME',
+                amount: amount,
+                category: category,
+                date: date,
+                notes: notes,
+                isRecurring: isRecurring
+            };
+            AppState[context].transactions.unshift(newTransaction);
+            HardwareEngine.showToast('تم تسجيل وحفظ المعاملة المالية المحددة.');
+        }
+
+        this.closeModalSheet('modal-transaction-form');
+        HardwareEngine.triggerHapticFeedback();
+        
+        // التحديث التفاؤلي الفوري لواجهة المستخدم (Optimistic UI Framework)
+        FinanceCalculator.recalculateAndRefreshUI();
+
+        // تمرير وكتابة التحديث غير المتزامن بداخل قواعد البيانات المحلية المستقرة
+        const success = await LocalDB.saveState();
+        if (!success) {
+            // التراجع الفوري والسلس في حالة حدوث خطأ أو عطل في تخزين البيانات وتوضيح الخلل
+            AppState[context].transactions = previousTransactionsBackup;
+            FinanceCalculator.recalculateAndRefreshUI();
+            HardwareEngine.showToast('فشل في حفظ البيانات داخل وحدة التخزين المحلية، تم التراجع الفوري عن المدخلات.', 'danger');
+        }
+    },
+
+    invokeEditTransactionModeIntoForm(txId) {
+        const context = AppState.currentContext;
+        const transaction = AppState[context].transactions.find(t => t.id === txId);
+        if (!transaction) return;
+
+        document.getElementById('tx-edit-id-hidden').value = transaction.id;
+        document.getElementById('modal-tx-title').textContent = 'تعديل وتدقيق المعاملة المالية الحالية';
+        document.getElementById('tx-amount-input').value = transaction.amount;
+        document.getElementById('tx-date-input').value = transaction.date;
+        document.getElementById('tx-notes-input').value = transaction.notes;
+        document.getElementById('tx-is-recurring').checked = transaction.isRecurring || false;
+
+        // ضبط واجهة منبثق التحديد ونوع المعاملة طبقاً للسجل التاريخي المستدعى
+        document.querySelectorAll('.mode-selector-intent .segment-btn').forEach(b => b.classList.remove('active', 'mode-expense-btn', 'mode-income-btn'));
+        const catGroup = document.getElementById('tx-category-group');
+        const catSelect = document.getElementById('tx-category-select');
+
+        if (transaction.type === 'EXPENSE') {
+            const btn = document.getElementById('tx-mode-expense');
+            btn.classList.add('active', 'mode-expense-btn');
+            catGroup.style.display = 'flex';
+            catSelect.value = transaction.category;
+            catSelect.required = true;
+        } else {
+            const btn = document.getElementById('tx-mode-income');
+            btn.classList.add('active', 'mode-income-btn');
+            catGroup.style.display = 'none';
+            catSelect.value = '';
+            catSelect.required = false;
+        }
+
+        this.openModalSheet('modal-transaction-form');
+    },
+
+    async executeOptimisticDeleteTransaction(txId) {
+        const context = AppState.currentContext;
+        const previousTransactionsBackup = [...AppState[context].transactions];
+
+        AppState[context].transactions = AppState[context].transactions.filter(t => t.id !== txId);
+        
+        HardwareEngine.triggerHapticFeedback();
+        HardwareEngine.showToast('تم شطب وحذف العملية المحددة بشكل عاجل وتحديث الموازين.');
+        
+        // التحديث التفاؤلي الفوري
+        FinanceCalculator.recalculateAndRefreshUI();
+
+        // تأكيد وحفظ التحديث غير المتزامن
+        const success = await LocalDB.saveState();
+        if (!success) {
+            AppState[context].transactions = previousTransactionsBackup;
+            FinanceCalculator.recalculateAndRefreshUI();
+            HardwareEngine.showToast('فشل في مزامنة الحذف، تم استعادة السجل المحذوف تلقائياً.', 'danger');
+        }
+    },
+
+    populateRecurringManagerWorkspace() {
+        const context = AppState.currentContext;
+        const bucket = document.getElementById('recurring-items-bucket');
+        bucket.innerHTML = '';
+
+        const recurringItems = AppState[context].transactions.filter(t => t.isRecurring === true);
+
+        if (recurringItems.length === 0) {
+            bucket.innerHTML = '<p class="empty-state-text" style="padding:16px 0;">لا توجد أي فواتير دورية متكررة مسجلة في هذا الحساب حالياً.</p>';
+            return;
+        }
+
+        // بناء وعرض الفواتير المتكررة المثبتة داخل لوحة المتابعة
+        recurringItems.forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'skeleton-row';
+            row.style.justifyContent = 'space-between';
+            row.style.background = 'var(--color-surface-variant)';
+            row.style.marginBottom = '8px';
+            row.innerHTML = `
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <span style="font-size:1.2rem;">${item.type === 'EXPENSE' ? '🧾' : '💰'}</span>
+                    <div style="display:flex; flex-direction:column;">
+                        <span style="font-size:0.85rem; font-weight:bold; color:var(--color-text-main);">${item.notes}</span>
+                        <span style="font-size:0.7rem; color:var(--color-text-muted);">${item.category} • فاتورة مستحقة شهرياً</span>
+                    </div>
+                </div>
+                <span style="font-size:0.9rem; font-weight:bold; color:${item.type === 'EXPENSE' ? 'var(--color-danger)' : 'var(--color-success)'}">
+                    ${item.type === 'EXPENSE' ? '-' : '+'}${parseFloat(item.amount).toFixed(2)} ج.م
+                </span>
+            `;
+            bucket.appendChild(row);
+        });
+    },
+
+    async executeBatchProcessRecurringBills() {
+        const context = AppState.currentContext;
+        const recurringItems = AppState[context].transactions.filter(t => t.isRecurring === true);
+
+        if (recurringItems.length === 0) {
+            HardwareEngine.showToast('لا توجد فواتير متكررة لتطبيقها داخل القسم الحالي.', 'warning');
+            return;
+        }
+
+        const previousTransactionsBackup = [...AppState[context].transactions];
+        const currentMonthString = new Date().toLocaleString('ar-EG', { month: 'long' });
+
+        // تكرار وحقن المعاملات للشهر الجديد مع الحفاظ التام على عزل المعطيات والبيانات عن أي قسم آخر
+        recurringItems.forEach(bill => {
+            const spawnedTx = {
+                ...bill,
+                id: 'TX-REC-SPAWN-' + performance.now() + '-' + Math.random(),
+                date: new Date().toISOString().split('T')[0],
+                notes: `[استحقاق ${currentMonthString}] - الدورة الآلية لـ: ${bill.notes}`,
+                isRecurring: false // النسخ المولدة تفرز كمعاملات اعتيادية غير دورية لمنع التكاثر اللا نهائي
+            };
+            AppState[context].transactions.unshift(spawnedTx);
+        });
+
+        HardwareEngine.triggerHapticFeedback();
+        HardwareEngine.showToast(`تم ضخ وتمرير إجمالي (${recurringItems.length}) فواتير والتزامات دورية لشهر الحالي بنجاح.`);
+        
+        this.closeModalSheet('modal-recurring-manager');
+        FinanceCalculator.recalculateAndRefreshUI();
+        
+        await LocalDB.saveState();
+    },
+
+    renderTransactionLedgerFeed() {
+        const context = AppState.currentContext;
+        const virtualList = document.getElementById('transactions-virtual-list');
+        const emptyState = document.getElementById('ledger-empty-state');
+        
+        // جلب قيم ومحددات التصفية والبحث اللحظية والبيان النصي الموجه
+        const searchQuery = document.getElementById('transaction-search-input').value.toLowerCase().trim();
+        const categoryFilter = document.getElementById('filter-category-select').value;
+        const dateStart = document.getElementById('filter-date-start').value;
+        const dateEnd = document.getElementById('filter-date-end').value;
+
+        // تصفية وحصر مصفوفة البيانات التاريخية المعزولة بناء على خيارات الفلترة المفعلة
+        const filteredData = AppState[context].transactions.filter(t => {
+            const matchesSearch = t.notes.toLowerCase().includes(searchQuery);
+            const matchesCategory = categoryFilter === 'ALL' || t.category === categoryFilter;
+            const matchesDateStart = !dateStart || t.date >= dateStart;
+            const matchesDateEnd = !dateEnd || t.date <= dateEnd;
+            
+            return matchesSearch && matchesCategory && matchesDateStart && matchesDateEnd;
+        });
+
+        // التعامل مع عرض الحالة الفارغة بدقة وسلاسة تفاعلية متفوقة
+        if (filteredData.length === 0) {
+            virtualList.innerHTML = '';
+            emptyState.classList.remove('hidden');
+            return;
+        }
+        
+        emptyState.classList.add('hidden');
+        
+        // بناء وسرد كتل وعناصر الواجهة بالاعتماد على الهياكل البنيوية السريعة ومحرك اللمس والسحب الجانبي
+        let htmlFragment = '';
+        filteredData.forEach(tx => {
+            const avatar = tx.type === 'EXPENSE' ? (tx.category.substring(0, 2)) : 'دخل';
+            const sign = tx.type === 'EXPENSE' ? '-' : '+';
+            const intentClass = tx.type === 'EXPENSE' ? 'expense-intent-color' : 'income-intent-color';
+            const recIndicator = tx.isRecurring ? ' <span style="color:var(--color-brand-primary);">🔄 دورية</span>' : '';
+
+            htmlFragment += `
+                <div class="tx-item-swipe-container">
+                    <div class="tx-swipe-underlay-action" data-id="${tx.id}">
+                        <span>حذف 🗑️</span>
+                    </div>
+                    <div class="tx-item-row-surface" data-id="${tx.id}">
+                        <div class="tx-row-leading">
+                            <div class="category-avatar-badge" style="background-color: ${tx.type === 'EXPENSE' ? (CategoryColorMap[tx.category] || '#64748b') : 'var(--color-success-bg)'}; color: ${tx.type === 'EXPENSE' ? 'white' : 'var(--color-success)'}">
+                                ${avatar}
+                            </div>
+                            <div class="tx-core-metadata-block">
+                                <span class="tx-row-notes-title">${tx.notes}${recIndicator}</span>
+                                <div class="tx-row-subline-meta">
+                                    <span class="category-tag-chip">${tx.category}</span>
+                                    <span>•</span>
+                                    <span>${tx.date}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tx-amount-trailing-readout ${intentClass}">
+                            <span>${sign}${parseFloat(tx.amount).toFixed(2)} ج.م</span>
+                        </div>
+                    </div>
+                </div>
             `;
         });
 
-        const availableNetSurplusBalance = Number(targetingContext.income || 0) - calculatedAggregateCostSum;
+        virtualList.innerHTML = htmlFragment;
+    },
 
-        printCanvasContainerPortal.innerHTML = `
-            <header class="print-header">
-                <div class="print-title">كشف بيان المركز المالي الموحد</div>
-                <div class="print-meta-block">
-                    <div>تصنيف التقرير: ${activeScopeLabel}</div>
-                    <div>تاريخ الاستخراج والطباعة: ${timestampGenerationLabel}</div>
-                    <div>العملة السيادية المعتمدة: الجنيه المصري (ج.م)</div>
-                </div>
-            </header>
-            
-            <section>
-                <table class="print-data-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 5%">#</th>
-                            <th style="width: 20%">التصنيف الهيكلي</th>
-                            <th style="width: 15%">تاريخ القيد</th>
-                            <th style="width: 40%">البيان والشرح التوضيحي</th>
-                            <th style="width: 20%">القيمة المستقطعة</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${dataTableRowsMarkupHTMLBuffer || '<tr><td colspan="5" style="text-align:center;">لا توجد معاملات مسجلة ضمن هذه الفترة الإدارية المالية.</td></tr>'}
-                    </tbody>
-                </table>
-            </section>
-            
-            <div class="print-summary-grid">
-                <div>
-                    <strong>إجمالي سقف السيولة التوزيعية المخصصة:</strong> 
-                    <span style="color: #10b981;">${Number(targetingContext.income || 0).toLocaleString('ar-EG')} ج.م</span>
-                </div>
-                <div>
-                    <strong>إجمالي المصروفات الصادرة والمدفوعات:</strong> 
-                    <span style="color: #ef4444;">${calculatedAggregateCostSum.toLocaleString('ar-EG')} ج.م</span>
-                </div>
-                <div>
-                    <strong>صافي الفائض الاستثماري المرحل المتبقي:</strong> 
-                    <span style="font-weight: bold; color: #2563eb;">${availableNetSurplusBalance.toLocaleString('ar-EG')} ج.م</span>
-                </div>
-            </div>
-            
-            <footer class="print-credit-block">
-                Official Financial Statement – Built by Hazem K H Madi - Senior Product Designer
-            </footer>
-        `;
-
-        // Execute core hardware browser interception loops printer layout managers directly
-        window.print();
-    }
-
-    // 9. Interactive Elements Core Event Delegation Registrars Routing Interface
-    function registerDOMEvents() {
-        // Shared Segment Navigator Context Switcher
-        document.querySelectorAll(".segment-btn").forEach(btnNode => {
-            btnNode.addEventListener("click", (clickEvent) => {
-                const targetClickedTabKeyToken = clickEvent.currentTarget.dataset.tab;
-                if (appState.activeTab === targetClickedTabKeyToken) return;
-
-                document.querySelectorAll(".segment-btn").forEach(el => el.classList.remove("active"));
-                clickEvent.currentTarget.classList.add("active");
-                
-                appState.activeTab = targetClickedTabKeyToken;
-                appState.activeCategoryFilter = null; // Clear down context specific filters active maps
-                
-                renderGlobalDashboardViews();
-                checkRecurringBillingDueStatus();
-            });
-        });
-
-        // Theme Toggle Button Interceptor
-        document.getElementById("theme-toggle").addEventListener("click", () => {
-            appState.theme = (appState.theme === 'light') ? 'dark' : 'light';
-            applySystemThemeContext();
-            saveStateToStoragePipeline();
-        });
-
-        // Search Ledger Live Tracker Filters Loops
-        document.getElementById("search-input").addEventListener("input", () => {
-            renderLedgerTransactionElements(appState[appState.activeTab]);
-        });
-
-        // Income Splitting Utility Elements Interface Submissions Hook
-        document.getElementById("income-splitter-form").addEventListener("submit", executeIncomeAllocationSplittingRouting);
-
-        // Continuous Slider Metric Ratio Realtime Adjustments Labels Tracker
-        document.getElementById("allocation-slider").addEventListener("input", (sliderEvent) => {
-            const currentPositionVal = parseInt(sliderEvent.target.value);
-            appState.allocationRatio = currentPositionVal;
-            document.getElementById("allocation-ratio-label").textContent = `${currentPositionVal}% شخصي / ${100 - currentPositionVal}% عائلي`;
-        });
-
-        // Structural Modal Openers and Closers Actions Bindings
-        document.getElementById("btn-open-add-modal").addEventListener("click", () => openMutationModalPortalDashboardInterface('add'));
-        document.getElementById("btn-close-modal").addEventListener("click", closeModalPortalDashboardInterface);
-        document.getElementById("btn-cancel-modal").addEventListener("click", closeModalPortalDashboardInterface);
-        document.getElementById("transaction-mutation-form").addEventListener("submit", executeTransactionMutationPipeline);
-
-        // Settings Slider Flyout Panels Actions Targets Controls
-        document.getElementById("settings-trigger").addEventListener("click", openSettingsSlideoverMenuInterface);
-        document.getElementById("btn-close-settings").addEventListener("click", closeSettingsSlideoverMenuInterface);
-        document.getElementById("btn-clear-all-data").addEventListener("click", executeGlobalPurgeFactoryResetClearanceRoutine);
-
-        // Batch processing recurring actions triggers
-        document.getElementById("btn-trigger-recurring").addEventListener("click", executeBatchProcessingRecurringDeductions);
-
-        // Administrative printing action trigger button component layout tracker
-        document.getElementById("btn-export-statement").addEventListener("click", generateOfficialStatementReportAdminPrint);
-    }
-
-    function applySystemThemeContext() {
-        document.documentElement.setAttribute("data-theme", appState.theme);
-        const themeMetaHeaderNode = document.getElementById("theme-meta");
-        if (themeMetaHeaderNode) {
-            themeMetaHeaderNode.setAttribute("content", appState.theme === 'dark' ? '#131c2e' : '#ffffff');
-        }
-    }
-
-    function openMutationModalPortalDashboardInterface(intentModeType, targetRecordId = null) {
-        const modalOverlayPortal = document.getElementById("transaction-modal");
-        const modalIntentTitleNode = document.getElementById("modal-title-intent");
-        const mutationFormElement = document.getElementById("transaction-mutation-form");
-        
-        mutationFormElement.reset();
-        document.getElementById("mutation-target-id").value = "";
-        
-        // Setup default date configuration inputs strings standard format mapping match fields
-        const localDateTimeNowISOString = new Date().toISOString().substring(0, 16);
-        document.getElementById("tx-timestamp").value = localDateTimeNowISOString;
-
-        if (intentModeType === 'edit' && targetRecordId) {
-            modalIntentTitleNode.textContent = "تعديل تفاصيل القيد المالي الصادر";
-            const currentRecordContextMatch = appState[appState.activeTab].expenses.find(item => item.id === targetRecordId);
-            
-            if (currentRecordContextMatch) {
-                document.getElementById("mutation-target-id").value = currentRecordContextMatch.id;
-                document.getElementById("tx-amount").value = currentRecordContextMatch.amount;
-                document.getElementById("tx-category").value = currentRecordContextMatch.category;
-                document.getElementById("tx-timestamp").value = currentRecordContextMatch.timestamp;
-                document.getElementById("tx-recurring").checked = currentRecordContextMatch.isRecurring;
-                document.getElementById("tx-notes").value = currentRecordContextMatch.notes || "";
-            }
-        } else {
-            modalIntentTitleNode.textContent = "إضافة معاملة خصم جديدة";
-        }
-
-        modalOverlayPortal.classList.remove("hidden");
-        modalOverlayPortal.setAttribute("aria-hidden", "false");
-    }
-
-    function closeModalPortalDashboardInterface() {
-        const modalOverlayPortal = document.getElementById("transaction-modal");
-        modalOverlayPortal.classList.add("hidden");
-        modalOverlayPortal.setAttribute("aria-hidden", "true");
-    }
-
-    function openSettingsSlideoverMenuInterface() {
-        const settingsSlideoverOverlay = document.getElementById("settings-slideover");
-        settingsSlideoverOverlay.classList.remove("hidden");
-        settingsSlideoverOverlay.setAttribute("aria-hidden", "false");
-    }
-
-    function closeSettingsSlideoverMenuInterface() {
-        const settingsSlideoverOverlay = document.getElementById("settings-slideover");
-        settingsSlideoverOverlay.classList.add("hidden");
-        settingsSlideoverOverlay.setAttribute("aria-hidden", "true");
-    }
-
-    function executeGlobalPurgeFactoryResetClearanceRoutine() {
-        if (confirm("تحذير أمني قطعي: هل أنت متأكد تماماً من رغبتك في مسح كافة البيانات المسجلة نهائياً؟ لا يمكن التراجع عن هذا الإجراء.")) {
-            localStorage.removeItem("HAZEM_FINTECH_PWA_STATE");
-            triggerNotificationToast("تم تهيئة ومسح قاعدة البيانات بنجاح تام.");
-            setTimeout(() => {
-                window.location.reload();
-            }, 500);
-        }
-    }
-
-    // 10. Dynamic Floating System Notification Alerts Manager Hub Layout Engine
-    function triggerNotificationToast(messageTextDescriptionString) {
-        const notificationHubRootNode = document.getElementById("toast-notification-hub");
-        
-        const toastMessageItemNode = document.createElement("div");
-        toastMessageItemNode.className = "toast-message-node";
-        toastMessageItemNode.innerHTML = `
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-            <span>${messageTextDescriptionString}</span>
-        `;
-
-        notificationHubRootNode.appendChild(toastMessageItemNode);
-
-        // Automated garbage clearance collection removal of notification node assets elements after animation cycles
+    generateStructuredFinancialStatementBlob() {
+        // طباعة إدارية نظيفة وراقية ومخصصة عبر استدعاء النوافذ المخفية المعزولة لـ Print Stylesheet
+        HardwareEngine.showToast('يتم الآن تحضير وتوليد كشف الميزانية الرسمي للطباعة الإدارية المحمية...');
         setTimeout(() => {
-            toastMessageItemNode.style.opacity = "0";
-            toastMessageItemNode.style.transform = "translateY(-10px)";
-            toastMessageItemNode.style.transition = "all 0.3s ease";
-            setTimeout(() => {
-                toastMessageItemNode.remove();
-            }, 300);
-        }, 3500);
-    }
+            window.print();
+        }, 500);
+    },
 
-    // 11. Core Progressive Web App Hardware Interceptor Engine Installer Loop
-    let interceptedDeferredPWAInstallPromptEventInstance = null;
+    executeNuclearSystemDatabaseWipe() {
+        const confirmation = confirm('تحذير نهائي خطير وموجّه! هل أنت متأكد تماماً من رغبتك في مسح وتطهير كافة البيانات، السجلات، التدفقات النقدية والملفات المخزنة في النظام نهائياً؟ لا يمكن التراجع عن هذا الإجراء مطلقاً.');
+        if (!confirmation) return;
 
-    function initializePWAServiceEngine() {
-        // Handle native PWA capture triggers lifecycle parameters pipelines
-        window.addEventListener("beforeinstallprompt", (promptInterceptedEvent) => {
-            promptInterceptedEvent.preventDefault();
-            interceptedDeferredPWAInstallPromptEventInstance = promptInterceptedEvent;
-            
-            const actionButtonPWAInstallerTrigger = document.getElementById("btn-pwa-install");
-            if (actionButtonPWAInstallerTrigger) {
-                actionButtonPWAInstallerTrigger.classList.remove("hidden");
-                actionButtonPWAInstallerTrigger.addEventListener("click", executeNativePWAHardwareInstallationSequence);
-            }
-        });
-
-        // Continuous explicit matching tracking configuration routing maps checking system platform matching iOS structures
-        const userAgentMobileDeviceCheck = window.navigator.userAgent.toLowerCase();
-        const isIOSSystemSafariDetected = /iphone|ipad|ipod/.test(userAgentMobileDeviceCheck);
-        const isRunningInStandaloneDisplayMode = window.matchMedia('(display-mode: standalone)').matches;
-
-        if (isIOSSystemSafariDetected && !isRunningInStandaloneDisplayMode) {
-            const iosSafariGuideNodeBox = document.getElementById("ios-safari-guide");
-            if (iosSafariGuideNodeBox) iosSafariGuideNodeBox.classList.remove("hidden");
+        localStorage.clear();
+        
+        if (window.indexedDB) {
+            indexedDB.deleteDatabase(LocalDB.DB_NAME);
         }
 
-        // Register core background network caching service structural scripts assets
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js')
-                    .then(registrationSuccessObj => {
-                        // Successfully bound background thread tracking lifecycle tasks assets parameters mapping
-                    })
-                    .catch(registrationExceptionError => {
-                        // Silently contain execution registration issues mapping pipelines parameters tracking logs
-                    });
+        HardwareEngine.triggerHapticFeedback();
+        alert('تم تطهير وتصفير قاعدة البيانات المركزية بنجاح، سيتم إعادة تشغيل النظام بشكل فوري بالكامل.');
+        window.location.reload();
+    }
+};
+
+// ==========================================================================
+// 7. NATIVE PWA ENGINE (Installation Capture Hooks & Manual Overlays)
+// ==========================================================================
+const PWAEngine = {
+    initLifecycle() {
+        // رصد التقاط نافذة التثبيت الافتراضية والتحكم اليدوي المتقدم بها لتجربة استخدام فائقة
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            AppState.ui.deferredPrompt = e;
+            
+            const banner = document.getElementById('pwa-install-banner-block');
+            if (banner) banner.style.display = 'flex';
+        });
+
+        const nativeBtn = document.getElementById('pwa-native-install-btn');
+        if (nativeBtn) {
+            nativeBtn.addEventListener('click', async () => {
+                const promptEvent = AppState.ui.deferredPrompt;
+                if (!promptEvent) return;
+
+                promptEvent.prompt();
+                const { outcome } = await promptEvent.userChoice;
+                
+                if (outcome === 'accepted') {
+                    HardwareEngine.showToast('شكراً لتثبيت التطبيق على جهازك بنجاح!');
+                }
+                AppState.ui.deferredPrompt = null;
+                document.getElementById('pwa-install-banner-block').style.display = 'none';
             });
         }
-    }
 
-    function executeNativePWAHardwareInstallationSequence() {
-        if (!interceptedDeferredPWAInstallPromptEventInstance) return;
+        // رصد واكتشاف أجهزة آبل بنظام iOS لتمرير وإظهار الموجه الإرشادي المخصص لمستخدمي متصفح سفاري المظلومين
+        const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
         
-        interceptedDeferredPWAInstallPromptEventInstance.prompt();
-        interceptedDeferredPWAInstallPromptEventInstance.userChoice.then((userInstallationDecisionToken) => {
-            if (userInstallationDecisionToken.outcome === 'accepted') {
-                triggerNotificationToast("شكراً لك! تم تثبيت المنظومة المالية بنجاح على جهازك.");
-                document.getElementById("btn-pwa-install").classList.add("hidden");
-            }
-            interceptedDeferredPWAInstallPromptEventInstance = null;
-        });
+        if (isIos && !isStandalone) {
+            const manualPanel = document.getElementById('ios-manual-routing-panel');
+            if (manualPanel) manualPanel.style.display = 'block';
+        }
+    }
+};
+
+// ==========================================================================
+// 8. MASTER RUNTIME BOOTSTRAPPING KERNEL (System Initialization Entry Point)
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. فتح وتدقيق قنوات الاتصال والتأصيل بداخل قاعدة البيانات المحلية غير المتزامنة
+    await LocalDB.init();
+    const storedState = await LocalDB.loadState();
+    
+    if (storedState) {
+        if (storedState.personal) AppState.personal = storedState.personal;
+        if (storedState.family) AppState.family = storedState.family;
+        if (storedState.theme) AppState.ui.theme = storedState.theme;
     }
 
-})();
+    // 2. تفعيل المظهر المختار والمخزن مسبقاً في إعدادات ذاكرة المستخدم
+    if (AppState.ui.theme === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.sun-icon').style.display = 'none';
+        document.querySelector('.moon-icon').style.display = 'block';
+        const metaColor = document.getElementById('theme-meta-color');
+        if (metaColor) metaColor.setAttribute('content', '#090d16');
+    }
+
+    // 3. ربط أحداث العناصر والنوافذ التفاعلية والأزرار بداخل واجهة التطبيق كاملة
+    UIEngine.initDOMHooks();
+
+    // 4. إطلاق وتفعيل محرك رصد الحركات والسحب اللمسي عالي الكثافة لصفوف السجل المالي
+    GestureEngine.initTouchDelegation('#transactions-virtual-list');
+
+    // 5. إطلاق وتهيئة دورة حياة تثبيت تطبيقات الويب التقدمية (PWA Core Lifecycle)
+    PWAEngine.initLifecycle();
+
+    // 6. الحساب الأولي الفوري للأرقام والموازين وضخ البيانات وبناء الرسوم البيانية المتجهة لإنعاش الشاشة الافتتاحية
+    FinanceCalculator.recalculateAndRefreshUI();
+});
