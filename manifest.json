@@ -1,0 +1,16 @@
+{
+  "name": "مدير مصاريف يونيو 2026",
+  "short_name": "المصاريف",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f4f6f9",
+  "theme-color": "#2c3e50",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2343/2343241.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
