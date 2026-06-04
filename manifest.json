@@ -1,16 +1,19 @@
 {
-  "name": "مدير الميزانية والمصاريف الديناميكي",
-  "short_name": "الميزانية الذكية",
-  "start_url": "index.html",
+  "name": "المنصة المالية المتقدمة للأوفلاين",
+  "short_name": "المنصة المالية",
+  "description": "تطبيق متقدم لإدارة وتتبع ميزانيات النفقات الشخصية والمنزلية بشكل أوفلاين كامل.",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f7f9fc",
-  "theme-color": "#2c3e50",
-  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "orientation": "portrait-primary",
+  "categories": ["finance", "productivity"],
   "icons": [
     {
       "src": "icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
