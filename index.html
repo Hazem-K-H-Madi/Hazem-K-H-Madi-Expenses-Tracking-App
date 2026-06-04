@@ -378,5 +378,37 @@
     </div>
 
     <script src="app.js"></script>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+<div id="deleteConfirmationModal" class="drawer id-shield hidden" style="justify-content: center; align-items: center;">
+    <div class="drawer-overlay" id="cancelDeleteBtn"></div>
+    <div class="card" style="position: relative; width: 90%; max-width: 400px; z-index: 1001; animation: scaleUp 0.2s ease;">
+        <div class="card-header" style="border-bottom: none; margin-bottom: 0.5rem; text-align: center;">
+            <h3 style="color: #ef4444; width: 100%; justify-content: center;">
+                <i class="fas fa-exclamation-triangle"></i> تأكيد حذف القيد!
+            </h3>
+        </div>
+        <p style="text-align: center; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+            هل أنت متأكد تماماً من رغبتك في حذف هذا القيد المالي من سجل محفظتك؟ هذه العملية نهائية ولا يمكن التراجع عنها.
+        </p>
+        <div style="display: flex; gap: 0.5rem;">
+            <button id="confirmDeleteBtn" class="btn-primary w-100" style="background-color: #ef4444; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">
+                نعم، احذف القيد
+            </button>
+            <button id="cancelDeleteBtn" class="btn-secondary w-100">
+                إلغاء الأمر
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes scaleUp {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+</style>
+
 </body>
 </html>
