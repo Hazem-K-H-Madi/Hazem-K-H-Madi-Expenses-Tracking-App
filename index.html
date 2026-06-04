@@ -1,3096 +1,520 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-theme="dark" data-scheme="indigo">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no, maximum-scale=1.0">
-    <meta name="theme-color" content="#0d0f14">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="متعقب المصاريف">
-    <meta name="description" content="تطبيق متعقب المصاريف الشخصية والبيت والعائلة - بالجنيه المصري | Hazem K H Madi">
-    <meta name="application-name" content="Expense Tracker Pro">
-    <meta name="mobile-web-app-capable" content="yes">
-    <title>متعقب المصاريف | Hazem K H Madi</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تطبيق الإدارة المالية - Hazem K H Madi</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4F46E5">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
     <style>
         :root {
-            --font-arabic: 'Cairo', 'Segoe UI', 'Tahoma', sans-serif;
-            --font-latin: 'Inter', system-ui, -apple-system, sans-serif;
-            --safe-bottom: env(safe-area-inset-bottom, 16px);
-            --safe-top: env(safe-area-inset-top, 0px);
-            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-smooth: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-bounce: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            --transition-spring: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            --radius-xs: 6px;
-            --radius-sm: 10px;
-            --radius-md: 16px;
-            --radius-lg: 20px;
-            --radius-xl: 24px;
-            --radius-2xl: 28px;
-            --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.1);
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.18);
-            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);
-            --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.45);
-            --shadow-xl: 0 24px 56px rgba(0, 0, 0, 0.55);
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --bg-color: #F3F4F6;
+            --surface: #FFFFFF;
+            --text-main: #111827;
+            --text-muted: #6B7280;
+            --success: #10B981;
+            --danger: #EF4444;
+            --border: #E5E7EB;
+            --radius: 16px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* ==================== THEME: DARK (default) ==================== */
         [data-theme="dark"] {
-            --bg-canvas: #0d0f14;
-            --bg-surface: #14161c;
-            --bg-elevated: #1a1c23;
-            --bg-overlay: #1f2129;
-            --bg-highlight: #252830;
-            --text-primary: #f0f2f5;
-            --text-secondary: #b0b5be;
-            --text-muted: #6b7280;
-            --text-inverse: #0d0f14;
-            --border-subtle: rgba(255, 255, 255, 0.06);
-            --border-medium: rgba(255, 255, 255, 0.1);
-            --border-strong: rgba(255, 255, 255, 0.15);
-            --overlay-bg: rgba(0, 0, 0, 0.7);
-            --toast-bg: #1f2937;
-            --input-bg: #1f2129;
-            --shadow-color: rgba(0, 0, 0, 0.5);
-            --skeleton-base: #1f2129;
-            --skeleton-shine: #2a2d37;
+            --bg-color: #111827;
+            --surface: #1F2937;
+            --text-main: #F9FAFB;
+            --text-muted: #9CA3AF;
+            --border: #374151;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
         }
 
-        /* ==================== THEME: LIGHT ==================== */
-        [data-theme="light"] {
-            --bg-canvas: #f8fafc;
-            --bg-surface: #ffffff;
-            --bg-elevated: #f1f5f9;
-            --bg-overlay: #e8ecf1;
-            --bg-highlight: #dfe4ea;
-            --text-primary: #1a1d28;
-            --text-secondary: #4a5060;
-            --text-muted: #7c8290;
-            --text-inverse: #ffffff;
-            --border-subtle: rgba(0, 0, 0, 0.06);
-            --border-medium: rgba(0, 0, 0, 0.1);
-            --border-strong: rgba(0, 0, 0, 0.15);
-            --overlay-bg: rgba(0, 0, 0, 0.45);
-            --toast-bg: #ffffff;
-            --input-bg: #f1f5f9;
-            --shadow-color: rgba(0, 0, 0, 0.08);
-            --skeleton-base: #e8ecf1;
-            --skeleton-shine: #f1f5f9;
-        }
-
-        /* ==================== COLOR SCHEMES ==================== */
-        /* Indigo (default) */
-        [data-scheme="indigo"] {
-            --accent-primary: #6366f1;
-            --accent-primary-light: #818cf8;
-            --accent-primary-pale: rgba(99, 102, 241, 0.15);
-            --accent-secondary: #8b5cf6;
-            --accent-success: #10b981;
-            --accent-warning: #f59e0b;
-            --accent-danger: #f43f5e;
-            --accent-info: #0ea5e9;
-            --gradient-primary: linear-gradient(135deg, #6366f1, #8b5cf6);
-            --glow-primary: 0 0 20px rgba(99, 102, 241, 0.35);
-        }
-        /* Emerald */
-        [data-scheme="emerald"] {
-            --accent-primary: #10b981;
-            --accent-primary-light: #34d399;
-            --accent-primary-pale: rgba(16, 185, 129, 0.15);
-            --accent-secondary: #059669;
-            --accent-success: #10b981;
-            --accent-warning: #f59e0b;
-            --accent-danger: #ef4444;
-            --accent-info: #06b6d4;
-            --gradient-primary: linear-gradient(135deg, #10b981, #059669);
-            --glow-primary: 0 0 20px rgba(16, 185, 129, 0.35);
-        }
-        /* Rose */
-        [data-scheme="rose"] {
-            --accent-primary: #f43f5e;
-            --accent-primary-light: #fb7185;
-            --accent-primary-pale: rgba(244, 63, 94, 0.15);
-            --accent-secondary: #e11d48;
-            --accent-success: #10b981;
-            --accent-warning: #f59e0b;
-            --accent-danger: #f43f5e;
-            --accent-info: #38bdf8;
-            --gradient-primary: linear-gradient(135deg, #f43f5e, #e11d48);
-            --glow-primary: 0 0 20px rgba(244, 63, 94, 0.35);
-        }
-        /* Amber */
-        [data-scheme="amber"] {
-            --accent-primary: #f59e0b;
-            --accent-primary-light: #fbbf24;
-            --accent-primary-pale: rgba(245, 158, 11, 0.15);
-            --accent-secondary: #d97706;
-            --accent-success: #10b981;
-            --accent-warning: #f59e0b;
-            --accent-danger: #ef4444;
-            --accent-info: #06b6d4;
-            --gradient-primary: linear-gradient(135deg, #f59e0b, #d97706);
-            --glow-primary: 0 0 20px rgba(245, 158, 11, 0.35);
-        }
-        /* Ocean */
-        [data-scheme="ocean"] {
-            --accent-primary: #0ea5e9;
-            --accent-primary-light: #38bdf8;
-            --accent-primary-pale: rgba(14, 165, 233, 0.15);
-            --accent-secondary: #0284c7;
-            --accent-success: #10b981;
-            --accent-warning: #f59e0b;
-            --accent-danger: #ef4444;
-            --accent-info: #06b6d4;
-            --gradient-primary: linear-gradient(135deg, #0ea5e9, #0284c7);
-            --glow-primary: 0 0 20px rgba(14, 165, 233, 0.35);
-        }
-        /* Monochrome */
-        [data-scheme="monochrome"] {
-            --accent-primary: #6b7280;
-            --accent-primary-light: #9ca3af;
-            --accent-primary-pale: rgba(107, 114, 128, 0.15);
-            --accent-secondary: #4b5563;
-            --accent-success: #6b7280;
-            --accent-warning: #9ca3af;
-            --accent-danger: #ef4444;
-            --accent-info: #6b7280;
-            --gradient-primary: linear-gradient(135deg, #6b7280, #4b5563);
-            --glow-primary: 0 0 20px rgba(107, 114, 128, 0.3);
-        }
-
-        /* ==================== GLOBAL RESET ==================== */
-        *,
-        *::before,
-        *::after {
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             -webkit-tap-highlight-color: transparent;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            scroll-behavior: smooth;
-            font-size: 16px;
         }
 
         body {
-            font-family: var(--font-arabic);
-            background: var(--bg-canvas);
-            color: var(--text-primary);
-            min-height: 100vh;
-            min-height: -webkit-fill-available;
-            overflow-x: hidden;
-            padding-bottom: calc(110px + var(--safe-bottom));
-            position: relative;
-            transition: background var(--transition-smooth), color var(--transition-smooth);
-            line-height: 1.6;
-            letter-spacing: -0.15px;
-        }
-
-        body::after {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: radial-gradient(ellipse at 45% 0%, var(--accent-primary-pale) 0%, transparent 55%),
-                radial-gradient(ellipse at 75% 95%, rgba(139, 92, 246, 0.04) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-            transition: background var(--transition-smooth);
-        }
-
-        body.no-scroll {
-            overflow: hidden;
-            touch-action: none;
-        }
-
-        /* ==================== SCROLLBAR ==================== */
-        ::-webkit-scrollbar {
-            width: 4px;
-            height: 4px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-            border-radius: 8px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-strong);
-            border-radius: 8px;
-            transition: background var(--transition-fast);
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-muted);
-        }
-
-        /* ==================== APP CONTAINER ==================== */
-        .app-container {
-            max-width: 540px;
-            margin: 0 auto;
-            padding: 12px 14px 0;
-            position: relative;
-            z-index: 1;
-        }
-
-        @media (min-width: 600px) {
-            .app-container {
-                max-width: 600px;
-                padding: 16px 18px 0;
-            }
-        }
-        @media (min-width: 768px) {
-            .app-container {
-                max-width: 680px;
-                padding: 20px 22px 0;
-            }
-        }
-        @media (min-width: 1024px) {
-            .app-container {
-                max-width: 720px;
-                padding: 24px 28px 0;
-            }
-            body {
-                padding-bottom: calc(130px + var(--safe-bottom));
-            }
-        }
-
-        /* ==================== HEADER ==================== */
-        .app-header {
-            background: var(--bg-elevated);
-            border-radius: var(--radius-xl);
-            padding: 18px 20px;
-            margin-bottom: 14px;
-            border: 1px solid var(--border-subtle);
-            box-shadow: var(--shadow-md);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            transition: var(--transition);
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 10px;
-            transition: all var(--transition-smooth);
-            position: relative;
+            height: 100vh;
             overflow: hidden;
         }
-        .app-header::before {
-            content: '';
-            position: absolute;
-            top: -30px;
-            right: -30px;
-            width: 100px;
-            height: 100px;
-            background: var(--accent-primary-pale);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-        .header-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            position: relative;
-            z-index: 1;
-        }
-        .header-logo {
-            width: 46px;
-            height: 46px;
-            background: var(--gradient-primary);
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 23px;
-            color: #fff;
-            box-shadow: var(--glow-primary);
-            animation: logoFloat 3s ease-in-out infinite;
-        }
-        @keyframes logoFloat {
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-4px);
-            }
-        }
-        .header-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            letter-spacing: -0.3px;
-            transition: color var(--transition-smooth);
-        }
-        .header-subtitle {
-            font-size: 0.68rem;
-            font-weight: 400;
-            color: var(--text-muted);
-            font-family: var(--font-latin);
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-        .header-actions {
-            display: flex;
-            gap: 7px;
-            position: relative;
-            z-index: 1;
-        }
-        .btn-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            border: 1px solid var(--border-medium);
-            background: var(--bg-overlay);
-            color: var(--text-secondary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 15px;
-            transition: all var(--transition-bounce);
-            position: relative;
-            text-decoration: none;
-        }
-        .btn-icon:hover {
-            background: var(--accent-primary-pale);
-            border-color: var(--accent-primary);
-            color: var(--accent-primary);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        .btn-icon:active {
-            transform: scale(0.9);
-            transition: all 0.08s ease;
-        }
-        .btn-icon.pulse-dot::after {
-            content: '';
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 9px;
-            height: 9px;
-            background: var(--accent-danger);
-            border-radius: 50%;
-            border: 2px solid var(--bg-elevated);
-            animation: pulseDot 2s infinite;
-        }
-        @keyframes pulseDot {
-            0%,
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.9);
-                opacity: 0.35;
-            }
-        }
-        .btn-icon.has-notification::before {
-            content: attr(data-count);
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background: var(--accent-danger);
-            color: #fff;
-            font-size: 0.6rem;
-            font-weight: 700;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-latin);
-        }
 
-        /* ==================== SKELETON LOADING ==================== */
-        .skeleton {
-            background: linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-shine) 50%, var(--skeleton-base) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            border-radius: var(--radius-sm);
-        }
-        @keyframes shimmer {
-            0% {
-                background-position: 200% 0;
-            }
-            100% {
-                background-position: -200% 0;
-            }
-        }
-        .skeleton-text {
-            height: 14px;
-            width: 80%;
-            margin-bottom: 8px;
-        }
-        .skeleton-text.short {
-            width: 50%;
-        }
-        .skeleton-card {
-            height: 80px;
-            width: 100%;
-            margin-bottom: 10px;
-            border-radius: var(--radius-md);
-        }
-
-        /* ==================== TAB NAVIGATION ==================== */
-        .tab-nav {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 12px;
-            background: var(--bg-surface);
-            border-radius: var(--radius-md);
-            padding: 5px;
-            border: 1px solid var(--border-subtle);
-            position: sticky;
-            top: 10px;
-            z-index: 50;
-            transition: all var(--transition-smooth);
-        }
-        .tab-btn {
-            flex: 1;
-            padding: 11px 7px;
-            border: none;
-            background: transparent;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-family: var(--font-arabic);
-            font-weight: 600;
-            font-size: 0.82rem;
-            color: var(--text-muted);
-            transition: all var(--transition-bounce);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            white-space: nowrap;
-            position: relative;
-            overflow: hidden;
-        }
-        .tab-btn::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--accent-primary);
-            opacity: 0;
-            border-radius: var(--radius-sm);
-            transition: opacity var(--transition-smooth);
-            z-index: 0;
-        }
-        .tab-btn.active::after {
-            opacity: 1;
-        }
-        .tab-btn.active {
-            color: #fff;
-            font-weight: 700;
-            box-shadow: var(--shadow-md);
-            z-index: 1;
-        }
-        .tab-btn span {
-            position: relative;
-            z-index: 1;
-        }
-        .tab-badge {
-            font-size: 0.62rem;
-            background: rgba(244, 63, 94, 0.2);
-            color: var(--accent-danger);
-            padding: 2px 7px;
-            border-radius: 20px;
-            font-weight: 700;
-            position: relative;
-            z-index: 1;
-            transition: all var(--transition-smooth);
-        }
-        .tab-btn.active .tab-badge {
-            background: rgba(255, 255, 255, 0.25);
-            color: #fff;
-        }
-
-        /* ==================== CARDS ==================== */
-        .card {
-            background: var(--bg-surface);
-            border-radius: var(--radius-lg);
-            padding: 16px 18px;
-            margin-bottom: 12px;
-            border: 1px solid var(--border-subtle);
-            box-shadow: var(--shadow-xs);
-            transition: all var(--transition-smooth);
-            position: relative;
-            overflow: hidden;
-            animation: cardAppear 0.4s ease forwards;
-        }
-        @keyframes cardAppear {
-            from {
-                opacity: 0;
-                transform: translateY(16px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .card:hover {
-            box-shadow: var(--shadow-md);
-            border-color: var(--border-medium);
-            transform: translateY(-1px);
-        }
-        .card:active {
-            transform: scale(0.985);
-            transition: all 0.1s ease;
-        }
-        .card-accent-left {
-            border-right: 3px solid var(--accent-primary);
-        }
-        .card-accent-teal {
-            border-right: 3px solid var(--accent-info);
-        }
-        .card-accent-warning {
-            border-right: 3px solid var(--accent-warning);
-        }
-        .card-accent-danger {
-            border-right: 3px solid var(--accent-danger);
-        }
-        .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .card-title {
-            font-weight: 700;
-            font-size: 0.88rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-primary);
-            transition: color var(--transition-smooth);
-        }
-        .icon-circle {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            background: var(--bg-overlay);
-            border: 1px solid var(--border-medium);
-            transition: all var(--transition-smooth);
-            flex-shrink: 0;
-        }
-        .icon-circle.accent {
-            background: var(--accent-primary-pale);
-            border-color: var(--accent-primary);
-            color: var(--accent-primary);
-        }
-
-        /* ==================== BUDGET DISPLAY ==================== */
-        .budget-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-        @media (min-width: 500px) {
-            .budget-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 10px;
-            }
-        }
-        .budget-cell {
-            background: var(--bg-overlay);
-            border-radius: var(--radius-sm);
-            padding: 12px 14px;
-            text-align: center;
-            border: 1px solid var(--border-subtle);
-            transition: all var(--transition-smooth);
-        }
-        .budget-cell:hover {
-            border-color: var(--border-medium);
-            background: var(--bg-highlight);
-        }
-        .budget-label {
-            font-size: 0.68rem;
-            color: var(--text-muted);
-            margin-bottom: 3px;
-            font-weight: 500;
-        }
-        .budget-number {
-            font-size: 1.2rem;
-            font-weight: 800;
-            font-family: var(--font-latin);
-            letter-spacing: -0.5px;
-            transition: color var(--transition-smooth);
-        }
-        .text-green {
-            color: var(--accent-success);
-        }
-        .text-red {
-            color: var(--accent-danger);
-        }
-        .text-amber {
-            color: var(--accent-warning);
-        }
-        .text-primary-accent {
-            color: var(--accent-primary);
-        }
-
-        /* ==================== PROGRESS BAR ==================== */
-        .progress-wrap {
-            margin-top: 2px;
-        }
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.68rem;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-            font-weight: 500;
-        }
-        .progress-bar {
-            height: 7px;
-            background: var(--bg-overlay);
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-        }
-        .progress-fill {
-            height: 100%;
-            border-radius: 10px;
-            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background 0.4s ease;
-            position: relative;
-        }
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 20px;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 0 10px 10px 0;
-            animation: progressShine 2s infinite;
-        }
-        @keyframes progressShine {
-            0%,
-            100% {
-                opacity: 0.3;
-            }
-            50% {
-                opacity: 0.7;
-            }
-        }
-        .progress-safe {
-            background: linear-gradient(90deg, var(--accent-success), #34d399);
-        }
-        .progress-warn {
-            background: linear-gradient(90deg, var(--accent-warning), #fbbf24);
-        }
-        .progress-danger {
-            background: linear-gradient(90deg, var(--accent-danger), #fb7185);
-            animation: pulseBar 1.6s infinite;
-        }
-        @keyframes pulseBar {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.65;
-            }
-        }
-
-        /* ==================== FORM ELEMENTS ==================== */
-        .form-row {
-            display: flex;
-            gap: 7px;
-            flex-wrap: wrap;
-            align-items: flex-end;
-        }
-        .form-group {
-            flex: 1;
-            min-width: 70px;
+        /* Sidebar & Navigation */
+        .sidebar {
+            width: 280px;
+            background: var(--surface);
+            border-left: 1px solid var(--border);
+            padding: 2rem 1rem;
             display: flex;
             flex-direction: column;
-            gap: 3px;
-        }
-        .form-label {
-            font-size: 0.68rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            letter-spacing: -0.1px;
-        }
-        .form-input {
-            padding: 10px 13px;
-            background: var(--input-bg);
-            border: 1.5px solid var(--border-medium);
-            border-radius: var(--radius-sm);
-            color: var(--text-primary);
-            font-family: var(--font-arabic);
-            font-size: 0.87rem;
-            transition: all var(--transition-fast);
-            outline: none;
-            width: 100%;
-            letter-spacing: -0.1px;
-        }
-        .form-input:focus {
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 4px var(--accent-primary-pale);
-            background: var(--bg-surface);
-        }
-        .form-input::placeholder {
-            color: var(--text-muted);
-            opacity: 0.6;
-        }
-        .form-input.error {
-            border-color: var(--accent-danger);
-            animation: shake 0.5s ease;
-        }
-        @keyframes shake {
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-            25% {
-                transform: translateX(-6px);
-            }
-            50% {
-                transform: translateX(6px);
-            }
-            75% {
-                transform: translateX(-4px);
-            }
-        }
-
-        /* ==================== BUTTONS ==================== */
-        .btn {
-            padding: 10px 16px;
-            border-radius: 22px;
-            font-family: var(--font-arabic);
-            font-weight: 700;
-            font-size: 0.78rem;
-            border: none;
-            cursor: pointer;
-            transition: all var(--transition-bounce);
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-            position: relative;
-            overflow: hidden;
-            letter-spacing: -0.2px;
-            text-decoration: none;
-        }
-        .btn::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(255, 255, 255, 0.15);
-            opacity: 0;
-            transition: opacity var(--transition-fast);
-            border-radius: 22px;
-        }
-        .btn:hover::after {
-            opacity: 1;
-        }
-        .btn:active {
-            transform: scale(0.93);
-            transition: all 0.06s ease;
-        }
-        .btn-primary {
-            background: var(--gradient-primary);
-            color: #fff;
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35);
-        }
-        .btn-primary:hover {
-            box-shadow: var(--glow-primary);
-            transform: translateY(-2px);
-        }
-        .btn-outline {
-            background: transparent;
-            border: 1.5px solid var(--border-medium);
-            color: var(--text-secondary);
-        }
-        .btn-outline:hover {
-            border-color: var(--accent-primary);
-            color: var(--accent-primary);
-            background: var(--accent-primary-pale);
-        }
-        .btn-sm {
-            padding: 5px 11px;
-            font-size: 0.7rem;
-            border-radius: 16px;
-        }
-        .btn-xs {
-            padding: 3px 8px;
-            font-size: 0.65rem;
-            border-radius: 12px;
-        }
-        .btn-danger-text {
-            background: transparent;
-            border: 1px solid rgba(244, 63, 94, 0.25);
-            color: var(--accent-danger);
-            padding: 4px 9px;
-            border-radius: 14px;
-            font-size: 0.68rem;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-        }
-        .btn-danger-text:hover {
-            background: rgba(244, 63, 94, 0.1);
-            border-color: var(--accent-danger);
-        }
-        .btn-success {
-            background: var(--accent-success);
-            color: #fff;
-        }
-        .btn-ghost {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            padding: 8px;
-        }
-        .btn-ghost:hover {
-            color: var(--accent-primary);
-            background: var(--accent-primary-pale);
-        }
-        .btn-block {
-            width: 100%;
-            justify-content: center;
-        }
-        .btn:disabled {
-            opacity: 0.5;
-            pointer-events: none;
-            cursor: not-allowed;
-        }
-
-        /* ==================== TRANSACTION LIST ==================== */
-        .transaction-list {
-            list-style: none;
-            max-height: 300px;
-            overflow-y: auto;
-            padding: 0;
-            margin: 0;
-        }
-        @media (min-width: 768px) {
-            .transaction-list {
-                max-height: 380px;
-            }
-        }
-        .transaction-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 11px 13px;
-            border-radius: var(--radius-sm);
-            margin-bottom: 5px;
-            background: var(--bg-overlay);
-            border: 1px solid transparent;
-            gap: 8px;
-            flex-wrap: wrap;
-            animation: fadeSlideIn 0.35s ease forwards;
-            transition: all var(--transition-fast);
-        }
-        @keyframes fadeSlideIn {
-            from {
-                opacity: 0;
-                transform: translateX(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        .transaction-item:hover {
-            border-color: var(--border-medium);
-            background: var(--bg-highlight);
-            transform: translateX(-3px);
-        }
-        .transaction-item:active {
-            transform: scale(0.98);
-        }
-        .transaction-info {
-            flex: 1;
-            min-width: 100px;
-        }
-        .transaction-desc {
-            font-weight: 600;
-            font-size: 0.83rem;
-            color: var(--text-primary);
-        }
-        .transaction-date {
-            font-size: 0.68rem;
-            color: var(--text-muted);
-            margin-top: 1px;
-        }
-        .transaction-amount {
-            font-weight: 700;
-            font-family: var(--font-latin);
-            color: var(--accent-danger);
-            font-size: 0.85rem;
-            white-space: nowrap;
-        }
-        .transaction-category-tag {
-            display: inline-block;
-            font-size: 0.6rem;
-            padding: 2px 7px;
-            border-radius: 10px;
-            background: var(--accent-primary-pale);
-            color: var(--accent-primary);
-            margin-right: 4px;
-            font-weight: 600;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 35px 20px;
-            color: var(--text-muted);
-        }
-        .empty-state i {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            display: block;
-            opacity: 0.4;
-        }
-        .empty-state p {
-            font-size: 0.82rem;
-        }
-
-        /* ==================== MODAL ==================== */
-        .modal-backdrop {
-            position: fixed;
-            inset: 0;
-            background: var(--overlay-bg);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            z-index: 200;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.35s ease;
-        }
-        .modal-backdrop.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .modal-panel {
-            background: var(--bg-elevated);
-            border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
-            width: 100%;
-            max-width: 540px;
-            max-height: 82vh;
-            overflow-y: auto;
-            padding: 10px 18px 30px;
-            transform: translateY(40px);
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border-top: 1px solid var(--border-medium);
-            box-shadow: var(--shadow-xl);
-        }
-        .modal-backdrop.active .modal-panel {
-            transform: translateY(0);
-        }
-        .modal-handle {
-            width: 44px;
-            height: 5px;
-            background: var(--border-strong);
-            border-radius: 10px;
-            margin: 6px auto 14px;
-            cursor: grab;
-        }
-        .modal-title {
-            font-weight: 700;
-            font-size: 1rem;
-            text-align: center;
-            margin-bottom: 16px;
-            color: var(--text-primary);
-        }
-
-        /* ==================== TOAST ==================== */
-        .toast-container {
-            position: fixed;
-            top: 18px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 999;
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-            width: 92%;
-            max-width: 420px;
-            pointer-events: none;
-        }
-        .toast {
-            padding: 13px 18px;
-            border-radius: 20px;
-            color: #fff;
-            font-weight: 600;
-            font-size: 0.8rem;
-            text-align: center;
-            background: var(--toast-bg);
-            box-shadow: var(--shadow-lg);
-            animation: toastSlideDown 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-            pointer-events: auto;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            justify-content: center;
-        }
-        .toast.success {
-            background: var(--accent-success);
-        }
-        .toast.error {
-            background: var(--accent-danger);
-        }
-        .toast.warning {
-            background: var(--accent-warning);
-            color: #000;
-        }
-        @keyframes toastSlideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        /* ==================== BOTTOM NAVIGATION ==================== */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--bg-elevated);
-            border-top: 1px solid var(--border-subtle);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 8px 6px calc(8px + env(safe-area-inset-bottom, 8px));
+            transition: var(--transition);
             z-index: 100;
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            transition: all var(--transition-smooth);
-        }
-        .bottom-nav-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
-            color: var(--text-muted);
-            font-size: 0.62rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all var(--transition-bounce);
-            background: none;
-            border: none;
-            font-family: var(--font-arabic);
-            padding: 6px 10px;
-            border-radius: var(--radius-sm);
-            position: relative;
-        }
-        .bottom-nav-btn i {
-            font-size: 1.15rem;
-            transition: transform var(--transition-bounce);
-        }
-        .bottom-nav-btn.active {
-            color: var(--accent-primary);
-            font-weight: 700;
-        }
-        .bottom-nav-btn.active i {
-            transform: scale(1.2);
-        }
-        .bottom-nav-btn:hover {
-            color: var(--accent-primary-light);
-            background: var(--accent-primary-pale);
-        }
-        .bottom-nav-btn:active {
-            transform: scale(0.9);
-        }
-        .install-btn-highlight {
-            background: var(--gradient-primary);
-            color: #fff !important;
-            border-radius: 22px;
-            padding: 8px 18px;
-            font-weight: 700;
-            box-shadow: var(--glow-primary);
-            animation: installPulse 2.5s ease-in-out infinite;
-        }
-        @keyframes installPulse {
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.5);
-            }
-            50% {
-                box-shadow: 0 0 0 14px rgba(99, 102, 241, 0);
-            }
-        }
-        .install-btn-highlight:hover {
-            transform: translateY(-3px) scale(1.04);
-            box-shadow: 0 12px 32px rgba(99, 102, 241, 0.5);
         }
 
-        /* ==================== QUICK ADD CHIPS ==================== */
-        .quick-add-chips {
-            display: flex;
-            gap: 5px;
-            flex-wrap: wrap;
-            margin-bottom: 8px;
-        }
-        .chip {
-            background: var(--bg-overlay);
-            border: 1px solid var(--border-medium);
-            padding: 5px 12px;
-            border-radius: 18px;
-            font-size: 0.68rem;
-            cursor: pointer;
-            transition: all var(--transition-bounce);
-            color: var(--text-secondary);
-            font-weight: 500;
-            user-select: none;
-            white-space: nowrap;
-        }
-        .chip:hover {
-            border-color: var(--accent-primary);
-            color: var(--accent-primary);
-            background: var(--accent-primary-pale);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-sm);
-        }
-        .chip:active {
-            transform: scale(0.9);
-            background: var(--accent-primary);
-            color: #fff;
-            border-color: var(--accent-primary);
-        }
-
-        /* ==================== OVERVIEW CARD ==================== */
-        .overview-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-        @media (min-width: 500px) {
-            .overview-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        /* ==================== SEARCH BAR ==================== */
-        .search-bar {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--bg-overlay);
-            border-radius: var(--radius-sm);
-            padding: 8px 14px;
-            border: 1px solid var(--border-subtle);
-            margin-bottom: 10px;
-            transition: all var(--transition-fast);
-        }
-        .search-bar:focus-within {
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 3px var(--accent-primary-pale);
-        }
-        .search-bar input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text-primary);
-            font-family: var(--font-arabic);
-            font-size: 0.82rem;
-            outline: none;
-        }
-        .search-bar i {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        /* ==================== SETTINGS PANEL ==================== */
-        .settings-section {
-            margin-bottom: 16px;
-        }
-        .settings-section-title {
-            font-weight: 700;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .settings-option-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border-subtle);
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .settings-label {
-            font-weight: 600;
-            font-size: 0.8rem;
-            color: var(--text-primary);
-        }
-        .color-dot-row {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .color-dot {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: all var(--transition-bounce);
-            position: relative;
-        }
-        .color-dot:hover {
-            transform: scale(1.15);
-            box-shadow: var(--shadow-md);
-        }
-        .color-dot.active {
-            border-color: var(--text-primary);
-            box-shadow: 0 0 0 4px var(--accent-primary-pale);
-        }
-        .color-dot.active::after {
-            content: '✓';
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-weight: 700;
-            font-size: 14px;
-        }
-        .toggle-switch {
-            width: 50px;
-            height: 28px;
-            background: var(--border-medium);
-            border-radius: 14px;
-            cursor: pointer;
-            position: relative;
-            transition: background var(--transition-fast);
-        }
-        .toggle-switch.active {
-            background: var(--accent-primary);
-        }
-        .toggle-switch::after {
-            content: '';
-            width: 22px;
-            height: 22px;
-            background: #fff;
-            border-radius: 50%;
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            transition: transform var(--transition-bounce);
-        }
-        .toggle-switch.active::after {
-            transform: translateX(22px);
-        }
-
-        /* ==================== EXPORT WRAPPER ==================== */
-        .export-wrapper {
-            position: absolute;
-            left: -9999px;
-            width: 720px;
-            background: var(--bg-canvas);
-            color: var(--text-primary);
-            z-index: -1;
-            opacity: 0;
-            pointer-events: none;
-            border-radius: var(--radius-xl);
-            overflow: hidden;
-        }
-
-        /* ==================== FOOTER ==================== */
-        .app-footer {
+        .brand {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
             text-align: center;
-            padding: 16px 14px;
-            margin-top: 8px;
-            border-top: 1px solid var(--border-subtle);
-            transition: all var(--transition-smooth);
-        }
-        .footer-credential-img {
-            width: 65px;
-            height: auto;
-            border-radius: 12px;
-            border: 1px solid var(--border-medium);
-            margin-bottom: 6px;
-            transition: all var(--transition-smooth);
-        }
-        .footer-name {
-            font-weight: 700;
-            font-family: var(--font-latin);
-            color: var(--text-primary);
-            font-size: 0.8rem;
-        }
-        .footer-role {
-            font-size: 0.68rem;
-            color: var(--text-muted);
-            font-family: var(--font-latin);
-        }
-        .footer-links {
-            display: flex;
-            gap: 14px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 5px;
-        }
-        .footer-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.7rem;
-            font-family: var(--font-latin);
-            transition: color var(--transition-fast);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .footer-links a:hover {
-            color: var(--accent-primary);
+            color: var(--primary);
         }
 
-        /* ==================== STATS BADGE ==================== */
-        .stat-badge {
+        .nav-item {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            font-size: 0.65rem;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 14px;
-            background: var(--accent-primary-pale);
-            color: var(--accent-primary);
-        }
-        .stat-badge.success {
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--accent-success);
-        }
-        .stat-badge.warning {
-            background: rgba(245, 158, 11, 0.15);
-            color: var(--accent-warning);
-        }
-        .stat-badge.danger {
-            background: rgba(244, 63, 94, 0.15);
-            color: var(--accent-danger);
+            gap: 0.5rem;
         }
 
-        /* ==================== RIPPLE EFFECT ==================== */
-        .ripple {
-            position: relative;
-            overflow: hidden;
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
+        .btn-outline:hover { background: var(--bg-color); }
+
+        /* Dashboard Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
-        .ripple-effect {
-            position: absolute;
+
+        .card {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-title { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+        .card-value { font-size: 2rem; font-weight: bold; color: var(--text-main); }
+        .text-success { color: var(--success); }
+        .text-danger { color: var(--danger); }
+
+        /* Charts */
+        .chart-container {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+            height: 350px;
+        }
+
+        /* Forms & Inputs */
+        .input-group { margin-bottom: 1rem; }
+        .input-group label { display: block; margin-bottom: 0.5rem; color: var(--text-main); font-weight: 500;}
+        .input-control {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-color);
+            color: var(--text-main);
+            outline: none;
+            transition: var(--transition);
+        }
+        .input-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2); }
+
+        /* Sections */
+        .section { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .section.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Credentials Section */
+        .credentials-card {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--bg-color) 100%);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: var(--radius);
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .credentials-card img {
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(0);
-            animation: rippleAnim 0.6s ease-out forwards;
-            pointer-events: none;
+            object-fit: cover;
+            border: 4px solid var(--primary);
+            margin-bottom: 1rem;
         }
-        @keyframes rippleAnim {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
+        .creator-name { font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem; font-family: sans-serif; direction: ltr;}
+        .social-links a { color: var(--primary); margin: 0 0.5rem; text-decoration: none; font-size: 1.2rem; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; padding: 1rem; border-left: none; border-bottom: 1px solid var(--border); flex-direction: row; overflow-x: auto; }
+            .nav-item { margin-bottom: 0; margin-left: 0.5rem; white-space: nowrap; }
+            .brand { display: none; }
         }
 
-        /* ==================== RESPONSIVE ADJUSTMENTS ==================== */
-        @media (max-width: 380px) {
-            .app-header {
-                padding: 14px 15px;
-            }
-            .header-title {
-                font-size: 0.95rem;
-            }
-            .tab-btn {
-                font-size: 0.72rem;
-                padding: 9px 5px;
-            }
-            .card {
-                padding: 12px 14px;
-            }
-            .budget-number {
-                font-size: 1rem;
-            }
-            .btn {
-                padding: 8px 12px;
-                font-size: 0.7rem;
-            }
-            .bottom-nav-btn {
-                font-size: 0.55rem;
-            }
-            .bottom-nav-btn i {
-                font-size: 1rem;
-            }
-            .install-btn-highlight {
-                padding: 6px 10px;
-                font-size: 0.6rem;
-            }
-        }
-        @media (min-width: 420px) and (max-width: 600px) {
-            .budget-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        @media (min-width: 768px) {
-            .card {
-                padding: 20px 24px;
-            }
-            .budget-number {
-                font-size: 1.35rem;
-            }
-            .transaction-item {
-                padding: 14px 16px;
-            }
-        }
-
-        /* ==================== PRINT STYLES ==================== */
-        @media print {
-            body>*:not(.export-wrapper) {
-                display: none !important;
-            }
-            .export-wrapper {
-                position: static !important;
-                left: auto !important;
-                opacity: 1 !important;
-                z-index: auto !important;
-                pointer-events: auto !important;
-                width: 100% !important;
-                padding: 20px !important;
-                background: #fff !important;
-                color: #000 !important;
-            }
-            .bottom-nav,
-            .modal-backdrop,
-            .toast-container {
-                display: none !important;
-            }
-        }
+        /* Export Template (Hidden usually) */
+        #export-template { display: none; padding: 40px; background: white; color: black; direction: rtl; }
+        .exporting #export-template { display: block; }
     </style>
 </head>
 <body>
 
-    <!-- Toast Container -->
-    <div class="toast-container" id="toastContainer"></div>
+    <aside class="sidebar">
+        <div class="brand">إدارة الأموال</div>
+        <div class="nav-item active" onclick="switchTab('dashboard')"><i class="fas fa-home"></i> لوحة القيادة</div>
+        <div class="nav-item" onclick="switchTab('personal')"><i class="fas fa-user"></i> شخصي</div>
+        <div class="nav-item" onclick="switchTab('family')"><i class="fas fa-home-user"></i> المنزل</div>
+        <div class="nav-item" onclick="switchTab('calculator')"><i class="fas fa-calculator"></i> حاسبة الدخل</div>
+        <div class="nav-item" onclick="switchTab('settings')"><i class="fas fa-cog"></i> الإعدادات</div>
+    </aside>
 
-    <!-- Modal Backdrop -->
-    <div class="modal-backdrop" id="modalBackdrop">
-        <div class="modal-panel" id="modalPanel">
-            <div class="modal-handle"></div>
-            <div class="modal-title" id="modalTitle"></div>
-            <div id="modalContent"></div>
-        </div>
-    </div>
-
-    <!-- Export Wrapper -->
-    <div class="export-wrapper" id="exportWrapper"></div>
-
-    <!-- Main App Container -->
-    <div class="app-container" id="appContainer">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="header-brand">
-                <div class="header-logo">💷</div>
-                <div>
-                    <div class="header-title">متعقب المصاريف</div>
-                    <div class="header-subtitle">EXPENSE TRACKER PRO</div>
-                </div>
-            </div>
-            <div class="header-actions">
-                <button class="btn-icon" id="btnSearch" title="بحث" aria-label="بحث في المصروفات">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-                <button class="btn-icon pulse-dot" id="btnSettings" title="الإعدادات" aria-label="فتح الإعدادات">
-                    <i class="fa-solid fa-sliders"></i>
-                </button>
+    <main class="main-content">
+        
+        <header class="header">
+            <h2>مرحباً، Hazem</h2>
+            <div>
+                <button class="btn btn-outline" id="installBtn" style="display: none;"><i class="fas fa-download"></i> تثبيت التطبيق</button>
+                <button class="btn btn-primary" onclick="exportReport()"><i class="fas fa-file-pdf"></i> تصدير تقرير</button>
             </div>
         </header>
 
-        <!-- Quick Overview -->
-        <div class="card" id="overviewCard">
-            <div class="card-header">
-                <div class="card-title">
-                    <span class="icon-circle accent">📊</span> نظرة عامة سريعة
+        <section id="dashboard" class="section active">
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-title">إجمالي الرصيد المتبقي</div>
+                    <div class="card-value" id="totalBalance">0 ج.م</div>
                 </div>
-                <span class="stat-badge" id="overallStatusBadge">قيد المتابعة</span>
-            </div>
-            <div class="overview-grid">
-                <div class="budget-cell">
-                    <div class="budget-label">المتبقي الشخصي</div>
-                    <div class="budget-number" id="overviewRemainingPersonal">0 ج.م</div>
+                <div class="card">
+                    <div class="card-title">مصاريف شخصية</div>
+                    <div class="card-value text-danger" id="totalPersonalExpense">0 ج.م</div>
                 </div>
-                <div class="budget-cell">
-                    <div class="budget-label">المتبقي العائلي</div>
-                    <div class="budget-number" id="overviewRemainingFamily">0 ج.م</div>
-                </div>
-                <div class="budget-cell">
-                    <div class="budget-label">إجمالي المصروف</div>
-                    <div class="budget-number text-primary-accent" id="totalSpentOverall">0 ج.م</div>
+                <div class="card">
+                    <div class="card-title">مصاريف المنزل</div>
+                    <div class="card-value text-danger" id="totalFamilyExpense">0 ج.م</div>
                 </div>
             </div>
-        </div>
-
-        <!-- Search Bar (hidden by default) -->
-        <div class="search-bar" id="searchBar" style="display:none;">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" placeholder="ابحث عن وصف مصروف...">
-            <button class="btn btn-xs btn-outline" id="btnClearSearch">مسح</button>
-        </div>
-
-        <!-- Tab Navigation -->
-        <div class="tab-nav" id="tabNav">
-            <button class="tab-btn active" data-tab="personal">
-                <span>👤 الشخصية</span>
-                <span class="tab-badge" id="badgePersonal">0</span>
-            </button>
-            <button class="tab-btn" data-tab="family">
-                <span>🏠 البيت والعائلة</span>
-                <span class="tab-badge" id="badgeFamily">0</span>
-            </button>
-        </div>
-
-        <!-- Personal Expenses Section -->
-        <section id="sectionPersonal" class="tab-section">
-            <!-- Budget Card -->
-            <div class="card card-accent-left">
-                <div class="card-header">
-                    <span class="card-title"><span class="icon-circle">💰</span> الميزانية الشخصية</span>
-                    <button class="btn btn-outline btn-sm" id="setBudgetPersonal">✏️ تعديل</button>
-                </div>
-                <div class="budget-grid">
-                    <div class="budget-cell">
-                        <div class="budget-label">الميزانية الشهرية</div>
-                        <div class="budget-number text-amber" id="budgetTotalPersonal">0 ج.م</div>
-                    </div>
-                    <div class="budget-cell">
-                        <div class="budget-label">المتبقي</div>
-                        <div class="budget-number text-green" id="budgetRemainingPersonal">0 ج.م</div>
-                    </div>
-                    <div class="budget-cell">
-                        <div class="budget-label">المصروف</div>
-                        <div class="budget-number text-red" id="budgetSpentPersonal">0 ج.م</div>
-                    </div>
-                </div>
-                <div class="progress-wrap">
-                    <div class="progress-header"><span>نسبة الصرف</span><span id="progressPercentPersonal">0%</span></div>
-                    <div class="progress-bar"><div class="progress-fill progress-safe" id="progressFillPersonal" style="width:0%"></div></div>
-                </div>
-            </div>
-
-            <!-- Add Expense Card -->
-            <div class="card">
-                <div class="card-title" style="margin-bottom:6px;">➕ إضافة مصروف شخصي</div>
-                <div class="quick-add-chips" id="quickChipsPersonal">
-                    <span class="chip" data-amount="50" data-desc="🚕 مواصلات">🚕 مواصلات</span>
-                    <span class="chip" data-amount="120" data-desc="🍔 غداء">🍔 غداء</span>
-                    <span class="chip" data-amount="200" data-desc="🎮 ترفيه">🎮 ترفيه</span>
-                    <span class="chip" data-amount="75" data-desc="☕ قهوة">☕ قهوة</span>
-                    <span class="chip" data-amount="300" data-desc="👕 ملابس">👕 ملابس</span>
-                </div>
-                <div class="form-row">
-                    <div class="form-group"><label class="form-label">الوصف</label><input type="text" class="form-input" id="descPersonal" placeholder="مثال: غداء، مواصلات..."></div>
-                    <div class="form-group" style="max-width:120px;"><label class="form-label">المبلغ (ج.م)</label><input type="number" class="form-input" id="amountPersonal" placeholder="0.00" step="0.01" min="0.01"></div>
-                    <button class="btn btn-primary" id="addPersonalBtn"><i class="fa-solid fa-check"></i> إضافة</button>
-                </div>
-            </div>
-
-            <!-- Transactions Card -->
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">📋 سجل المصروفات الشخصية</span>
-                    <div style="display:flex;gap:6px;flex-wrap:wrap;">
-                        <span class="stat-badge" id="txnCountPersonal">0 عنصر</span>
-                        <button class="btn-danger-text" id="clearPersonalBtn"><i class="fa-solid fa-trash-can"></i> مسح الكل</button>
-                    </div>
-                </div>
-                <ul class="transaction-list" id="transactionListPersonal">
-                    <li class="empty-state"><i class="fa-solid fa-receipt"></i><p>لا توجد مصروفات مسجلة بعد</p></li>
-                </ul>
+            <div class="chart-container">
+                <canvas id="expenseChart"></canvas>
             </div>
         </section>
 
-        <!-- Family Expenses Section -->
-        <section id="sectionFamily" class="tab-section" style="display:none;">
-            <div class="card card-accent-teal">
-                <div class="card-header">
-                    <span class="card-title"><span class="icon-circle">🏡</span> ميزانية البيت والعائلة</span>
-                    <button class="btn btn-outline btn-sm" id="setBudgetFamily">✏️ تعديل</button>
-                </div>
-                <div class="budget-grid">
-                    <div class="budget-cell"><div class="budget-label">الميزانية الشهرية</div><div class="budget-number text-amber" id="budgetTotalFamily">0 ج.م</div></div>
-                    <div class="budget-cell"><div class="budget-label">المتبقي</div><div class="budget-number text-green" id="budgetRemainingFamily">0 ج.م</div></div>
-                    <div class="budget-cell"><div class="budget-label">المصروف</div><div class="budget-number text-red" id="budgetSpentFamily">0 ج.م</div></div>
-                </div>
-                <div class="progress-wrap">
-                    <div class="progress-header"><span>نسبة الصرف</span><span id="progressPercentFamily">0%</span></div>
-                    <div class="progress-bar"><div class="progress-fill progress-safe" id="progressFillFamily" style="width:0%"></div></div>
-                </div>
-            </div>
+        <section id="personal" class="section">
             <div class="card">
-                <div class="card-title" style="margin-bottom:6px;">➕ إضافة مصروف عائلي</div>
-                <div class="quick-add-chips" id="quickChipsFamily">
-                    <span class="chip" data-amount="300" data-desc="🍲 أكل البيت">🍲 أكل البيت</span>
-                    <span class="chip" data-amount="500" data-desc="💡 فواتير">💡 فواتير</span>
-                    <span class="chip" data-amount="150" data-desc="🧹 منظفات">🧹 منظفات</span>
-                    <span class="chip" data-amount="200" data-desc="💊 أدوية">💊 أدوية</span>
-                    <span class="chip" data-amount="400" data-desc="📚 تعليم">📚 تعليم</span>
+                <h3>إضافة مصروف شخصي</h3>
+                <br>
+                <div class="input-group">
+                    <label>المبلغ (ج.م)</label>
+                    <input type="number" id="p-amount" class="input-control" placeholder="أدخل المبلغ">
                 </div>
-                <div class="form-row">
-                    <div class="form-group"><label class="form-label">الوصف</label><input type="text" class="form-input" id="descFamily" placeholder="فواتير، أكل، أدوية..."></div>
-                    <div class="form-group" style="max-width:120px;"><label class="form-label">المبلغ (ج.م)</label><input type="number" class="form-input" id="amountFamily" placeholder="0.00" step="0.01" min="0.01"></div>
-                    <button class="btn btn-primary" id="addFamilyBtn"><i class="fa-solid fa-check"></i> إضافة</button>
+                <div class="input-group">
+                    <label>الوصف</label>
+                    <input type="text" id="p-desc" class="input-control" placeholder="مثال: اشتراك إنترنت، قهوة...">
                 </div>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">📋 سجل مصروفات البيت والعائلة</span>
-                    <div style="display:flex;gap:6px;flex-wrap:wrap;">
-                        <span class="stat-badge" id="txnCountFamily">0 عنصر</span>
-                        <button class="btn-danger-text" id="clearFamilyBtn"><i class="fa-solid fa-trash-can"></i> مسح الكل</button>
-                    </div>
-                </div>
-                <ul class="transaction-list" id="transactionListFamily">
-                    <li class="empty-state"><i class="fa-solid fa-receipt"></i><p>لا توجد مصروفات مسجلة بعد</p></li>
-                </ul>
+                <button class="btn btn-primary" onclick="addExpense('personal')">إضافة</button>
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="app-footer">
-            <img src="https://drive.google.com/thumbnail?id=1C7BT9_FOkAysydVqegpxGoWfrv-A7SVR&sz=w200"
-            alt="Credential Badge" class="footer-credential-img" loading="lazy"
-            onerror="this.style.display='none';">
-            <div class="footer-name">Hazem K H Madi</div>
-            <div class="footer-role">Senior Product Designer</div>
-            <div class="footer-links">
-                <a href="https://hazemkhmadi.framer.ai" target="_blank" rel="noopener"><i class="fa-solid fa-globe"></i> Portfolio</a>
-                <a href="https://www.linkedin.com/in/hazem-k-h-madi" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
-                <span style="color:var(--text-muted);font-size:0.65rem;"><i class="fa-solid fa-code"></i> Built with ❤️</span>
+        <section id="family" class="section">
+            <div class="card">
+                <h3>إضافة مصروف للمنزل</h3>
+                <br>
+                <div class="input-group">
+                    <label>المبلغ (ج.م)</label>
+                    <input type="number" id="f-amount" class="input-control" placeholder="أدخل المبلغ">
+                </div>
+                <div class="input-group">
+                    <label>الوصف</label>
+                    <input type="text" id="f-desc" class="input-control" placeholder="مثال: فواتير كهرباء، بقالة...">
+                </div>
+                <button class="btn btn-primary" onclick="addExpense('family')">إضافة</button>
             </div>
-        </footer>
-    </div>
+        </section>
 
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav" id="bottomNav">
-        <button class="bottom-nav-btn active" data-view="personal" id="navPersonal">
-            <i class="fa-solid fa-user"></i><span>الشخصية</span>
-        </button>
-        <button class="bottom-nav-btn" data-view="family" id="navFamily">
-            <i class="fa-solid fa-house"></i><span>العائلة</span>
-        </button>
-        <button class="bottom-nav-btn" id="navCalculator">
-            <i class="fa-solid fa-calculator"></i><span>الحاسبة</span>
-        </button>
-        <button class="bottom-nav-btn" id="navExport">
-            <i class="fa-solid fa-file-export"></i><span>تصدير</span>
-        </button>
-        <button class="bottom-nav-btn install-btn-highlight" id="navInstall" style="display:none;">
-            <i class="fa-solid fa-cloud-arrow-down"></i><span>تثبيت</span>
-        </button>
-    </nav>
+        <section id="calculator" class="section">
+            <div class="card">
+                <h3>حاسبة توزيع الدخل الاحترافية</h3>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">أضف مصادر دخلك المتعددة وقم بتخصيصها لتغذية حساباتك.</p>
+                
+                <div class="input-group">
+                    <label>الدخل الأساسي / الراتب (ج.م)</label>
+                    <input type="number" id="calc-salary" class="input-control" value="0">
+                </div>
+                <div class="input-group">
+                    <label>مشاريع إضافية (Freelance) (ج.م)</label>
+                    <input type="number" id="calc-freelance" class="input-control" value="0">
+                </div>
+                <div class="input-group">
+                    <label>تخصيص للمنزل (%)</label>
+                    <input type="number" id="calc-percent" class="input-control" value="60" max="100">
+                </div>
+                <button class="btn btn-primary" onclick="calculateAndAllocate()">حساب وتوزيع</button>
+            </div>
+        </section>
 
-    <!-- External Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
-    </script>
+        <section id="settings" class="section">
+            <div class="card">
+                <h3>تخصيص الواجهة</h3>
+                <br>
+                <div class="input-group">
+                    <label>المظهر (Dark/Light Mode)</label>
+                    <button class="btn btn-outline" onclick="toggleTheme()"><i class="fas fa-moon"></i> تبديل المظهر</button>
+                </div>
+            </div>
+
+            <div class="credentials-card">
+                <img src="https://drive.google.com/uc?export=view&id=1C7BT9_FOkAysydVqegpxGoWfrv-A7SVR" alt="Hazem Madi" onerror="this.src='https://via.placeholder.com/120'">
+                <div class="creator-name">Hazem K H Madi</div>
+                <p style="color: var(--text-muted); margin-bottom: 1rem; font-family: sans-serif;">Senior Product Designer</p>
+                <div class="social-links">
+                    <a href="https://hazemkhmadi.framer.ai" target="_blank" title="Portfolio"><i class="fas fa-globe"></i></a>
+                    <a href="https://www.linkedin.com/in/hazem-k-h-madi" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+                <p style="margin-top: 1rem; font-size: 0.9rem;">تم تصميم وتطوير هذه المنصة خصيصاً لتوفير تجربة مالية متطورة.</p>
+            </div>
+        </section>
+
+        <div id="export-template">
+            <h1 style="text-align: center; color: #4F46E5;">التقرير المالي المفصل</h1>
+            <h3 style="text-align: center; color: #6B7280; margin-bottom: 2rem;">بواسطة Hazem K H Madi</h3>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 2rem; border-bottom: 2px solid #E5E7EB; padding-bottom: 1rem;">
+                <div><strong>إجمالي الدخل:</strong> <span id="pdf-income"></span></div>
+                <div><strong>مصاريف شخصية:</strong> <span id="pdf-personal"></span></div>
+                <div><strong>مصاريف المنزل:</strong> <span id="pdf-family"></span></div>
+            </div>
+        </div>
+
+    </main>
 
     <script>
-        (function() {
-            // ==================== STORAGE KEYS ====================
-            const STORAGE = {
-                pBudget: 'exp_tracker_pro_pBudget_v5',
-                pTxns: 'exp_tracker_pro_pTxns_v5',
-                fBudget: 'exp_tracker_pro_fBudget_v5',
-                fTxns: 'exp_tracker_pro_fTxns_v5',
-                tab: 'exp_tracker_pro_tab_v5',
-                theme: 'exp_tracker_pro_theme_v5',
-                scheme: 'exp_tracker_pro_scheme_v5',
-            };
+        // State Management
+        let state = JSON.parse(localStorage.getItem('financeAppState')) || {
+            totalIncome: 0,
+            personalExpenses: [],
+            familyExpenses: []
+        };
 
-            // ==================== APPLICATION STATE ====================
-            const state = {
-                activeTab: 'personal',
-                personal: { budget: 0, transactions: [] },
-                family: { budget: 0, transactions: [] },
-                theme: 'dark',
-                scheme: 'indigo',
-                searchQuery: '',
-                isSearchOpen: false,
-            };
+        let myChart;
 
-            // ==================== DOM REFERENCE CACHE ====================
-            const $ = (sel) => document.querySelector(sel);
-            const $$ = (sel) => document.querySelectorAll(sel);
+        // Number Formatter
+        const formatMoney = (amount) => {
+            return new Intl.NumberFormat('ar-EG', { style: 'currency', currency: 'EGP' }).format(amount);
+        };
 
-            const dom = {
-                // Badges
-                badgePersonal: $('#badgePersonal'),
-                badgeFamily: $('#badgeFamily'),
-                // Personal budget
-                budgetTotalPersonal: $('#budgetTotalPersonal'),
-                budgetRemainingPersonal: $('#budgetRemainingPersonal'),
-                budgetSpentPersonal: $('#budgetSpentPersonal'),
-                progressPercentPersonal: $('#progressPercentPersonal'),
-                progressFillPersonal: $('#progressFillPersonal'),
-                // Personal form
-                descPersonal: $('#descPersonal'),
-                amountPersonal: $('#amountPersonal'),
-                addPersonalBtn: $('#addPersonalBtn'),
-                transactionListPersonal: $('#transactionListPersonal'),
-                setBudgetPersonal: $('#setBudgetPersonal'),
-                clearPersonalBtn: $('#clearPersonalBtn'),
-                txnCountPersonal: $('#txnCountPersonal'),
-                quickChipsPersonal: $('#quickChipsPersonal'),
-                // Family budget
-                budgetTotalFamily: $('#budgetTotalFamily'),
-                budgetRemainingFamily: $('#budgetRemainingFamily'),
-                budgetSpentFamily: $('#budgetSpentFamily'),
-                progressPercentFamily: $('#progressPercentFamily'),
-                progressFillFamily: $('#progressFillFamily'),
-                // Family form
-                descFamily: $('#descFamily'),
-                amountFamily: $('#amountFamily'),
-                addFamilyBtn: $('#addFamilyBtn'),
-                transactionListFamily: $('#transactionListFamily'),
-                setBudgetFamily: $('#setBudgetFamily'),
-                clearFamilyBtn: $('#clearFamilyBtn'),
-                txnCountFamily: $('#txnCountFamily'),
-                quickChipsFamily: $('#quickChipsFamily'),
-                // Modal
-                modalBackdrop: $('#modalBackdrop'),
-                modalTitle: $('#modalTitle'),
-                modalContent: $('#modalContent'),
-                // Overview
-                overviewRemainingPersonal: $('#overviewRemainingPersonal'),
-                overviewRemainingFamily: $('#overviewRemainingFamily'),
-                totalSpentOverall: $('#totalSpentOverall'),
-                overallStatusBadge: $('#overallStatusBadge'),
-                overviewCard: $('#overviewCard'),
-                // Search
-                searchBar: $('#searchBar'),
-                searchInput: $('#searchInput'),
-                btnSearch: $('#btnSearch'),
-                btnClearSearch: $('#btnClearSearch'),
-                // Settings
-                btnSettings: $('#btnSettings'),
-                // Sections
-                sectionPersonal: $('#sectionPersonal'),
-                sectionFamily: $('#sectionFamily'),
-                tabNav: $('#tabNav'),
-                // Export
-                exportWrapper: $('#exportWrapper'),
-                // Toast
-                toastContainer: $('#toastContainer'),
-                // Bottom nav
-                bottomNav: $('#bottomNav'),
-                navInstall: $('#navInstall'),
-            };
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
 
-            // ==================== PWA INSTALL PROMPT ====================
-            let deferredPrompt = null;
+        // Theme Toggling
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            updateChart(); // Refresh chart colors
+        }
 
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                if (dom.navInstall) {
-                    dom.navInstall.style.display = 'flex';
+        // Initialize Theme from LocalStorage
+        if(localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
+
+        // Core App Functions
+        function addExpense(type) {
+            const amountInput = document.getElementById(`${type === 'personal' ? 'p' : 'f'}-amount`);
+            const descInput = document.getElementById(`${type === 'personal' ? 'p' : 'f'}-desc`);
+            
+            const amount = parseFloat(amountInput.value);
+            const desc = descInput.value;
+
+            if (isNaN(amount) || amount <= 0 || !desc) {
+                alert("يرجى إدخال قيم صحيحة.");
+                return;
+            }
+
+            const expense = { id: Date.now(), amount, desc, date: new Date().toISOString() };
+            
+            if (type === 'personal') state.personalExpenses.push(expense);
+            else state.familyExpenses.push(expense);
+
+            saveState();
+            updateUI();
+            
+            amountInput.value = '';
+            descInput.value = '';
+        }
+
+        function calculateAndAllocate() {
+            const salary = parseFloat(document.getElementById('calc-salary').value) || 0;
+            const freelance = parseFloat(document.getElementById('calc-freelance').value) || 0;
+            const familyPercent = parseFloat(document.getElementById('calc-percent').value) || 60;
+
+            const totalNewIncome = salary + freelance;
+            state.totalIncome += totalNewIncome;
+            
+            saveState();
+            updateUI();
+            alert(`تم إضافة ${formatMoney(totalNewIncome)} للرصيد بنجاح.`);
+            switchTab('dashboard');
+        }
+
+        function getTotals() {
+            const pTotal = state.personalExpenses.reduce((sum, exp) => sum + exp.amount, 0);
+            const fTotal = state.familyExpenses.reduce((sum, exp) => sum + exp.amount, 0);
+            const balance = state.totalIncome - (pTotal + fTotal);
+            return { pTotal, fTotal, balance };
+        }
+
+        function updateUI() {
+            const totals = getTotals();
+            
+            document.getElementById('totalBalance').innerText = formatMoney(totals.balance);
+            document.getElementById('totalPersonalExpense').innerText = formatMoney(totals.pTotal);
+            document.getElementById('totalFamilyExpense').innerText = formatMoney(totals.fTotal);
+
+            updateChart(totals.pTotal, totals.fTotal, totals.balance);
+        }
+
+        function saveState() {
+            localStorage.setItem('financeAppState', JSON.stringify(state));
+        }
+
+        // Chart.js Integration
+        function updateChart(pTotal = 0, fTotal = 0, balance = 0) {
+            const ctx = document.getElementById('expenseChart').getContext('2d');
+            const textColor = getComputedStyle(document.body).getPropertyValue('--text-main').trim();
+            
+            if (myChart) myChart.destroy();
+
+            myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['المتبقي', 'مصاريف شخصية', 'مصاريف المنزل'],
+                    datasets: [{
+                        data: [Math.max(0, balance), pTotal, fTotal],
+                        backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: textColor, font: { family: 'Segoe UI' } } }
+                    },
+                    cutout: '70%'
                 }
-                console.log('✅ PWA install prompt ready');
             });
+        }
 
-            window.addEventListener('appinstalled', () => {
+        // PDF Export Logic (Superior Custom Formatting)
+        function exportReport() {
+            const totals = getTotals();
+            document.getElementById('pdf-income').innerText = formatMoney(state.totalIncome);
+            document.getElementById('pdf-personal').innerText = formatMoney(totals.pTotal);
+            document.getElementById('pdf-family').innerText = formatMoney(totals.fTotal);
+
+            const element = document.getElementById('export-template');
+            element.style.display = 'block';
+
+            const opt = {
+                margin:       1,
+                filename:     `Financial_Report_Hazem_Madi_${new Date().toLocaleDateString()}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                element.style.display = 'none';
+            });
+        }
+
+        // PWA Install Logic
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const installBtn = document.getElementById('installBtn');
+            installBtn.style.display = 'inline-flex';
+            
+            installBtn.addEventListener('click', async () => {
+                installBtn.style.display = 'none';
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
                 deferredPrompt = null;
-                if (dom.navInstall) {
-                    dom.navInstall.style.display = 'none';
-                }
-                showToast('🎉 تم تثبيت التطبيق بنجاح! شكراً لك', 'success');
-                console.log('📱 App installed successfully');
             });
-
-            // ==================== UTILITY FUNCTIONS ====================
-            function formatCurrency(amount) {
-                try {
-                    return new Intl.NumberFormat('ar-EG', {
-                        style: 'currency',
-                        currency: 'EGP',
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                    }).format(amount);
-                } catch (e) {
-                    return amount.toFixed(2) + ' ج.م';
-                }
-            }
-
-            function formatCurrencyShort(amount) {
-                if (Math.abs(amount) >= 1000000) return (amount / 1000000).toFixed(1) + 'M ج.م';
-                if (Math.abs(amount) >= 1000) return (amount / 1000).toFixed(1) + 'k ج.م';
-                return amount.toFixed(0) + ' ج.م';
-            }
-
-            function getTodayDate() {
-                const d = new Date();
-                const year = d.getFullYear();
-                const month = String(d.getMonth() + 1).padStart(2, '0');
-                const day = String(d.getDate()).padStart(2, '0');
-                return `${year}-${month}-${day}`;
-            }
-
-            function formatDateArabic(dateStr) {
-                const d = new Date(dateStr);
-                const months = [
-                    'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
-                    'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
-                ];
-                if (isNaN(d.getTime())) return dateStr;
-                return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
-            }
-
-            function generateUniqueId() {
-                return 'txn_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-            }
-
-            function escapeHTML(str) {
-                const div = document.createElement('div');
-                div.textContent = str;
-                return div.innerHTML;
-            }
-
-            function showToast(message, type = 'info') {
-                const toast = document.createElement('div');
-                toast.className = `toast ${type}`;
-                const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
-                toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span> ${message}`;
-                dom.toastContainer.appendChild(toast);
-                setTimeout(() => {
-                    toast.style.opacity = '0';
-                    toast.style.transform = 'translateY(-25px) scale(0.85)';
-                    toast.style.transition = 'all 0.35s ease';
-                    setTimeout(() => toast.remove(), 350);
-                }, 2400);
-            }
-
-            // ==================== RIPPLE EFFECT ====================
-            function addRippleEffect(e) {
-                const btn = e.currentTarget;
-                if (!btn.classList.contains('ripple')) return;
-                const ripple = document.createElement('span');
-                ripple.className = 'ripple-effect';
-                const rect = btn.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                ripple.style.width = ripple.style.height = size + 'px';
-                ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
-                ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
-                btn.appendChild(ripple);
-                ripple.addEventListener('animationend', () => ripple.remove());
-            }
-
-            // ==================== DATA PERSISTENCE ====================
-            function saveAllData() {
-                try {
-                    localStorage.setItem(STORAGE.pBudget, state.personal.budget);
-                    localStorage.setItem(STORAGE.pTxns, JSON.stringify(state.personal.transactions));
-                    localStorage.setItem(STORAGE.fBudget, state.family.budget);
-                    localStorage.setItem(STORAGE.fTxns, JSON.stringify(state.family.transactions));
-                    localStorage.setItem(STORAGE.tab, state.activeTab);
-                    localStorage.setItem(STORAGE.theme, state.theme);
-                    localStorage.setItem(STORAGE.scheme, state.scheme);
-                } catch (e) {
-                    console.warn('Storage full, attempting cleanup...');
-                    showToast('⚠️ مساحة التخزين ممتلئة، يُرجى تصدير البيانات', 'warning');
-                }
-            }
-
-            function loadAllData() {
-                try {
-                    const pb = localStorage.getItem(STORAGE.pBudget);
-                    state.personal.budget = pb !== null ? parseFloat(pb) : 0;
-                    const pt = localStorage.getItem(STORAGE.pTxns);
-                    state.personal.transactions = pt ? JSON.parse(pt) : [];
-                    const fb = localStorage.getItem(STORAGE.fBudget);
-                    state.family.budget = fb !== null ? parseFloat(fb) : 0;
-                    const ft = localStorage.getItem(STORAGE.fTxns);
-                    state.family.transactions = ft ? JSON.parse(ft) : [];
-                    state.activeTab = localStorage.getItem(STORAGE.tab) || 'personal';
-                    state.theme = localStorage.getItem(STORAGE.theme) || 'dark';
-                    state.scheme = localStorage.getItem(STORAGE.scheme) || 'indigo';
-
-                    if (!Array.isArray(state.personal.transactions)) state.personal.transactions = [];
-                    if (!Array.isArray(state.family.transactions)) state.family.transactions = [];
-                    if (isNaN(state.personal.budget) || state.personal.budget < 0) state.personal.budget = 0;
-                    if (isNaN(state.family.budget) || state.family.budget < 0) state.family.budget = 0;
-                } catch (e) {
-                    console.error('Data loading error:', e);
-                    state.personal = { budget: 0, transactions: [] };
-                    state.family = { budget: 0, transactions: [] };
-                }
-            }
-
-            // ==================== COMPUTED VALUES ====================
-            function getTotalSpent(category) {
-                return state[category].transactions.reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0);
-            }
-
-            function getRemaining(category) {
-                return state[category].budget - getTotalSpent(category);
-            }
-
-            function getSpendPercentage(category) {
-                if (state[category].budget <= 0) return 0;
-                const pct = (getTotalSpent(category) / state[category].budget) * 100;
-                return Math.min(pct, 100);
-            }
-
-            // ==================== RENDER FUNCTIONS ====================
-            function renderBudgetCard(category) {
-                const remaining = getRemaining(category);
-                const spent = getTotalSpent(category);
-                const pct = getSpendPercentage(category);
-
-                let totalEl, remEl, spentEl, pctEl, fillEl;
-                if (category === 'personal') {
-                    totalEl = dom.budgetTotalPersonal;
-                    remEl = dom.budgetRemainingPersonal;
-                    spentEl = dom.budgetSpentPersonal;
-                    pctEl = dom.progressPercentPersonal;
-                    fillEl = dom.progressFillPersonal;
-                } else {
-                    totalEl = dom.budgetTotalFamily;
-                    remEl = dom.budgetRemainingFamily;
-                    spentEl = dom.budgetSpentFamily;
-                    pctEl = dom.progressPercentFamily;
-                    fillEl = dom.progressFillFamily;
-                }
-
-                if (totalEl) totalEl.textContent = formatCurrency(state[category].budget);
-                if (remEl) {
-                    remEl.textContent = formatCurrency(remaining);
-                    remEl.className = 'budget-number ' + (remaining > 0 ? 'text-green' : remaining < 0 ? 'text-red' :
-                        'text-amber');
-                }
-                if (spentEl) spentEl.textContent = formatCurrency(spent);
-                if (pctEl) pctEl.textContent = pct.toFixed(1) + '%';
-                if (fillEl) {
-                    fillEl.style.width = pct + '%';
-                    fillEl.classList.remove('progress-safe', 'progress-warn', 'progress-danger');
-                    if (pct < 60) fillEl.classList.add('progress-safe');
-                    else if (pct < 85) fillEl.classList.add('progress-warn');
-                    else fillEl.classList.add('progress-danger');
-                }
-            }
-
-            function renderTransactionList(category) {
-                const listEl = category === 'personal' ? dom.transactionListPersonal : dom.transactionListFamily;
-                const countEl = category === 'personal' ? dom.txnCountPersonal : dom.txnCountFamily;
-                let transactions = [...state[category].transactions].reverse();
-
-                // Apply search filter
-                if (state.searchQuery && state.searchQuery.trim()) {
-                    const query = state.searchQuery.trim().toLowerCase();
-                    transactions = transactions.filter(t =>
-                        t.description.toLowerCase().includes(query)
-                    );
-                }
-
-                if (listEl) {
-                    listEl.innerHTML = '';
-                    if (transactions.length === 0) {
-                        const emptyMsg = state.searchQuery ?
-                            'لا توجد نتائج تطابق بحثك' :
-                            'لا توجد مصروفات مسجلة بعد';
-                        listEl.innerHTML =
-                            `<li class="empty-state"><i class="fa-solid fa-receipt"></i><p>${emptyMsg}</p></li>`;
-                    } else {
-                        transactions.forEach((txn, index) => {
-                            const li = document.createElement('li');
-                            li.className = 'transaction-item';
-                            li.style.animationDelay = (index * 0.03) + 's';
-                            li.setAttribute('data-id', txn.id);
-                            li.innerHTML = `
-                                <div class="transaction-info">
-                                    <div class="transaction-desc">${escapeHTML(txn.description)}</div>
-                                    <div class="transaction-date">${formatDateArabic(txn.date)}</div>
-                                </div>
-                                <div style="display:flex;align-items:center;gap:8px;">
-                                    <span class="transaction-amount">- ${formatCurrency(txn.amount)}</span>
-                                    <button class="btn-danger-text delete-txn-btn" data-id="${txn.id}" data-category="${category}" title="حذف">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
-                                </div>
-                            `;
-                            listEl.appendChild(li);
-                        });
-
-                        // Attach delete event listeners
-                        listEl.querySelectorAll('.delete-txn-btn').forEach(btn => {
-                            btn.addEventListener('click', function(e) {
-                                e.stopPropagation();
-                                const txnId = this.getAttribute('data-id');
-                                const cat = this.getAttribute('data-category');
-                                deleteTransaction(cat, txnId);
-                            });
-                        });
-                    }
-                }
-                if (countEl) {
-                    countEl.textContent = state[category].transactions.length + ' عنصر';
-                }
-            }
-
-            function renderOverview() {
-                const remP = getRemaining('personal');
-                const remF = getRemaining('family');
-                const totalSpent = getTotalSpent('personal') + getTotalSpent('family');
-                const totalBudget = state.personal.budget + state.family.budget;
-                const overallPct = totalBudget > 0 ? (totalSpent / totalBudget) * 100 : 0;
-
-                if (dom.overviewRemainingPersonal) {
-                    dom.overviewRemainingPersonal.textContent = formatCurrency(remP);
-                    dom.overviewRemainingPersonal.className = 'budget-number ' + (remP > 0 ? 'text-green' : remP < 0 ?
-                        'text-red' : 'text-amber');
-                }
-                if (dom.overviewRemainingFamily) {
-                    dom.overviewRemainingFamily.textContent = formatCurrency(remF);
-                    dom.overviewRemainingFamily.className = 'budget-number ' + (remF > 0 ? 'text-green' : remF < 0 ?
-                        'text-red' : 'text-amber');
-                }
-                if (dom.totalSpentOverall) {
-                    dom.totalSpentOverall.textContent = formatCurrency(totalSpent);
-                }
-                if (dom.overallStatusBadge) {
-                    dom.overallStatusBadge.classList.remove('success', 'warning', 'danger');
-                    if (overallPct < 60) {
-                        dom.overallStatusBadge.classList.add('success');
-                        dom.overallStatusBadge.textContent = '✅ الوضع آمن';
-                    } else if (overallPct < 85) {
-                        dom.overallStatusBadge.classList.add('warning');
-                        dom.overallStatusBadge.textContent = '⚠️ انتباه';
-                    } else {
-                        dom.overallStatusBadge.classList.add('danger');
-                        dom.overallStatusBadge.textContent = '🔴 تجاوز';
-                    }
-                }
-            }
-
-            function renderBadges() {
-                const pSpent = getTotalSpent('personal');
-                const fSpent = getTotalSpent('family');
-                if (dom.badgePersonal) dom.badgePersonal.textContent = formatCurrencyShort(pSpent);
-                if (dom.badgeFamily) dom.badgeFamily.textContent = formatCurrencyShort(fSpent);
-            }
-
-            function renderAll() {
-                renderBudgetCard('personal');
-                renderBudgetCard('family');
-                renderTransactionList('personal');
-                renderTransactionList('family');
-                renderOverview();
-                renderBadges();
-            }
-
-            // ==================== ACTIONS ====================
-            function deleteTransaction(category, txnId) {
-                const initialLength = state[category].transactions.length;
-                state[category].transactions = state[category].transactions.filter(t => t.id !== txnId);
-                if (state[category].transactions.length < initialLength) {
-                    saveAllData();
-                    renderAll();
-                    showToast('🗑️ تم حذف المصروف بنجاح', 'info');
-                }
-            }
-
-            function addTransaction(category, description, amount) {
-                if (!description || !description.trim()) {
-                    showToast('⚠️ الرجاء إدخال وصف للمصروف', 'error');
-                    return false;
-                }
-                if (isNaN(amount) || amount <= 0) {
-                    showToast('⚠️ الرجاء إدخال مبلغ صحيح أكبر من صفر', 'error');
-                    return false;
-                }
-
-                const transaction = {
-                    id: generateUniqueId(),
-                    description: description.trim(),
-                    amount: parseFloat(amount),
-                    date: getTodayDate(),
-                };
-
-                state[category].transactions.push(transaction);
-                saveAllData();
-                renderAll();
-
-                // Clear form
-                if (category === 'personal') {
-                    dom.descPersonal.value = '';
-                    dom.amountPersonal.value = '';
-                    dom.descPersonal.focus();
-                } else {
-                    dom.descFamily.value = '';
-                    dom.amountFamily.value = '';
-                    dom.descFamily.focus();
-                }
-
-                // Feedback
-                const remaining = getRemaining(category);
-                if (remaining < 0) {
-                    showToast('⚠️ تنبيه هام: لقد تجاوزت الميزانية المحددة!', 'error');
-                } else if (state[category].budget > 0 && remaining < state[category].budget * 0.15) {
-                    showToast('⚡ تحذير: الميزانية أوشكت على النفاد (أقل من 15%)', 'warning');
-                } else {
-                    showToast('✅ تم إضافة المصروف بنجاح', 'success');
-                }
-                return true;
-            }
-
-            function setBudget(category) {
-                const categoryName = category === 'personal' ? 'الشخصية' : 'البيت والعائلة';
-                const currentBudget = state[category].budget;
-                openModal('📋 تحديد الميزانية - ' + categoryName, `
-                    <div style="text-align:center;">
-                        <p style="color:var(--text-secondary);margin-bottom:12px;font-size:0.82rem;">
-                            أدخل الميزانية الشهرية لمصاريف <strong>${categoryName}</strong> بالجنيه المصري
-                        </p>
-                        <input type="number" class="form-input" id="budgetInputModal" value="${currentBudget}" step="1" min="0" placeholder="مثال: 5000" style="font-size:1.3rem;text-align:center;margin-bottom:14px;font-weight:700;">
-                        <div style="display:flex;gap:8px;">
-                            <button class="btn btn-primary flex-1" id="saveBudgetModalBtn">💾 حفظ الميزانية</button>
-                            <button class="btn btn-outline flex-1" id="cancelBudgetModalBtn">إلغاء</button>
-                        </div>
-                        ${currentBudget > 0 ? `<p style="margin-top:10px;font-size:0.7rem;color:var(--text-muted);">الميزانية الحالية: ${formatCurrency(currentBudget)}</p>` : ''}
-                    </div>
-                `);
-
-                setTimeout(() => {
-                    const inputEl = $('#budgetInputModal');
-                    const saveBtn = $('#saveBudgetModalBtn');
-                    const cancelBtn = $('#cancelBudgetModalBtn');
-                    if (inputEl) inputEl.focus();
-                    if (saveBtn) {
-                        saveBtn.addEventListener('click', () => {
-                            const val = parseFloat(inputEl?.value);
-                            if (isNaN(val) || val < 0) {
-                                showToast('⚠️ الرجاء إدخال مبلغ صحيح', 'error');
-                                return;
-                            }
-                            state[category].budget = val;
-                            saveAllData();
-                            renderAll();
-                            closeModal();
-                            showToast('✅ تم حفظ الميزانية بنجاح', 'success');
-                        });
-                    }
-                    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
-                }, 150);
-            }
-
-            function clearAllTransactions(category) {
-                if (state[category].transactions.length === 0) {
-                    showToast('ℹ️ لا توجد مصروفات لمسحها', 'info');
-                    return;
-                }
-                const categoryName = category === 'personal' ? 'الشخصية' : 'البيت والعائلة';
-                openModal('🗑️ تأكيد مسح المصروفات', `
-                    <div style="text-align:center;">
-                        <p style="color:var(--accent-danger);font-weight:600;margin-bottom:10px;">
-                            ⚠️ هل أنت متأكد من مسح <strong>جميع</strong> مصروفات ${categoryName}؟
-                        </p>
-                        <p style="color:var(--text-muted);font-size:0.75rem;margin-bottom:14px;">
-                            عدد المصروفات: ${state[category].transactions.length} | هذا الإجراء لا يمكن التراجع عنه
-                        </p>
-                        <div style="display:flex;gap:8px;">
-                            <button class="btn btn-primary flex-1" id="confirmClearModalBtn" style="background:var(--accent-danger);">🗑️ نعم، امسح الكل</button>
-                            <button class="btn btn-outline flex-1" id="cancelClearModalBtn">إلغاء</button>
-                        </div>
-                    </div>
-                `);
-                setTimeout(() => {
-                    const confirmBtn = $('#confirmClearModalBtn');
-                    const cancelBtn = $('#cancelClearModalBtn');
-                    if (confirmBtn) {
-                        confirmBtn.addEventListener('click', () => {
-                            state[category].transactions = [];
-                            saveAllData();
-                            renderAll();
-                            closeModal();
-                            showToast('🗑️ تم مسح جميع المصروفات بنجاح', 'info');
-                        });
-                    }
-                    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
-                }, 150);
-            }
-
-            function switchTab(tab) {
-                state.activeTab = tab;
-                saveAllData();
-                // Update tab nav
-                dom.tabNav.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                const activeTabBtn = dom.tabNav.querySelector(`[data-tab="${tab}"]`);
-                if (activeTabBtn) activeTabBtn.classList.add('active');
-                // Show/hide sections
-                if (dom.sectionPersonal) dom.sectionPersonal.style.display = tab === 'personal' ? '' : 'none';
-                if (dom.sectionFamily) dom.sectionFamily.style.display = tab === 'family' ? '' : 'none';
-                // Update bottom nav
-                dom.bottomNav.querySelectorAll('.bottom-nav-btn').forEach(b => b.classList.remove('active'));
-                const navBtn = document.getElementById(tab === 'personal' ? 'navPersonal' : 'navFamily');
-                if (navBtn) navBtn.classList.add('active');
-                renderAll();
-            }
-
-            // ==================== MODAL FUNCTIONS ====================
-            function openModal(title, contentHTML) {
-                if (dom.modalTitle) dom.modalTitle.textContent = title;
-                if (dom.modalContent) dom.modalContent.innerHTML = contentHTML;
-                if (dom.modalBackdrop) {
-                    dom.modalBackdrop.classList.add('active');
-                    document.body.classList.add('no-scroll');
-                }
-            }
-
-            function closeModal() {
-                if (dom.modalBackdrop) {
-                    dom.modalBackdrop.classList.remove('active');
-                    document.body.classList.remove('no-scroll');
-                }
-                setTimeout(() => {
-                    if (dom.modalContent) dom.modalContent.innerHTML = '';
-                }, 300);
-            }
-
-            // ==================== CALCULATOR ====================
-            function openCalculatorModal() {
-                openModal('🧮 حاسبة الدخل المتعدد', `
-                    <div id="calculatorApp">
-                        <p style="text-align:center;color:var(--text-secondary);font-size:0.78rem;margin-bottom:12px;">
-                            💡 أدخل مصادر دخلك المتعددة وسيتم جمعها وتقسيمها على الفئتين
-                        </p>
-                        <div id="incomeSourcesContainer" style="max-height:170px;overflow-y:auto;margin-bottom:10px;"></div>
-                        <button class="btn btn-outline btn-sm w-100" id="addIncomeSourceBtn" style="margin-bottom:10px;">
-                            <i class="fa-solid fa-plus"></i> إضافة مصدر دخل
-                        </button>
-                        <div class="budget-cell" style="margin-bottom:10px;">
-                            <span style="font-weight:600;">💰 إجمالي الدخل:</span>
-                            <strong id="calcTotalIncome" style="font-family:var(--font-latin);font-size:1.1rem;">0 ج.م</strong>
-                        </div>
-                        <div class="form-row" style="margin-bottom:8px;">
-                            <div class="form-group">
-                                <label class="form-label">نسبة المصاريف الشخصية (%)</label>
-                                <input type="number" class="form-input" id="calcPercentPersonal" value="40" min="0" max="100" step="1" style="text-align:center;">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">نسبة البيت والعائلة (%)</label>
-                                <input type="number" class="form-input" id="calcPercentFamily" value="60" min="0" max="100" readonly style="text-align:center;">
-                            </div>
-                        </div>
-                        <div class="budget-cell" style="margin-bottom:6px;background:var(--accent-primary-pale);">
-                            👤 نصيب الشخصية: <strong id="calcSharePersonal" style="font-family:var(--font-latin);">0 ج.م</strong>
-                        </div>
-                        <div class="budget-cell" style="margin-bottom:12px;background:rgba(14,165,233,0.1);">
-                            🏠 نصيب البيت والعائلة: <strong id="calcShareFamily" style="font-family:var(--font-latin);">0 ج.م</strong>
-                        </div>
-                        <button class="btn btn-primary btn-block" id="applyCalculatorBtn">
-                            <i class="fa-solid fa-check-circle"></i> تطبيق على الميزانيات
-                        </button>
-                    </div>
-                `);
-
-                setTimeout(() => {
-                    initCalculator();
-                }, 200);
-            }
-
-            function initCalculator() {
-                let incomeSources = [{ id: generateUniqueId(), name: '', amount: '' }];
-
-                function renderIncomeSources() {
-                    const container = $('#incomeSourcesContainer');
-                    if (!container) return;
-                    container.innerHTML = incomeSources.map((src, idx) => `
-                        <div class="form-row" style="margin-bottom:6px;" data-src-id="${src.id}">
-                            <div class="form-group" style="flex:2;">
-                                <label class="form-label">اسم المصدر ${idx + 1}</label>
-                                <input type="text" class="form-input income-name-input" value="${escapeHTML(src.name)}" placeholder="مثال: راتب، عمل إضافي...">
-                            </div>
-                            <div class="form-group" style="flex:1;min-width:80px;">
-                                <label class="form-label">المبلغ (ج.م)</label>
-                                <input type="number" class="form-input income-amount-input" value="${src.amount}" placeholder="0" step="0.01" min="0">
-                            </div>
-                            ${incomeSources.length > 1 ? `<button class="btn-danger-text remove-source-btn" data-src-id="${src.id}" style="align-self:flex-end;margin-bottom:2px;"><i class="fa-solid fa-trash"></i></button>` : '<span style="width:28px;"></span>'}
-                        </div>
-                    `).join('');
-
-                    container.querySelectorAll('.income-name-input, .income-amount-input').forEach(input => {
-                        input.addEventListener('input', updateCalculator);
-                    });
-                    container.querySelectorAll('.remove-source-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            const srcId = this.getAttribute('data-src-id');
-                            incomeSources = incomeSources.filter(s => s.id !== srcId);
-                            renderIncomeSources();
-                            updateCalculator();
-                        });
-                    });
-                }
-
-                function updateCalculator() {
-                    const nameInputs = $$('#incomeSourcesContainer .income-name-input');
-                    const amountInputs = $$('#incomeSourcesContainer .income-amount-input');
-                    let total = 0;
-                    incomeSources.forEach((src, i) => {
-                        if (nameInputs[i]) src.name = nameInputs[i].value;
-                        if (amountInputs[i]) src.amount = amountInputs[i].value;
-                        total += parseFloat(src.amount) || 0;
-                    });
-                    const pctPersonal = parseFloat($('#calcPercentPersonal')?.value) || 0;
-                    const pctFamily = Math.max(0, 100 - pctPersonal);
-
-                    if ($('#calcPercentFamily')) $('#calcPercentFamily').value = pctFamily;
-                    if ($('#calcTotalIncome')) $('#calcTotalIncome').textContent = formatCurrency(total);
-                    if ($('#calcSharePersonal')) $('#calcSharePersonal').textContent = formatCurrency(total *
-                        pctPersonal / 100);
-                    if ($('#calcShareFamily')) $('#calcShareFamily').textContent = formatCurrency(total * pctFamily /
-                    100);
-                }
-
-                const addBtn = $('#addIncomeSourceBtn');
-                if (addBtn) {
-                    addBtn.addEventListener('click', () => {
-                        incomeSources.push({ id: generateUniqueId(), name: '', amount: '' });
-                        renderIncomeSources();
-                        updateCalculator();
-                    });
-                }
-
-                const pctInput = $('#calcPercentPersonal');
-                if (pctInput) {
-                    pctInput.addEventListener('input', () => {
-                        let val = parseInt(pctInput.value) || 0;
-                        val = Math.max(0, Math.min(100, val));
-                        pctInput.value = val;
-                        updateCalculator();
-                    });
-                }
-
-                const applyBtn = $('#applyCalculatorBtn');
-                if (applyBtn) {
-                    applyBtn.addEventListener('click', () => {
-                        const totalText = $('#calcTotalIncome')?.textContent || '0';
-                        const total = parseFloat(totalText.replace(/[^0-9.\-]/g, '')) || 0;
-                        const pctP = parseFloat($('#calcPercentPersonal')?.value) || 0;
-
-                        if (total <= 0) {
-                            showToast('⚠️ الرجاء إدخال مبلغ دخل صحيح', 'error');
-                            return;
-                        }
-                        state.personal.budget = total * pctP / 100;
-                        state.family.budget = total * (100 - pctP) / 100;
-                        saveAllData();
-                        renderAll();
-                        closeModal();
-                        showToast('✅ تم تطبيق الميزانيات بنجاح!', 'success');
-                    });
-                }
-
-                renderIncomeSources();
-                updateCalculator();
-            }
-
-            // ==================== EXPORT FUNCTIONS ====================
-            function buildExportHTML(category) {
-                const data = state[category];
-                const categoryName = category === 'personal' ? 'المصاريف الشخصية' : 'مصاريف البيت والعائلة';
-                const categoryIcon = category === 'personal' ? '👤' : '🏠';
-                const spent = getTotalSpent(category);
-                const remaining = getRemaining(category);
-                const pct = getSpendPercentage(category);
-                const now = new Date();
-                const dateStr = now.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
-                const timeStr = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
-
-                let rowsHTML = '';
-                if (data.transactions.length === 0) {
-                    rowsHTML =
-                        '<tr><td colspan="4" style="text-align:center;padding:20px;color:#999;">لا توجد مصروفات مسجلة</td></tr>';
-                } else {
-                    data.transactions.slice().reverse().forEach((txn, idx) => {
-                        rowsHTML += `
-                            <tr>
-                                <td>${idx + 1}</td>
-                                <td>${escapeHTML(txn.description)}</td>
-                                <td>${formatDateArabic(txn.date)}</td>
-                                <td style="text-align:right;font-weight:600;">${formatCurrency(txn.amount)}</td>
-                            </tr>`;
-                    });
-                }
-
-                return `
-                    <div style="font-family:'Cairo','Segoe UI',sans-serif;direction:rtl;text-align:right;padding:24px;background:#fff;color:#1a1d28;max-width:700px;margin:0 auto;border-radius:16px;">
-                        <div style="background:#0d0f14;color:#fff;padding:18px 22px;border-radius:14px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-                            <div>
-                                <h2 style="margin:0;font-size:1.2rem;">${categoryIcon} ${categoryName}</h2>
-                                <p style="margin:3px 0 0;opacity:0.7;font-size:0.7rem;font-family:'Inter',sans-serif;">تقرير مصروفات - ${dateStr} | ${timeStr}</p>
-                            </div>
-                            <div style="background:rgba(255,255,255,0.12);padding:7px 14px;border-radius:18px;font-family:'Inter',sans-serif;font-weight:700;">${formatCurrency(data.budget)}</div>
-                        </div>
-                        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;">
-                            <div style="background:#f8fafc;border-radius:10px;padding:12px;text-align:center;border:1px solid #e8ecf1;"><div style="font-size:0.68rem;color:#7c8290;">الميزانية</div><div style="font-weight:800;font-size:1rem;">${formatCurrency(data.budget)}</div></div>
-                            <div style="background:#fef0f0;border-radius:10px;padding:12px;text-align:center;border:1px solid #fce0e0;"><div style="font-size:0.68rem;color:#f43f5e;">المصروف</div><div style="font-weight:800;font-size:1rem;color:#f43f5e;">${formatCurrency(spent)}</div></div>
-                            <div style="background:#e6f7f4;border-radius:10px;padding:12px;text-align:center;border:1px solid #d0f0e8;"><div style="font-size:0.68rem;color:#10b981;">المتبقي</div><div style="font-weight:800;font-size:1rem;color:#10b981;">${formatCurrency(remaining)}</div></div>
-                        </div>
-                        <table style="width:100%;border-collapse:collapse;font-size:0.78rem;">
-                            <thead><tr style="background:#f8fafc;border-bottom:2px solid #e8ecf1;"><th style="padding:10px 8px;">#</th><th style="padding:10px 8px;">الوصف</th><th style="padding:10px 8px;">التاريخ</th><th style="padding:10px 8px;text-align:right;">المبلغ</th></tr></thead>
-                            <tbody>${rowsHTML}</tbody>
-                            <tfoot><tr style="border-top:2px solid #e8ecf1;font-weight:700;"><td colspan="3" style="padding:10px 8px;">الإجمالي المصروف</td><td style="padding:10px 8px;text-align:right;font-family:'Inter',sans-serif;">${formatCurrency(spent)}</td></tr></tfoot>
-                        </table>
-                        <div style="margin-top:20px;padding-top:14px;border-top:1px solid #e8ecf1;text-align:center;font-size:0.68rem;color:#7c8290;">
-                            <p style="margin:0;">تطبيق متعقب المصاريف | تم إنشاؤه بواسطة</p>
-                            <p style="margin:2px 0 0;font-family:'Inter',sans-serif;"><strong>Hazem K H Madi</strong> - Senior Product Designer</p>
-                        </div>
-                    </div>`;
-            }
-
-            async function exportReport(category, format) {
-                const exportHTML = buildExportHTML(category);
-                if (dom.exportWrapper) {
-                    dom.exportWrapper.innerHTML = exportHTML;
-                    dom.exportWrapper.style.position = 'relative';
-                    dom.exportWrapper.style.left = 'auto';
-                    dom.exportWrapper.style.zIndex = '300';
-                    dom.exportWrapper.style.opacity = '1';
-                    dom.exportWrapper.style.pointerEvents = 'auto';
-                    dom.exportWrapper.style.width = '700px';
-                    dom.exportWrapper.style.margin = '20px auto';
-                    dom.exportWrapper.style.borderRadius = '16px';
-                    dom.exportWrapper.style.overflow = 'hidden';
-                    dom.exportWrapper.style.boxShadow = '0 20px 60px rgba(0,0,0,0.5)';
-                    dom.exportWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-
-                await new Promise(r => setTimeout(r, 400));
-
-                try {
-                    const canvas = await html2canvas(dom.exportWrapper, {
-                        scale: 2,
-                        useCORS: true,
-                        backgroundColor: '#ffffff',
-                        logging: false,
-                    });
-
-                    if (format === 'png') {
-                        const link = document.createElement('a');
-                        link.download =
-                            `تقرير_المصاريف_${category === 'personal' ? 'الشخصية' : 'العائلية'}_${getTodayDate()}.png`;
-                        link.href = canvas.toDataURL('image/png');
-                        link.click();
-                        showToast('📸 تم تصدير التقرير كصورة PNG بنجاح', 'success');
-                    } else if (format === 'pdf') {
-                        const imgData = canvas.toDataURL('image/png');
-                        const imgWidth = 210;
-                        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                        const { jsPDF } = window.jspdf;
-                        const pdf = new jsPDF('p', 'mm', 'a4');
-                        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, Math.min(imgHeight, 297));
-                        if (imgHeight > 297) {
-                            let remaining = imgHeight - 297;
-                            while (remaining > 0) {
-                                pdf.addPage();
-                                pdf.addImage(imgData, 'PNG', 0, -297, imgWidth, imgHeight);
-                                remaining -= 297;
-                            }
-                        }
-                        pdf.save(
-                            `تقرير_المصاريف_${category === 'personal' ? 'الشخصية' : 'العائلية'}_${getTodayDate()}.pdf`);
-                        showToast('📄 تم تصدير التقرير كملف PDF بنجاح', 'success');
-                    }
-                } catch (err) {
-                    console.error('Export error:', err);
-                    showToast('❌ حدث خطأ أثناء التصدير. جارٍ فتح نافذة الطباعة...', 'error');
-                    setTimeout(() => {
-                        const printWindow = window.open('', '_blank', 'width=800,height=600');
-                        if (printWindow) {
-                            printWindow.document.write('<!DOCTYPE html><html dir="rtl"><head><meta charset="UTF-8"><title>تقرير</title></head><body>' +
-                                exportHTML + '</body></html>');
-                            printWindow.document.close();
-                            printWindow.focus();
-                            printWindow.print();
-                        }
-                    }, 500);
-                }
-
-                // Reset export wrapper
-                setTimeout(() => {
-                    if (dom.exportWrapper) {
-                        dom.exportWrapper.style.position = 'absolute';
-                        dom.exportWrapper.style.left = '-9999px';
-                        dom.exportWrapper.style.zIndex = '-1';
-                        dom.exportWrapper.style.opacity = '0';
-                        dom.exportWrapper.style.pointerEvents = 'none';
-                        dom.exportWrapper.style.width = '720px';
-                        dom.exportWrapper.style.margin = '0';
-                        dom.exportWrapper.innerHTML = '';
-                    }
-                }, 300);
-            }
-
-            function openExportOptionsModal() {
-                openModal('📤 تصدير التقرير', `
-                    <p style="text-align:center;color:var(--text-secondary);margin-bottom:14px;font-size:0.8rem;">اختر الفئة وصيغة التصدير المناسبة</p>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
-                        <button class="btn btn-outline export-option-btn" data-cat="personal" data-fmt="png" style="flex-direction:column;gap:6px;padding:14px;">
-                            <span style="font-size:1.6rem;">📸</span><span>PNG - الشخصية</span>
-                        </button>
-                        <button class="btn btn-outline export-option-btn" data-cat="personal" data-fmt="pdf" style="flex-direction:column;gap:6px;padding:14px;">
-                            <span style="font-size:1.6rem;">📄</span><span>PDF - الشخصية</span>
-                        </button>
-                        <button class="btn btn-outline export-option-btn" data-cat="family" data-fmt="png" style="flex-direction:column;gap:6px;padding:14px;">
-                            <span style="font-size:1.6rem;">📸</span><span>PNG - العائلة</span>
-                        </button>
-                        <button class="btn btn-outline export-option-btn" data-cat="family" data-fmt="pdf" style="flex-direction:column;gap:6px;padding:14px;">
-                            <span style="font-size:1.6rem;">📄</span><span>PDF - العائلة</span>
-                        </button>
-                    </div>
-                    <button class="btn btn-outline btn-sm w-100" id="cancelExportModalBtn">إلغاء</button>
-                `);
-
-                setTimeout(() => {
-                    document.querySelectorAll('.export-option-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            const cat = this.getAttribute('data-cat');
-                            const fmt = this.getAttribute('data-fmt');
-                            closeModal();
-                            exportReport(cat, fmt);
-                        });
-                    });
-                    const cancelBtn = $('#cancelExportModalBtn');
-                    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
-                }, 150);
-            }
-
-            // ==================== PWA INSTALL FUNCTION ====================
-            function promptPWAInstall() {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then((choiceResult) => {
-                        if (choiceResult.outcome === 'accepted') {
-                            showToast('🎉 جارٍ تثبيت التطبيق...', 'success');
-                            if (dom.navInstall) dom.navInstall.style.display = 'none';
-                        } else {
-                            showToast('👋 يمكنك التثبيت لاحقاً من الإعدادات', 'info');
-                        }
-                        deferredPrompt = null;
-                    });
-                } else {
-                    // Fallback guidance
-                    openModal('📱 تثبيت التطبيق', `
-                        <div style="text-align:center;font-size:0.82rem;line-height:1.8;">
-                            <p style="margin-bottom:12px;">لتثبيت التطبيق على هاتفك كتطبيق مستقل:</p>
-                            <div style="background:var(--bg-overlay);border-radius:12px;padding:14px;margin-bottom:10px;text-align:right;">
-                                <p><strong>📱 أندرويد (Android):</strong></p>
-                                <p style="color:var(--text-muted);font-size:0.72rem;">1. افتح المتصفح (Chrome)</p>
-                                <p style="color:var(--text-muted);font-size:0.72rem;">2. اضغط على القائمة (⋮) واختر "تثبيت التطبيق"</p>
-                                <p style="color:var(--text-muted);font-size:0.72rem;">3. أو استخدم زر التثبيت في الشريط السفلي</p>
-                            </div>
-                            <div style="background:var(--bg-overlay);border-radius:12px;padding:14px;margin-bottom:10px;text-align:right;">
-                                <p><strong>🍎 آيفون (iOS):</strong></p>
-                                <p style="color:var(--text-muted);font-size:0.72rem;">1. افتح المتصفح (Safari)</p>
-                                <p style="color:var(--text-muted);font-size:0.72rem;">2. اضغط على زر المشاركة <i class="fa-solid fa-square-arrow-up-right"></i></p>
-                                <p style="color:var(--text-muted);font-size:0.72rem;">3. اختر "إضافة إلى الشاشة الرئيسية"</p>
-                            </div>
-                            <div style="background:var(--accent-primary-pale);border-radius:12px;padding:14px;text-align:right;">
-                                <p><strong>🏪 متجر Google Play:</strong></p>
-                                <p style="color:var(--text-muted);font-size:0.72rem;">سيتم نشر التطبيق قريباً على متجر Google Play كتطبيق Trusted Web Activity (TWA). تابع التحديثات عبر حساب المصمم.</p>
-                            </div>
-                        </div>
-                        <button class="btn btn-outline btn-sm w-100" style="margin-top:12px;" onclick="document.querySelector('#modalBackdrop').classList.remove('active');document.body.classList.remove('no-scroll');">حسناً، فهمت</button>
-                    `);
-                }
-            }
-
-            // ==================== SETTINGS PANEL ====================
-            function openSettingsModal() {
-                const currentTheme = state.theme;
-                const currentScheme = state.scheme;
-                const schemes = [
-                    { id: 'indigo', name: 'نيلي', color: '#6366f1' },
-                    { id: 'emerald', name: 'زمردي', color: '#10b981' },
-                    { id: 'rose', name: 'وردي', color: '#f43f5e' },
-                    { id: 'amber', name: 'ذهبي', color: '#f59e0b' },
-                    { id: 'ocean', name: 'محيطي', color: '#0ea5e9' },
-                    { id: 'monochrome', name: 'رمادي', color: '#6b7280' },
-                ];
-
-                const schemeDotsHTML = schemes.map(s => `
-                    <span class="color-dot ${currentScheme === s.id ? 'active' : ''}" data-scheme="${s.id}" style="background:${s.color};" title="${s.name}"></span>
-                `).join('');
-
-                openModal('⚙️ الإعدادات والتخصيص', `
-                    <div class="settings-section">
-                        <div class="settings-section-title">المظهر</div>
-                        <div class="settings-option-row">
-                            <span class="settings-label">🌙 الوضع الداكن</span>
-                            <div class="toggle-switch ${currentTheme === 'dark' ? 'active' : ''}" id="toggleDarkMode"></div>
-                        </div>
-                    </div>
-                    <div class="settings-section">
-                        <div class="settings-section-title">نظام الألوان</div>
-                        <div class="color-dot-row">${schemeDotsHTML}</div>
-                    </div>
-                    <div class="settings-section">
-                        <div class="settings-section-title">البيانات</div>
-                        <button class="btn btn-outline btn-sm w-100" id="btnExportAllData" style="margin-bottom:6px;">
-                            <i class="fa-solid fa-download"></i> تصدير جميع البيانات (JSON)
-                        </button>
-                        <button class="btn btn-outline btn-sm w-100" id="btnImportData" style="margin-bottom:6px;">
-                            <i class="fa-solid fa-upload"></i> استيراد البيانات (JSON)
-                        </button>
-                        <input type="file" id="importFileInput" accept=".json" style="display:none;">
-                        <button class="btn btn-danger-text btn-sm w-100" id="btnResetAll">
-                            <i class="fa-solid fa-rotate-left"></i> إعادة ضبط كل البيانات
-                        </button>
-                    </div>
-                    <div class="settings-section">
-                        <div class="settings-section-title">حول التطبيق</div>
-                        <p style="font-size:0.7rem;color:var(--text-muted);text-align:center;">
-                            الإصدار 5.0 | تم التطوير بواسطة <strong>Hazem K H Madi</strong><br>
-                            Senior Product Designer
-                        </p>
-                    </div>
-                `);
-
-                setTimeout(() => {
-                    // Toggle dark mode
-                    const toggleBtn = $('#toggleDarkMode');
-                    if (toggleBtn) {
-                        toggleBtn.addEventListener('click', () => {
-                            const newTheme = state.theme === 'dark' ? 'light' : 'dark';
-                            applyTheme(newTheme);
-                            toggleBtn.classList.toggle('active', newTheme === 'dark');
-                        });
-                    }
-
-                    // Color scheme dots
-                    document.querySelectorAll('.color-dot').forEach(dot => {
-                        dot.addEventListener('click', function() {
-                            const scheme = this.getAttribute('data-scheme');
-                            applyScheme(scheme);
-                            document.querySelectorAll('.color-dot').forEach(d => d.classList
-                                .remove('active'));
-                            this.classList.add('active');
-                        });
-                    });
-
-                    // Export all data
-                    const exportDataBtn = $('#btnExportAllData');
-                    if (exportDataBtn) {
-                        exportDataBtn.addEventListener('click', () => {
-                            const allData = {
-                                personal: state.personal,
-                                family: state.family,
-                                theme: state.theme,
-                                scheme: state.scheme,
-                                exportDate: new Date().toISOString(),
-                                version: '5.0',
-                            };
-                            const blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' });
-                            const url = URL.createObjectURL(blob);
-                            const a = document.createElement('a');
-                            a.href = url;
-                            a.download = `expense_tracker_backup_${getTodayDate()}.json`;
-                            a.click();
-                            URL.revokeObjectURL(url);
-                            showToast('💾 تم تصدير جميع البيانات بنجاح', 'success');
-                        });
-                    }
-
-                    // Import data
-                    const importBtn = $('#btnImportData');
-                    const fileInput = $('#importFileInput');
-                    if (importBtn && fileInput) {
-                        importBtn.addEventListener('click', () => fileInput.click());
-                        fileInput.addEventListener('change', (e) => {
-                            const file = e.target.files[0];
-                            if (!file) return;
-                            const reader = new FileReader();
-                            reader.onload = (event) => {
-                                try {
-                                    const imported = JSON.parse(event.target.result);
-                                    if (imported.personal && imported.family) {
-                                        state.personal = imported.personal;
-                                        state.family = imported.family;
-                                        if (imported.theme) applyTheme(imported.theme);
-                                        if (imported.scheme) applyScheme(imported.scheme);
-                                        saveAllData();
-                                        renderAll();
-                                        closeModal();
-                                        showToast('✅ تم استيراد البيانات بنجاح', 'success');
-                                    } else {
-                                        showToast('❌ ملف غير صالح', 'error');
-                                    }
-                                } catch (err) {
-                                    showToast('❌ فشل قراءة الملف', 'error');
-                                }
-                            };
-                            reader.readAsText(file);
-                            fileInput.value = '';
-                        });
-                    }
-
-                    // Reset all
-                    const resetBtn = $('#btnResetAll');
-                    if (resetBtn) {
-                        resetBtn.addEventListener('click', () => {
-                            if (confirm(
-                                    '⚠️ هل أنت متأكد من إعادة ضبط كل البيانات؟ لا يمكن التراجع عن هذا الإجراء.')) {
-                                state.personal = { budget: 0, transactions: [] };
-                                state.family = { budget: 0, transactions: [] };
-                                state.theme = 'dark';
-                                state.scheme = 'indigo';
-                                applyTheme('dark');
-                                applyScheme('indigo');
-                                saveAllData();
-                                renderAll();
-                                closeModal();
-                                showToast('🔄 تم إعادة ضبط كل البيانات', 'info');
-                            }
-                        });
-                    }
-                }, 200);
-            }
-
-            function applyTheme(theme) {
-                state.theme = theme;
-                document.documentElement.setAttribute('data-theme', theme);
-                const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-                if (metaThemeColor) {
-                    metaThemeColor.setAttribute('content', theme === 'dark' ? '#0d0f14' : '#f8fafc');
-                }
-                saveAllData();
-                const toggleBtn = $('#toggleDarkMode');
-                if (toggleBtn) toggleBtn.classList.toggle('active', theme === 'dark');
-            }
-
-            function applyScheme(scheme) {
-                state.scheme = scheme;
-                document.documentElement.setAttribute('data-scheme', scheme);
-                saveAllData();
-            }
-
-            // ==================== SEARCH FUNCTIONALITY ====================
-            function toggleSearch() {
-                state.isSearchOpen = !state.isSearchOpen;
-                if (dom.searchBar) {
-                    dom.searchBar.style.display = state.isSearchOpen ? 'flex' : 'none';
-                }
-                if (!state.isSearchOpen) {
-                    state.searchQuery = '';
-                    if (dom.searchInput) dom.searchInput.value = '';
-                    renderAll();
-                } else {
-                    if (dom.searchInput) dom.searchInput.focus();
-                }
-            }
-
-            // ==================== EVENT LISTENERS ====================
-            // Tab navigation
-            if (dom.tabNav) {
-                dom.tabNav.addEventListener('click', function(e) {
-                    const btn = e.target.closest('.tab-btn');
-                    if (!btn) return;
-                    const tab = btn.getAttribute('data-tab');
-                    if (tab) switchTab(tab);
-                });
-            }
-
-            // Add transaction buttons
-            if (dom.addPersonalBtn) {
-                dom.addPersonalBtn.addEventListener('click', () => {
-                    addTransaction('personal', dom.descPersonal.value, parseFloat(dom.amountPersonal
-                        .value));
-                });
-            }
-            if (dom.addFamilyBtn) {
-                dom.addFamilyBtn.addEventListener('click', () => {
-                    addTransaction('family', dom.descFamily.value, parseFloat(dom.amountFamily.value));
-                });
-            }
-
-            // Enter key on amount inputs
-            if (dom.amountPersonal) {
-                dom.amountPersonal.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') addTransaction('personal', dom.descPersonal.value, parseFloat(dom
-                        .amountPersonal.value));
-                });
-            }
-            if (dom.descPersonal) {
-                dom.descPersonal.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        dom.amountPersonal.focus();
-                    }
-                });
-            }
-            if (dom.amountFamily) {
-                dom.amountFamily.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') addTransaction('family', dom.descFamily.value, parseFloat(dom.amountFamily
-                        .value));
-                });
-            }
-            if (dom.descFamily) {
-                dom.descFamily.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        dom.amountFamily.focus();
-                    }
-                });
-            }
-
-            // Set budget buttons
-            if (dom.setBudgetPersonal) dom.setBudgetPersonal.addEventListener('click', () => setBudget('personal'));
-            if (dom.setBudgetFamily) dom.setBudgetFamily.addEventListener('click', () => setBudget('family'));
-
-            // Clear buttons
-            if (dom.clearPersonalBtn) dom.clearPersonalBtn.addEventListener('click', () => clearAllTransactions('personal'));
-            if (dom.clearFamilyBtn) dom.clearFamilyBtn.addEventListener('click', () => clearAllTransactions('family'));
-
-            // Quick chips
-            if (dom.quickChipsPersonal) {
-                dom.quickChipsPersonal.addEventListener('click', (e) => {
-                    const chip = e.target.closest('.chip');
-                    if (!chip) return;
-                    addTransaction('personal', chip.dataset.desc, parseFloat(chip.dataset.amount));
-                });
-            }
-            if (dom.quickChipsFamily) {
-                dom.quickChipsFamily.addEventListener('click', (e) => {
-                    const chip = e.target.closest('.chip');
-                    if (!chip) return;
-                    addTransaction('family', chip.dataset.desc, parseFloat(chip.dataset.amount));
-                });
-            }
-
-            // Search button
-            if (dom.btnSearch) dom.btnSearch.addEventListener('click', toggleSearch);
-            if (dom.searchInput) {
-                dom.searchInput.addEventListener('input', () => {
-                    state.searchQuery = dom.searchInput.value;
-                    renderAll();
-                });
-            }
-            if (dom.btnClearSearch) {
-                dom.btnClearSearch.addEventListener('click', () => {
-                    state.searchQuery = '';
-                    if (dom.searchInput) dom.searchInput.value = '';
-                    renderAll();
-                });
-            }
-
-            // Settings button
-            if (dom.btnSettings) dom.btnSettings.addEventListener('click', openSettingsModal);
-
-            // Bottom navigation
-            const navPersonalBtn = document.getElementById('navPersonal');
-            const navFamilyBtn = document.getElementById('navFamily');
-            const navCalculatorBtn = document.getElementById('navCalculator');
-            const navExportBtn = document.getElementById('navExport');
-            const navInstallBtn = document.getElementById('navInstall');
-
-            if (navPersonalBtn) navPersonalBtn.addEventListener('click', () => switchTab('personal'));
-            if (navFamilyBtn) navFamilyBtn.addEventListener('click', () => switchTab('family'));
-            if (navCalculatorBtn) navCalculatorBtn.addEventListener('click', openCalculatorModal);
-            if (navExportBtn) navExportBtn.addEventListener('click', openExportOptionsModal);
-            if (navInstallBtn) navInstallBtn.addEventListener('click', promptPWAInstall);
-
-            // Modal backdrop click to close
-            if (dom.modalBackdrop) {
-                dom.modalBackdrop.addEventListener('click', function(e) {
-                    if (e.target === dom.modalBackdrop) {
-                        closeModal();
-                    }
-                });
-            }
-
-            // Touch swipe down on modal to close
-            let touchStartY = 0;
-            if (dom.modalBackdrop) {
-                dom.modalBackdrop.addEventListener('touchstart', function(e) {
-                    if (e.target.closest('.modal-panel')) {
-                        touchStartY = e.touches[0].clientY;
-                    }
-                }, { passive: true });
-                dom.modalBackdrop.addEventListener('touchmove', function(e) {
-                    const sheet = e.target.closest('.modal-panel');
-                    if (sheet && sheet.scrollTop <= 0 && e.touches[0].clientY - touchStartY > 70) {
-                        closeModal();
-                    }
-                }, { passive: true });
-            }
-
-            // Keyboard shortcuts
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    if (dom.modalBackdrop && dom.modalBackdrop.classList.contains('active')) {
-                        closeModal();
-                    } else if (state.isSearchOpen) {
-                        toggleSearch();
-                    }
-                }
-                if (e.ctrlKey && e.key === '1') {
-                    e.preventDefault();
-                    switchTab('personal');
-                }
-                if (e.ctrlKey && e.key === '2') {
-                    e.preventDefault();
-                    switchTab('family');
-                }
-                if (e.ctrlKey && e.key === 'k') {
-                    e.preventDefault();
-                    toggleSearch();
-                }
+        });
+
+        // Initialize App
+        updateUI();
+
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW setup failed: ', err));
             });
-
-            // Ripple effect on buttons
-            document.addEventListener('click', function(e) {
-                const rippleBtn = e.target.closest('.btn, .btn-icon, .chip, .bottom-nav-btn');
-                if (rippleBtn && !rippleBtn.classList.contains('ripple')) {
-                    addRippleToElement(e, rippleBtn);
-                }
-            });
-
-            function addRippleToElement(e, element) {
-                const ripple = document.createElement('span');
-                ripple.className = 'ripple-effect';
-                const rect = element.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                ripple.style.width = ripple.style.height = size + 'px';
-                ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
-                ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
-                element.style.position = element.style.position || 'relative';
-                element.style.overflow = 'hidden';
-                element.appendChild(ripple);
-                ripple.addEventListener('animationend', () => ripple.remove());
-            }
-
-            // ==================== INITIALIZATION ====================
-            function initializeApp() {
-                loadAllData();
-                applyTheme(state.theme);
-                applyScheme(state.scheme);
-                switchTab(state.activeTab);
-                renderAll();
-
-                // If install prompt was already captured, show install button
-                if (deferredPrompt && dom.navInstall) {
-                    dom.navInstall.style.display = 'flex';
-                }
-
-                console.log('🚀 متعقب المصاريف PRO | الإصدار 5.0');
-                console.log('👨‍💻 Developed by Hazem K H Madi - Senior Product Designer');
-                console.log('📊 Features: Dual-tab tracking, Multi-income calculator, PWA install, Export PNG/PDF, Search, Settings, Light/Dark mode, 6 Color schemes');
-                console.log('⌨️ Shortcuts: Ctrl+1 Personal | Ctrl+2 Family | Ctrl+K Search | Esc Close');
-            }
-
-            // ==================== SERVICE WORKER REGISTRATION ====================
-            if ('serviceWorker' in navigator) {
-                const swCode = `
-                    const CACHE_NAME = 'expense-tracker-pro-v5';
-                    const ASSETS = [self.location.href];
-                    self.addEventListener('install', (e) => {
-                        e.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
-                    });
-                    self.addEventListener('activate', (e) => {
-                        e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))).then(() => self.clients.claim()));
-                    });
-                    self.addEventListener('fetch', (e) => {
-                        e.respondWith(
-                            caches.match(e.request).then(cached =>
-                                cached || fetch(e.request).then(res => {
-                                    if (res.ok && res.type === 'basic') {
-                                        const clone = res.clone();
-                                        caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
-                                    }
-                                    return res;
-                                })
-                            )
-                        );
-                    });
-                `;
-                const swBlob = new Blob([swCode], { type: 'application/javascript' });
-                const swUrl = URL.createObjectURL(swBlob);
-                navigator.serviceWorker.register(swUrl).then(() => {
-                    console.log('✅ Service Worker registered');
-                }).catch(err => {
-                    console.warn('Service Worker registration failed:', err.message);
-                });
-            }
-
-            // ==================== WEB APP MANIFEST ====================
-            const manifestData = {
-                name: 'متعقب المصاريف PRO',
-                short_name: 'المصاريف PRO',
-                description: 'تطبيق متعقب المصاريف الشخصية والبيت والعائلة - بالجنيه المصري | Hazem K H Madi',
-                start_url: location.href,
-                display: 'standalone',
-                background_color: '#0d0f14',
-                theme_color: '#0d0f14',
-                orientation: 'portrait-primary',
-                lang: 'ar',
-                dir: 'rtl',
-                categories: ['finance', 'productivity', 'utilities'],
-                icons: [{
-                    src: 'data:image/svg+xml,' + encodeURIComponent(
-                        '<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192"><rect width="192" height="192" rx="32" fill="#0d0f14"/><text x="96" y="115" text-anchor="middle" font-size="80" fill="white">💷</text></svg>'
-                        ),
-                    sizes: '192x192',
-                    type: 'image/svg+xml',
-                    purpose: 'any maskable',
-                }, ],
-            };
-            const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/json' });
-            const manifestUrl = URL.createObjectURL(manifestBlob);
-            const manifestLink = document.createElement('link');
-            manifestLink.rel = 'manifest';
-            manifestLink.href = manifestUrl;
-            document.head.appendChild(manifestLink);
-
-            // ==================== START THE APPLICATION ====================
-            initializeApp();
-
-            // ==================== EXPOSE FOR DEBUGGING ====================
-            window.__expenseTrackerPro = {
-                state,
-                renderAll,
-                saveAllData,
-                loadAllData,
-                addTransaction,
-                deleteTransaction,
-                exportReport,
-                applyTheme,
-                applyScheme,
-                openCalculatorModal,
-                openExportOptionsModal,
-                openSettingsModal,
-                promptPWAInstall,
-                version: '5.0',
-            };
-
-            console.log('%c💷 متعقب المصاريف PRO v5.0 %c| Built with ❤️',
-                'font-weight:bold;color:#6366f1;', 'color:#b0b5be;');
-            console.log('%c👨‍💻 Hazem K H Madi %c- Senior Product Designer',
-                'font-weight:bold;color:#f0f2f5;', 'color:#6b7280;');
-            console.log('%c🔗 Portfolio: https://hazemkhmadi.framer.ai %c| 💼 LinkedIn: https://www.linkedin.com/in/hazem-k-h-madi',
-                'color:#6366f1;', 'color:#6366f1;');
-        })();
+        }
     </script>
 </body>
 </html>
