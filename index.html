@@ -427,7 +427,6 @@
             }
         }
 
-        /* Header */
         .app-header {
             background: var(--header-bg);
             border-radius: var(--radius-xl);
@@ -525,6 +524,7 @@
             font-size: 15px;
             transition: all var(--transition-fast);
             position: relative;
+            overflow: hidden;
         }
         .btn-icon:hover {
             background: var(--accent-soft);
@@ -561,7 +561,6 @@
             }
         }
 
-        /* Tabs */
         .tab-nav {
             display: flex;
             gap: 5px;
@@ -592,6 +591,8 @@
             justify-content: center;
             gap: 5px;
             white-space: nowrap;
+            position: relative;
+            overflow: hidden;
         }
         .tab-btn.active {
             background: var(--bg-elevated);
@@ -614,7 +615,6 @@
             color: #fff;
         }
 
-        /* Cards */
         .card {
             background: var(--bg-surface);
             border-radius: var(--radius-lg);
@@ -681,7 +681,6 @@
             transition: all var(--transition-smooth);
         }
 
-        /* Budget display */
         .budget-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -768,7 +767,6 @@
             }
         }
 
-        /* Form */
         .form-row {
             display: flex;
             gap: 7px;
@@ -825,6 +823,8 @@
             white-space: nowrap;
             position: relative;
             overflow: hidden;
+            background: transparent;
+            color: inherit;
         }
         .btn::after {
             content: '';
@@ -834,6 +834,7 @@
             opacity: 0;
             transition: opacity 0.2s;
             border-radius: inherit;
+            pointer-events: none;
         }
         .btn:hover::after {
             opacity: 1;
@@ -875,13 +876,14 @@
             font-size: 0.65rem;
             cursor: pointer;
             transition: all var(--transition-fast);
+            position: relative;
+            overflow: hidden;
         }
         .btn-danger-text:hover {
             background: rgba(244, 63, 94, 0.1);
             border-color: var(--danger);
         }
 
-        /* Quick add chips */
         .quick-add-chips {
             display: flex;
             gap: 5px;
@@ -898,6 +900,8 @@
             transition: all var(--transition-bounce);
             color: var(--text-secondary);
             white-space: nowrap;
+            position: relative;
+            overflow: hidden;
         }
         .chip:hover {
             border-color: var(--accent-primary);
@@ -910,7 +914,6 @@
             transform: scale(0.9);
         }
 
-        /* Transaction list */
         .transaction-list {
             list-style: none;
             max-height: 300px;
@@ -990,7 +993,6 @@
             font-size: 0.78rem;
         }
 
-        /* Overview card */
         .overview-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1002,7 +1004,6 @@
             }
         }
 
-        /* Modal */
         .modal-backdrop {
             position: fixed;
             inset: 0;
@@ -1046,7 +1047,6 @@
             cursor: grab;
         }
 
-        /* Toast */
         .toast-container {
             position: fixed;
             top: 16px;
@@ -1096,7 +1096,6 @@
             }
         }
 
-        /* Bottom Nav */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -1130,6 +1129,7 @@
             padding: 5px 8px;
             border-radius: 12px;
             position: relative;
+            overflow: hidden;
         }
         .bottom-nav-btn.active {
             color: var(--accent-primary);
@@ -1161,7 +1161,6 @@
             }
         }
 
-        /* Settings panel */
         .settings-section {
             margin-bottom: 16px;
         }
@@ -1190,6 +1189,8 @@
             color: var(--text-muted);
             transition: all var(--transition-bounce);
             font-family: var(--font-arabic);
+            position: relative;
+            overflow: hidden;
         }
         .theme-toggle button.active {
             background: var(--accent-primary);
@@ -1234,7 +1235,6 @@
             background: linear-gradient(135deg, #666, #999);
         }
 
-        /* Play Store card */
         .playstore-card {
             background: linear-gradient(135deg, #1a1c23, #1f2129);
             border: 2px solid var(--accent-primary);
@@ -1260,19 +1260,28 @@
         .playstore-icon {
             font-size: 2.5rem;
             margin-bottom: 6px;
+            position: relative;
+            z-index: 1;
         }
         .playstore-title {
             font-weight: 700;
             font-size: 0.9rem;
             color: var(--text-primary);
+            position: relative;
+            z-index: 1;
         }
         .playstore-subtitle {
             font-size: 0.68rem;
             color: var(--text-muted);
             margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        .playstore-card .btn {
+            position: relative;
+            z-index: 1;
         }
 
-        /* Export container */
         .export-wrapper {
             position: absolute;
             left: -9999px;
@@ -1284,7 +1293,6 @@
             transition: all var(--transition-smooth);
         }
 
-        /* Footer */
         .app-footer {
             text-align: center;
             padding: 16px 14px;
@@ -1329,7 +1337,6 @@
             color: var(--accent-primary);
         }
 
-        /* Ripple effect */
         .ripple {
             position: absolute;
             border-radius: 50%;
@@ -1345,7 +1352,6 @@
             }
         }
 
-        /* Confetti */
         .confetti-piece {
             position: fixed;
             z-index: 9999;
@@ -1363,7 +1369,6 @@
             }
         }
 
-        /* Responsive refinements */
         @media (max-width: 360px) {
             .app-container {
                 padding: 8px 6px 0;
@@ -1483,7 +1488,6 @@
             </div>
         </header>
 
-        <!-- Combined Overview -->
         <div class="card" style="border:1px solid var(--border-medium);">
             <div class="card-title" style="margin-bottom:10px;">📊 نظرة عامة سريعة</div>
             <div class="overview-grid">
@@ -1507,7 +1511,6 @@
             <button class="tab-btn" data-tab="family"><span>🏠</span> البيت والعائلة <span class="tab-badge" id="badgeFamily">0</span></button>
         </div>
 
-        <!-- Personal Section -->
         <section id="sectionPersonal">
             <div class="card card-accent-left">
                 <div class="card-header">
@@ -1546,7 +1549,6 @@
             </div>
         </section>
 
-        <!-- Family Section -->
         <section id="sectionFamily" style="display:none;">
             <div class="card card-accent-teal">
                 <div class="card-header">
@@ -1585,7 +1587,6 @@
             </div>
         </section>
 
-        <!-- Google Play Store Integration Card -->
         <div class="playstore-card" id="playstoreCard">
             <div class="playstore-icon">📱</div>
             <div class="playstore-title">تثبيت التطبيق من Google Play</div>
@@ -1593,7 +1594,7 @@
             <button class="btn btn-primary" id="btnPlayStore" style="margin:0 auto;">
                 <i class="fa-brands fa-google-play"></i> تثبيت من Google Play
             </button>
-            <p style="font-size:0.6rem;color:var(--text-muted);margin-top:8px;">يدعم Trusted Web Activity (TWA) • تثبيت رسمي</p>
+            <p style="font-size:0.6rem;color:var(--text-muted);margin-top:8px;position:relative;z-index:1;">يدعم Trusted Web Activity (TWA) • تثبيت رسمي</p>
         </div>
 
         <footer class="app-footer">
@@ -1608,7 +1609,6 @@
         </footer>
     </div>
 
-    <!-- Bottom Navigation Bar -->
     <div class="bottom-nav" id="bottomNav">
         <button class="bottom-nav-btn active" data-view="personal" id="navPersonal">
             <i class="fa-solid fa-user"></i><span>الشخصية</span>
@@ -1627,14 +1627,10 @@
         </button>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
-    </script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
         (function() {
-            // ==================== STATE ====================
             const STORAGE_KEYS = {
                 pBudget: 'exp_v5_p_budget',
                 pTxns: 'exp_v5_p_txns',
@@ -1655,7 +1651,6 @@
 
             let deferredPrompt = null;
 
-            // ==================== DOM REFS ====================
             const $ = (s) => document.querySelector(s);
             const $$ = (s) => document.querySelectorAll(s);
 
@@ -1706,20 +1701,15 @@
 
             let dom = getAllDOMElements();
 
-            // ==================== UTILS ====================
             function formatCurrency(amt) {
-                try { return new Intl.NumberFormat('ar-EG', { style: 'currency', currency: 'EGP',
-                        maximumFractionDigits: 2 }).format(amt); } catch { return amt.toFixed(2) + ' ج.م'; }
+                try { return new Intl.NumberFormat('ar-EG', { style: 'currency', currency: 'EGP', maximumFractionDigits: 2 }).format(amt); } catch { return amt.toFixed(2) + ' ج.م'; }
             }
 
-            function shortCurrency(amt) { return amt >= 1000 ? (amt / 1000).toFixed(1) + 'k ج.م' : amt.toFixed(0) +
-                    ' ج.م'; }
+            function shortCurrency(amt) { return amt >= 1000 ? (amt / 1000).toFixed(1) + 'k ج.م' : amt.toFixed(0) + ' ج.م'; }
 
             function today() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 
-            function formatDateAr(d) { const m = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس',
-                    'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
-                ]; const dt = new Date(d); return `${dt.getDate()} ${m[dt.getMonth()]} ${dt.getFullYear()}`; }
+            function formatDateAr(d) { const m = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر']; const dt = new Date(d); return `${dt.getDate()} ${m[dt.getMonth()]} ${dt.getFullYear()}`; }
 
             function uid() { return 'txn_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8); }
 
@@ -1729,10 +1719,7 @@
                 const icons = { success: '✅', error: '❌', info: 'ℹ️' };
                 t.innerHTML = `${icons[type]||'ℹ️'} ${msg}`;
                 dom.toastContainer.appendChild(t);
-                setTimeout(() => { t.style.opacity = '0';
-                    t.style.transform = 'translateY(-20px)';
-                    t.style.transition = 'all 0.35s ease';
-                    setTimeout(() => t.remove(), 350); }, 2400);
+                setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateY(-20px)'; t.style.transition = 'all 0.35s ease'; setTimeout(() => t.remove(), 350); }, 2400);
             }
 
             function saveData() {
@@ -1746,14 +1733,10 @@
             }
 
             function loadData() {
-                const pb = localStorage.getItem(STORAGE_KEYS.pBudget);
-                state.personal.budget = pb !== null ? +pb : 0;
-                const pt = localStorage.getItem(STORAGE_KEYS.pTxns);
-                state.personal.transactions = pt ? JSON.parse(pt) : [];
-                const fb = localStorage.getItem(STORAGE_KEYS.fBudget);
-                state.family.budget = fb !== null ? +fb : 0;
-                const ft = localStorage.getItem(STORAGE_KEYS.fTxns);
-                state.family.transactions = ft ? JSON.parse(ft) : [];
+                const pb = localStorage.getItem(STORAGE_KEYS.pBudget); state.personal.budget = pb !== null ? +pb : 0;
+                const pt = localStorage.getItem(STORAGE_KEYS.pTxns); state.personal.transactions = pt ? JSON.parse(pt) : [];
+                const fb = localStorage.getItem(STORAGE_KEYS.fBudget); state.family.budget = fb !== null ? +fb : 0;
+                const ft = localStorage.getItem(STORAGE_KEYS.fTxns); state.family.transactions = ft ? JSON.parse(ft) : [];
                 state.activeTab = localStorage.getItem(STORAGE_KEYS.tab) || 'personal';
                 state.theme = localStorage.getItem(STORAGE_KEYS.theme) || 'dark';
                 state.color = localStorage.getItem(STORAGE_KEYS.color) || 'indigo';
@@ -1768,56 +1751,41 @@
                 document.body.setAttribute('data-theme', state.theme);
                 document.body.setAttribute('data-color', state.color);
                 const metaTheme = document.querySelector('meta[name="theme-color"]');
-                if (metaTheme) {
-                    metaTheme.content = state.theme === 'dark' ? '#0d0f14' : '#ffffff';
-                }
+                if (metaTheme) metaTheme.content = state.theme === 'dark' ? '#0d0f14' : '#ffffff';
             }
 
             function spent(cat) { return state[cat].transactions.reduce((s, t) => s + (+t.amount || 0), 0); }
-
             function remaining(cat) { return state[cat].budget - spent(cat); }
+            function percentage(cat) { if (state[cat].budget <= 0) return 0; return Math.min((spent(cat) / state[cat].budget) * 100, 100); }
 
-            function percentage(cat) { if (state[cat].budget <= 0) return 0; return Math.min((spent(cat) / state[cat]
-                    .budget) * 100, 100); }
-
-            // ==================== RENDER ====================
             function renderBadges() {
                 dom.badgePersonal.textContent = shortCurrency(spent('personal'));
                 dom.badgeFamily.textContent = shortCurrency(spent('family'));
             }
 
             function renderOverview() {
-                const remP = remaining('personal');
-                const remF = remaining('family');
+                const remP = remaining('personal'), remF = remaining('family');
                 if (dom.overviewRemainingPersonal) {
                     dom.overviewRemainingPersonal.textContent = formatCurrency(remP);
-                    dom.overviewRemainingPersonal.className = 'budget-number ' + (remP > 0 ? 'text-green' : remP < 0 ?
-                        'text-red' : 'text-amber');
+                    dom.overviewRemainingPersonal.className = 'budget-number ' + (remP > 0 ? 'text-green' : remP < 0 ? 'text-red' : 'text-amber');
                 }
                 if (dom.overviewRemainingFamily) {
                     dom.overviewRemainingFamily.textContent = formatCurrency(remF);
-                    dom.overviewRemainingFamily.className = 'budget-number ' + (remF > 0 ? 'text-green' : remF < 0 ?
-                        'text-red' : 'text-amber');
+                    dom.overviewRemainingFamily.className = 'budget-number ' + (remF > 0 ? 'text-green' : remF < 0 ? 'text-red' : 'text-amber');
                 }
-                if (dom.totalSpentOverall) {
-                    dom.totalSpentOverall.textContent = formatCurrency(spent('personal') + spent('family'));
-                }
+                if (dom.totalSpentOverall) dom.totalSpentOverall.textContent = formatCurrency(spent('personal') + spent('family'));
             }
 
             function renderBudget(cat) {
-                const rem = remaining(cat),
-                    pct = percentage(cat);
+                const rem = remaining(cat), pct = percentage(cat);
                 const totalEl = cat === 'personal' ? dom.budgetTotalPersonal : dom.budgetTotalFamily;
                 const remEl = cat === 'personal' ? dom.budgetRemainingPersonal : dom.budgetRemainingFamily;
                 const pctEl = cat === 'personal' ? dom.progressPercentPersonal : dom.progressPercentFamily;
                 const fillEl = cat === 'personal' ? dom.progressFillPersonal : dom.progressFillFamily;
                 if (totalEl) totalEl.textContent = formatCurrency(state[cat].budget);
-                if (remEl) { remEl.textContent = formatCurrency(rem);
-                    remEl.className = 'budget-number ' + (rem > 0 ? 'text-green' : rem < 0 ? 'text-red' : 'text-amber'); }
+                if (remEl) { remEl.textContent = formatCurrency(rem); remEl.className = 'budget-number ' + (rem > 0 ? 'text-green' : rem < 0 ? 'text-red' : 'text-amber'); }
                 if (pctEl) pctEl.textContent = pct.toFixed(1) + '%';
-                if (fillEl) { fillEl.style.width = pct + '%';
-                    fillEl.classList.remove('progress-safe', 'progress-warn', 'progress-danger');
-                    fillEl.classList.add(pct < 60 ? 'progress-safe' : pct < 85 ? 'progress-warn' : 'progress-danger'); }
+                if (fillEl) { fillEl.style.width = pct + '%'; fillEl.classList.remove('progress-safe', 'progress-warn', 'progress-danger'); fillEl.classList.add(pct < 60 ? 'progress-safe' : pct < 85 ? 'progress-warn' : 'progress-danger'); }
             }
 
             function renderTxns(cat) {
@@ -1826,8 +1794,7 @@
                 const txns = [...state[cat].transactions].reverse();
                 listEl.innerHTML = '';
                 if (!txns.length) {
-                    listEl.innerHTML =
-                        `<li class="empty-state"><i class="fa-solid fa-receipt"></i><p>لا توجد مصروفات ${cat==='personal'?'شخصية':'عائلية'} بعد</p></li>`;
+                    listEl.innerHTML = `<li class="empty-state"><i class="fa-solid fa-receipt"></i><p>لا توجد مصروفات ${cat==='personal'?'شخصية':'عائلية'} بعد</p></li>`;
                     return;
                 }
                 txns.forEach((t, i) => {
@@ -1850,32 +1817,23 @@
                 listEl.querySelectorAll('.del-txn-btn').forEach(b => {
                     b.addEventListener('click', function(e) {
                         e.stopPropagation();
-                        const id = this.dataset.id,
-                            c = this.dataset.cat;
+                        const id = this.dataset.id, c = this.dataset.cat;
                         state[c].transactions = state[c].transactions.filter(tx => tx.id !== id);
-                        saveData();
-                        renderAll();
-                        toast('🗑️ تم حذف المصروف', 'info');
+                        saveData(); renderAll(); toast('🗑️ تم حذف المصروف', 'info');
                     });
                 });
             }
 
             function renderAll() {
-                renderBudget('personal');
-                renderBudget('family');
-                renderTxns('personal');
-                renderTxns('family');
-                renderBadges();
-                renderOverview();
+                renderBudget('personal'); renderBudget('family');
+                renderTxns('personal'); renderTxns('family');
+                renderBadges(); renderOverview();
             }
 
-            function escapeHtml(t) { const d = document.createElement('div');
-                d.textContent = t; return d.innerHTML; }
+            function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
 
-            // ==================== ACTIONS ====================
             function switchTab(tab) {
-                state.activeTab = tab;
-                saveData();
+                state.activeTab = tab; saveData();
                 dom.tabNav.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
                 const activeBtn = dom.tabNav.querySelector(`[data-tab="${tab}"]`);
                 if (activeBtn) activeBtn.classList.add('active');
@@ -1891,21 +1849,13 @@
                 if (!desc || !desc.trim()) return toast('⚠️ الرجاء إدخال وصف للمصروف', 'error');
                 if (isNaN(amt) || amt <= 0) return toast('⚠️ الرجاء إدخال مبلغ صحيح', 'error');
                 state[cat].transactions.push({ id: uid(), description: desc.trim(), amount: amt, date: today() });
-                saveData();
-                renderAll();
-                if (cat === 'personal') { dom.descPersonal.value = '';
-                    dom.amountPersonal.value = '';
-                    dom.descPersonal.focus(); } else { dom.descFamily.value = '';
-                    dom.amountFamily.value = '';
-                    dom.descFamily.focus(); }
+                saveData(); renderAll();
+                if (cat === 'personal') { dom.descPersonal.value = ''; dom.amountPersonal.value = ''; dom.descPersonal.focus(); }
+                else { dom.descFamily.value = ''; dom.amountFamily.value = ''; dom.descFamily.focus(); }
                 const rem = remaining(cat);
-                if (rem < 0) {
-                    toast('⚠️ تنبيه: لقد تجاوزت الميزانية المحددة!', 'error');
-                } else if (rem < state[cat].budget * 0.1 && state[cat].budget > 0) {
-                    toast('⚡ الميزانية أوشكت على النفاد (أقل من 10%)', 'info');
-                } else {
-                    toast('✅ تم إضافة المصروف بنجاح', 'success');
-                }
+                if (rem < 0) toast('⚠️ تنبيه: لقد تجاوزت الميزانية المحددة!', 'error');
+                else if (rem < state[cat].budget * 0.1 && state[cat].budget > 0) toast('⚡ الميزانية أوشكت على النفاد (أقل من 10%)', 'info');
+                else toast('✅ تم إضافة المصروف بنجاح', 'success');
             }
 
             function setBudgetModal(cat) {
@@ -1922,16 +1872,14 @@
                     </div>`;
                 dom.modalBackdrop.classList.add('active');
                 setTimeout(() => { const inp = $('#budgetInput'); if (inp) inp.focus(); }, 200);
-                $('#saveBudgetBtn').addEventListener('click', () => {
-                    const v = parseFloat($('#budgetInput')?.value);
+                const saveBtn = $('#saveBudgetBtn');
+                const cancelBtn = $('#cancelBudgetBtn');
+                if (saveBtn) saveBtn.addEventListener('click', () => {
+                    const v = parseFloat(document.getElementById('budgetInput')?.value);
                     if (isNaN(v) || v < 0) return toast('⚠️ قيمة غير صحيحة', 'error');
-                    state[cat].budget = v;
-                    saveData();
-                    renderAll();
-                    closeModal();
-                    toast('✅ تم حفظ الميزانية بنجاح', 'success');
+                    state[cat].budget = v; saveData(); renderAll(); closeModal(); toast('✅ تم حفظ الميزانية بنجاح', 'success');
                 });
-                $('#cancelBudgetBtn').addEventListener('click', closeModal);
+                if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
             }
 
             function clearAllModal(cat) {
@@ -1948,20 +1896,21 @@
                         </div>
                     </div>`;
                 dom.modalBackdrop.classList.add('active');
-                $('#confirmClearBtn').addEventListener('click', () => { state[cat].transactions = [];
-                    saveData();
-                    renderAll();
-                    closeModal();
-                    toast('🗑️ تم مسح جميع المصروفات', 'info'); });
-                $('#cancelClearBtn').addEventListener('click', closeModal);
+                const confirmBtn = $('#confirmClearBtn');
+                const cancelBtn = $('#cancelClearBtn');
+                if (confirmBtn) confirmBtn.addEventListener('click', () => { state[cat].transactions = []; saveData(); renderAll(); closeModal(); toast('🗑️ تم مسح جميع المصروفات', 'info'); });
+                if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
             }
 
             function closeModal() {
                 dom.modalBackdrop.classList.remove('active');
-                setTimeout(() => { dom.modalContent.innerHTML = ''; }, 350);
+                setTimeout(() => {
+                    if (!dom.modalBackdrop.classList.contains('active')) {
+                        dom.modalContent.innerHTML = '';
+                    }
+                }, 350);
             }
 
-            // ==================== CALCULATOR ====================
             function openCalculator() {
                 dom.modalTitle.textContent = '🧮 حاسبة الدخل المتعدد';
                 dom.modalContent.innerHTML = `
@@ -1980,9 +1929,8 @@
                     </div>`;
                 dom.modalBackdrop.classList.add('active');
                 let sources = [{ id: uid(), name: '', amount: '' }];
-
                 function renderSources() {
-                    const container = $('#incomeSources');
+                    const container = document.getElementById('incomeSources');
                     if (!container) return;
                     container.innerHTML = sources.map((s, i) => `
                         <div class="form-row" style="margin-bottom:5px;">
@@ -1990,68 +1938,44 @@
                             <input class="form-input src-amount" type="number" placeholder="المبلغ" value="${s.amount}" style="max-width:100px;" step="0.01" min="0">
                             ${sources.length>1?`<button class="btn-danger-text del-src-btn" data-id="${s.id}"><i class="fa-solid fa-trash"></i></button>`:'<span style="width:30px;"></span>'}
                         </div>`).join('');
-                    container.querySelectorAll('.src-name,.src-amount').forEach(inp => inp.addEventListener('input',
-                        updateCalc));
+                    container.querySelectorAll('.src-name,.src-amount').forEach(inp => inp.addEventListener('input', updateCalc));
                     container.querySelectorAll('.del-src-btn').forEach(b => b.addEventListener('click', () => {
                         sources = sources.filter(s => s.id !== b.dataset.id);
-                        renderSources();
-                        updateCalc();
+                        renderSources(); updateCalc();
                     }));
                 }
-
                 function updateCalc() {
-                    const names = $$('#incomeSources .src-name'),
-                        amounts = $$('#incomeSources .src-amount');
+                    const names = document.querySelectorAll('#incomeSources .src-name'), amounts = document.querySelectorAll('#incomeSources .src-amount');
                     let total = 0;
-                    sources.forEach((s, i) => { s.name = names[i]?.value || '';
-                        s.amount = amounts[i]?.value || '';
-                        total += +s.amount || 0; });
-                    const pctP = +($('#pctPersonal')?.value || 0);
+                    sources.forEach((s, i) => { s.name = names[i]?.value || ''; s.amount = amounts[i]?.value || ''; total += +s.amount || 0; });
+                    const pctP = parseFloat(document.getElementById('pctPersonal')?.value) || 0;
                     const pctF = Math.max(0, 100 - pctP);
-                    const pctFEl = $('#pctFamily');
-                    if (pctFEl) pctFEl.value = pctF;
-                    const calcTotalEl = $('#calcTotal');
-                    if (calcTotalEl) calcTotalEl.textContent = formatCurrency(total);
-                    const sharePEl = $('#sharePersonal');
-                    if (sharePEl) sharePEl.textContent = formatCurrency(total * pctP / 100);
-                    const shareFEl = $('#shareFamily');
-                    if (shareFEl) shareFEl.textContent = formatCurrency(total * pctF / 100);
+                    const pctFEl = document.getElementById('pctFamily'); if (pctFEl) pctFEl.value = pctF;
+                    const calcTotalEl = document.getElementById('calcTotal'); if (calcTotalEl) calcTotalEl.textContent = formatCurrency(total);
+                    const sharePEl = document.getElementById('sharePersonal'); if (sharePEl) sharePEl.textContent = formatCurrency(total * pctP / 100);
+                    const shareFEl = document.getElementById('shareFamily'); if (shareFEl) shareFEl.textContent = formatCurrency(total * pctF / 100);
                 }
-                $('#addIncomeSource').addEventListener('click', () => { sources.push({ id: uid(), name: '',
-                        amount: '' });
-                    renderSources();
-                    updateCalc(); });
-                $('#pctPersonal').addEventListener('input', () => { let v = +$('#pctPersonal').value;
-                    v = Math.max(0, Math.min(100, v));
-                    $('#pctPersonal').value = v;
-                    updateCalc(); });
-                $('#applyCalc').addEventListener('click', () => {
-                    const totalText = $('#calcTotal')?.textContent?.replace(/[^0-9.]/g, '') || '0';
+                const addIncomeBtn = document.getElementById('addIncomeSource');
+                if (addIncomeBtn) addIncomeBtn.addEventListener('click', () => { sources.push({ id: uid(), name: '', amount: '' }); renderSources(); updateCalc(); });
+                const pctPersonalInput = document.getElementById('pctPersonal');
+                if (pctPersonalInput) pctPersonalInput.addEventListener('input', () => { let v = +pctPersonalInput.value; v = Math.max(0, Math.min(100, v)); pctPersonalInput.value = v; updateCalc(); });
+                const applyBtn = document.getElementById('applyCalc');
+                if (applyBtn) applyBtn.addEventListener('click', () => {
+                    const totalText = document.getElementById('calcTotal')?.textContent?.replace(/[^0-9.]/g, '') || '0';
                     const total = parseFloat(totalText) || 0;
-                    const pctP = +($('#pctPersonal')?.value || 0);
+                    const pctP = parseFloat(document.getElementById('pctPersonal')?.value) || 0;
                     if (total <= 0) return toast('⚠️ أدخل دخلاً صحيحاً', 'error');
                     state.personal.budget = total * pctP / 100;
                     state.family.budget = total * (100 - pctP) / 100;
-                    saveData();
-                    renderAll();
-                    closeModal();
-                    toast('✅ تم تطبيق الميزانيات بنجاح!', 'success');
+                    saveData(); renderAll(); closeModal(); toast('✅ تم تطبيق الميزانيات بنجاح!', 'success');
                 });
-                renderSources();
-                updateCalc();
+                renderSources(); updateCalc();
             }
 
-            // ==================== EXPORT ====================
             function buildExportHTML(cat) {
-                const d = state[cat];
-                const s = spent(cat),
-                    r = remaining(cat),
-                    p = percentage(cat);
+                const d = state[cat]; const s = spent(cat), r = remaining(cat), p = percentage(cat);
                 const name = cat === 'personal' ? 'المصاريف الشخصية' : 'مصاريف البيت والعائلة';
-                let rows = d.transactions.length ? d.transactions.slice().reverse().map((t, i) =>
-                    `<tr><td>${i+1}</td><td>${escapeHtml(t.description)}</td><td>${formatDateAr(t.date)}</td><td style="font-weight:700;">${formatCurrency(t.amount)}</td></tr>`
-                ).join('') :
-                    '<tr><td colspan="4" style="text-align:center;padding:20px;">لا توجد مصروفات مسجلة</td></tr>';
+                let rows = d.transactions.length ? d.transactions.slice().reverse().map((t, i) => `<tr><td>${i+1}</td><td>${escapeHtml(t.description)}</td><td>${formatDateAr(t.date)}</td><td style="font-weight:700;">${formatCurrency(t.amount)}</td></tr>`).join('') : '<tr><td colspan="4" style="text-align:center;padding:20px;">لا توجد مصروفات مسجلة</td></tr>';
                 return `<div style="font-family:'Cairo',sans-serif;direction:rtl;background:var(--bg-canvas);color:var(--text-primary);padding:24px;border-radius:20px;border:2px solid var(--accent-primary);">
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;"><h2 style="margin:0;">${name}</h2><span style="font-family:var(--font-latin);font-weight:700;">الميزانية: ${formatCurrency(d.budget)}</span></div>
                     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">
@@ -2068,37 +1992,24 @@
             async function exportFile(cat, format) {
                 const html = buildExportHTML(cat);
                 dom.exportWrapper.innerHTML = html;
-                dom.exportWrapper.style.cssText =
-                    'position:relative;left:auto;z-index:300;opacity:1;pointer-events:auto;margin:16px auto;width:95%;max-width:720px;border-radius:20px;overflow:hidden;';
+                dom.exportWrapper.style.cssText = 'position:relative;left:auto;z-index:300;opacity:1;pointer-events:auto;margin:16px auto;width:95%;max-width:720px;border-radius:20px;overflow:hidden;';
                 dom.exportWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 await new Promise(r => setTimeout(r, 500));
                 try {
-                    const canvas = await html2canvas(dom.exportWrapper, { scale: 2, backgroundColor: getComputedStyle(
-                            document.body).getPropertyValue('--bg-canvas').trim() || '#0d0f14', logging: false,
-                        useCORS: true });
+                    const bgColor = getComputedStyle(document.body).getPropertyValue('--bg-canvas').trim() || '#0d0f14';
+                    const canvas = await html2canvas(dom.exportWrapper, { scale: 2, backgroundColor: bgColor, logging: false, useCORS: true });
                     if (format === 'png') {
-                        const a = document.createElement('a');
-                        a.download = `تقرير_المصاريف_${cat==='personal'?'الشخصية':'العائلية'}_${today()}.png`;
-                        a.href = canvas.toDataURL('image/png');
-                        a.click();
+                        const a = document.createElement('a'); a.download = `تقرير_المصاريف_${cat==='personal'?'الشخصية':'العائلية'}_${today()}.png`; a.href = canvas.toDataURL('image/png'); a.click();
                         toast('📸 تم تصدير التقرير كصورة PNG', 'success');
                     } else {
-                        const { jsPDF } = window.jspdf;
-                        const pdf = new jsPDF('p', 'mm', 'a4');
-                        const imgW = 210,
-                            imgH = (canvas.height * imgW) / canvas.width;
+                        const { jsPDF } = window.jspdf; const pdf = new jsPDF('p', 'mm', 'a4'); const imgW = 210, imgH = (canvas.height * imgW) / canvas.width;
                         pdf.addImage(canvas, 'PNG', 0, 0, imgW, Math.min(imgH, 297));
-                        if (imgH > 297) { let rh = imgH - 297; while (rh > 0) { pdf.addPage();
-                                pdf.addImage(canvas, 'PNG', 0, -297, imgW, imgH);
-                                rh -= 297; } }
+                        if (imgH > 297) { let rh = imgH - 297; while (rh > 0) { pdf.addPage(); pdf.addImage(canvas, 'PNG', 0, -297, imgW, imgH); rh -= 297; } }
                         pdf.save(`تقرير_المصاريف_${cat==='personal'?'الشخصية':'العائلية'}_${today()}.pdf`);
                         toast('📄 تم تصدير التقرير كملف PDF', 'success');
                     }
-                } catch (e) { toast('❌ فشل التصدير', 'error');
-                    console.error(e); }
-                setTimeout(() => { dom.exportWrapper.style.cssText =
-                        'position:absolute;left:-9999px;z-index:-1;opacity:0;pointer-events:none;';
-                    dom.exportWrapper.innerHTML = ''; }, 400);
+                } catch (e) { toast('❌ فشل التصدير', 'error'); console.error(e); }
+                setTimeout(() => { dom.exportWrapper.style.cssText = 'position:absolute;left:-9999px;z-index:-1;opacity:0;pointer-events:none;'; dom.exportWrapper.innerHTML = ''; }, 400);
             }
 
             function openExportOptions() {
@@ -2113,12 +2024,10 @@
                     </div>
                     <button class="btn btn-outline w-100 mt-3" id="cancelExpBtn">إلغاء</button>`;
                 dom.modalBackdrop.classList.add('active');
-                $$('.exp-opt-btn').forEach(b => b.addEventListener('click', () => { closeModal();
-                    exportFile(b.dataset.cat, b.dataset.f); }));
-                $('#cancelExpBtn').addEventListener('click', closeModal);
+                document.querySelectorAll('.exp-opt-btn').forEach(b => b.addEventListener('click', () => { closeModal(); exportFile(b.dataset.cat, b.dataset.f); }));
+                document.getElementById('cancelExpBtn')?.addEventListener('click', closeModal);
             }
 
-            // ==================== SETTINGS PANEL ====================
             function openSettings() {
                 dom.modalTitle.textContent = '⚙️ الإعدادات والتخصيص';
                 dom.modalContent.innerHTML = `
@@ -2151,90 +2060,54 @@
                     <button class="btn btn-outline w-100 mt-3" id="closeSettingsBtn">إغلاق</button>`;
                 dom.modalBackdrop.classList.add('active');
 
-                // Theme toggle
-                $$('#themeToggle button').forEach(b => b.addEventListener('click', () => {
-                    state.theme = b.dataset.theme;
-                    applyTheme();
-                    saveData();
-                    $$('#themeToggle button').forEach(x => x.classList.remove('active'));
-                    b.classList.add('active');
+                document.querySelectorAll('#themeToggle button').forEach(b => b.addEventListener('click', () => {
+                    state.theme = b.dataset.theme; applyTheme(); saveData();
+                    document.querySelectorAll('#themeToggle button').forEach(x => x.classList.remove('active')); b.classList.add('active');
                     toast(`تم تغيير المظهر إلى ${state.theme==='dark'?'الداكن':'الفاتح'}`, 'success');
                 }));
 
-                // Color swatches
-                $$('#colorSwatches .color-swatch').forEach(s => s.addEventListener('click', () => {
-                    state.color = s.dataset.color;
-                    applyTheme();
-                    saveData();
-                    $$('#colorSwatches .color-swatch').forEach(x => x.classList.remove(
-                        'active'));
-                    s.classList.add('active');
+                document.querySelectorAll('#colorSwatches .color-swatch').forEach(s => s.addEventListener('click', () => {
+                    state.color = s.dataset.color; applyTheme(); saveData();
+                    document.querySelectorAll('#colorSwatches .color-swatch').forEach(x => x.classList.remove('active')); s.classList.add('active');
                     toast('🎨 تم تغيير نظام الألوان', 'success');
                 }));
 
-                // Export data
-                $('#btnExportData').addEventListener('click', () => {
-                    const data = {
-                        personal: state.personal,
-                        family: state.family,
-                        theme: state.theme,
-                        color: state.color,
-                        exportedAt: new Date().toISOString(),
-                    };
+                document.getElementById('btnExportData')?.addEventListener('click', () => {
+                    const data = { personal: state.personal, family: state.family, theme: state.theme, color: state.color, exportedAt: new Date().toISOString() };
                     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                    const a = document.createElement('a');
-                    a.href = URL.createObjectURL(blob);
-                    a.download = `بيانات_المصاريف_${today()}.json`;
-                    a.click();
+                    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `بيانات_المصاريف_${today()}.json`; a.click();
                     toast('💾 تم تصدير البيانات بنجاح', 'success');
                 });
 
-                // Import data
-                const fileInput = $('#importFileInput');
-                $('#btnImportData').addEventListener('click', () => fileInput.click());
-                fileInput.addEventListener('change', (e) => {
-                    const file = e.target.files[0];
-                    if (!file) return;
+                const fileInput = document.getElementById('importFileInput');
+                document.getElementById('btnImportData')?.addEventListener('click', () => fileInput.click());
+                if (fileInput) fileInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0]; if (!file) return;
                     const reader = new FileReader();
                     reader.onload = (ev) => {
                         try {
                             const data = JSON.parse(ev.target.result);
                             if (data.personal && data.family) {
-                                state.personal = data.personal;
-                                state.family = data.family;
+                                state.personal = data.personal; state.family = data.family;
                                 if (data.theme) state.theme = data.theme;
                                 if (data.color) state.color = data.color;
-                                saveData();
-                                applyTheme();
-                                renderAll();
-                                toast('✅ تم استيراد البيانات بنجاح', 'success');
-                            } else { toast('❌ ملف غير صالح', 'error'); }
+                                saveData(); applyTheme(); renderAll(); toast('✅ تم استيراد البيانات بنجاح', 'success');
+                            } else toast('❌ ملف غير صالح', 'error');
                         } catch { toast('❌ فشل قراءة الملف', 'error'); }
                     };
-                    reader.readAsText(file);
-                    fileInput.value = '';
+                    reader.readAsText(file); fileInput.value = '';
                 });
 
-                // Reset all
-                $('#btnResetAll').addEventListener('click', () => {
-                    if (confirm(
-                            '⚠️ هل أنت متأكد من إعادة ضبط جميع البيانات؟ لا يمكن التراجع عن هذا الإجراء.')) {
-                        state.personal = { budget: 0, transactions: [] };
-                        state.family = { budget: 0, transactions: [] };
-                        state.theme = 'dark';
-                        state.color = 'indigo';
-                        saveData();
-                        applyTheme();
-                        renderAll();
-                        closeModal();
-                        toast('🗑️ تم إعادة ضبط جميع البيانات', 'info');
+                document.getElementById('btnResetAll')?.addEventListener('click', () => {
+                    if (confirm('⚠️ هل أنت متأكد من إعادة ضبط جميع البيانات؟ لا يمكن التراجع عن هذا الإجراء.')) {
+                        state.personal = { budget: 0, transactions: [] }; state.family = { budget: 0, transactions: [] };
+                        state.theme = 'dark'; state.color = 'indigo'; saveData(); applyTheme(); renderAll(); closeModal(); toast('🗑️ تم إعادة ضبط جميع البيانات', 'info');
                     }
                 });
 
-                $('#closeSettingsBtn').addEventListener('click', closeModal);
+                document.getElementById('closeSettingsBtn')?.addEventListener('click', closeModal);
             }
 
-            // ==================== PLAY STORE ====================
             function openPlayStoreGuide() {
                 dom.modalTitle.textContent = '📱 التثبيت من Google Play';
                 dom.modalContent.innerHTML = `
@@ -2256,20 +2129,14 @@
                         </button>
                     </div>`;
                 dom.modalBackdrop.classList.add('active');
-                $('#installPWAnow').addEventListener('click', () => {
-                    closeModal();
-                    promptInstall();
-                });
+                document.getElementById('installPWAnow')?.addEventListener('click', () => { closeModal(); promptInstall(); });
             }
 
             function promptInstall() {
                 if (deferredPrompt) {
                     deferredPrompt.prompt();
                     deferredPrompt.userChoice.then((choiceResult) => {
-                        if (choiceResult.outcome === 'accepted') {
-                            toast('🎉 تم تثبيت التطبيق بنجاح!', 'success');
-                            spawnConfetti();
-                        }
+                        if (choiceResult.outcome === 'accepted') { toast('🎉 تم تثبيت التطبيق بنجاح!', 'success'); spawnConfetti(); }
                         deferredPrompt = null;
                     });
                 } else {
@@ -2282,32 +2149,19 @@
                             <button class="btn btn-outline w-100 mt-3" id="closeInstallGuide">حسناً</button>
                         </div>`;
                     dom.modalBackdrop.classList.add('active');
-                    $('#closeInstallGuide').addEventListener('click', closeModal);
+                    document.getElementById('closeInstallGuide')?.addEventListener('click', closeModal);
                 }
             }
 
             function spawnConfetti() {
-                const colors = ['#6366f1', '#8b5cf6', '#10b981', '#f59e0b', '#f43f5e', '#0ea5e9', '#34d399',
-                '#fb7185'];
-                for (let i = 0; i < 50; i++) {
-                    const piece = document.createElement('div');
-                    piece.className = 'confetti-piece';
-                    piece.style.cssText = `
-                        left:${Math.random()*100}vw;
-                        top:${-20-Math.random()*60}px;
-                        width:${6+Math.random()*10}px;
-                        height:${6+Math.random()*10}px;
-                        background:${colors[Math.floor(Math.random()*colors.length)]};
-                        border-radius:${Math.random()>0.5?'50%':'2px'};
-                        animation-delay:${Math.random()*0.6}s;
-                        animation-duration:${1.2+Math.random()*1.8}s;
-                    `;
-                    document.body.appendChild(piece);
-                    setTimeout(() => piece.remove(), 2000);
+                const colors = ['#6366f1','#8b5cf6','#10b981','#f59e0b','#f43f5e','#0ea5e9','#34d399','#fb7185'];
+                for (let i=0;i<50;i++) {
+                    const piece = document.createElement('div'); piece.className='confetti-piece';
+                    piece.style.cssText = `left:${Math.random()*100}vw;top:${-20-Math.random()*60}px;width:${6+Math.random()*10}px;height:${6+Math.random()*10}px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${Math.random()>0.5?'50%':'2px'};animation-delay:${Math.random()*0.6}s;animation-duration:${1.2+Math.random()*1.8}s;`;
+                    document.body.appendChild(piece); setTimeout(()=>piece.remove(),2000);
                 }
             }
 
-            // ==================== KEYBOARD SHORTCUTS ====================
             function showShortcuts() {
                 dom.modalTitle.textContent = '⌨️ اختصارات لوحة المفاتيح';
                 dom.modalContent.innerHTML = `
@@ -2323,171 +2177,84 @@
                     </div>
                     <button class="btn btn-outline w-100 mt-3" id="closeShortcutsBtn">حسناً</button>`;
                 dom.modalBackdrop.classList.add('active');
-                $('#closeShortcutsBtn').addEventListener('click', closeModal);
+                document.getElementById('closeShortcutsBtn')?.addEventListener('click', closeModal);
             }
 
-            // ==================== RIPPLE EFFECT ====================
             function addRipple(e) {
                 const btn = e.currentTarget;
-                const ripple = document.createElement('span');
-                ripple.className = 'ripple';
+                const ripple = document.createElement('span'); ripple.className = 'ripple';
                 const rect = btn.getBoundingClientRect();
                 const size = Math.max(rect.width, rect.height);
                 ripple.style.width = ripple.style.height = size + 'px';
-                ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
-                ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+                ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+                ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
                 btn.appendChild(ripple);
                 setTimeout(() => ripple.remove(), 600);
             }
 
-            // ==================== EVENT BINDINGS ====================
             function bindEvents() {
                 dom = getAllDOMElements();
 
-                // Tab switching
-                dom.tabNav.addEventListener('click', e => { const btn = e.target.closest('.tab-btn'); if (btn)
-                        switchTab(btn.dataset.tab); });
+                dom.tabNav.addEventListener('click', e => { const btn = e.target.closest('.tab-btn'); if (btn) switchTab(btn.dataset.tab); });
 
-                // Add transactions
-                dom.addPersonalBtn.addEventListener('click', () => addTxn('personal', dom.descPersonal.value,
-                    +dom.amountPersonal.value));
-                dom.addFamilyBtn.addEventListener('click', () => addTxn('family', dom.descFamily.value, +dom
-                    .amountFamily.value));
+                dom.addPersonalBtn.addEventListener('click', () => addTxn('personal', dom.descPersonal.value, +dom.amountPersonal.value));
+                dom.addFamilyBtn.addEventListener('click', () => addTxn('family', dom.descFamily.value, +dom.amountFamily.value));
 
-                // Enter key
-                dom.amountPersonal.addEventListener('keydown', e => { if (e.key === 'Enter') addTxn('personal',
-                        dom.descPersonal.value, +dom.amountPersonal.value); });
-                dom.descPersonal.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault();
-                        dom.amountPersonal.focus(); } });
-                dom.amountFamily.addEventListener('keydown', e => { if (e.key === 'Enter') addTxn('family', dom
-                        .descFamily.value, +dom.amountFamily.value); });
-                dom.descFamily.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); dom
-                        .amountFamily.focus(); } });
+                dom.amountPersonal.addEventListener('keydown', e => { if (e.key==='Enter') addTxn('personal', dom.descPersonal.value, +dom.amountPersonal.value); });
+                dom.descPersonal.addEventListener('keydown', e => { if (e.key==='Enter') { e.preventDefault(); dom.amountPersonal.focus(); } });
+                dom.amountFamily.addEventListener('keydown', e => { if (e.key==='Enter') addTxn('family', dom.descFamily.value, +dom.amountFamily.value); });
+                dom.descFamily.addEventListener('keydown', e => { if (e.key==='Enter') { e.preventDefault(); dom.amountFamily.focus(); } });
 
-                // Set budget
                 dom.setBudgetPersonal.addEventListener('click', () => setBudgetModal('personal'));
                 dom.setBudgetFamily.addEventListener('click', () => setBudgetModal('family'));
 
-                // Clear all
                 dom.clearPersonalBtn.addEventListener('click', () => clearAllModal('personal'));
                 dom.clearFamilyBtn.addEventListener('click', () => clearAllModal('family'));
 
-                // Quick chips
-                dom.quickChipsPersonal.addEventListener('click', e => { const chip = e.target.closest('.chip'); if (
-                        chip) addTxn('personal', chip.dataset.desc, +chip.dataset.amount); });
-                dom.quickChipsFamily.addEventListener('click', e => { const chip = e.target.closest('.chip'); if (chip)
-                        addTxn('family', chip.dataset.desc, +chip.dataset.amount); });
+                dom.quickChipsPersonal.addEventListener('click', e => { const chip = e.target.closest('.chip'); if (chip) addTxn('personal', chip.dataset.desc, +chip.dataset.amount); });
+                dom.quickChipsFamily.addEventListener('click', e => { const chip = e.target.closest('.chip'); if (chip) addTxn('family', chip.dataset.desc, +chip.dataset.amount); });
 
-                // Modal close
-                dom.modalBackdrop.addEventListener('click', e => { if (e.target === dom.modalBackdrop) closeModal
-                    (); });
+                dom.modalBackdrop.addEventListener('click', e => { if (e.target === dom.modalBackdrop) closeModal(); });
 
-                // Bottom nav
                 document.getElementById('navPersonal').addEventListener('click', () => switchTab('personal'));
                 document.getElementById('navFamily').addEventListener('click', () => switchTab('family'));
                 document.getElementById('navCalculator').addEventListener('click', openCalculator);
                 document.getElementById('navExport').addEventListener('click', openExportOptions);
                 document.getElementById('navInstall').addEventListener('click', promptInstall);
 
-                // Header buttons
                 dom.btnSettings.addEventListener('click', openSettings);
                 dom.btnCalc.addEventListener('click', openCalculator);
                 dom.btnPlayStore.addEventListener('click', openPlayStoreGuide);
-                dom.btnShortcuts.addEventListener('click', (e) => { e.preventDefault();
-                    showShortcuts(); });
+                dom.btnShortcuts.addEventListener('click', (e) => { e.preventDefault(); showShortcuts(); });
 
-                // Ripple on all buttons
-                document.querySelectorAll('.btn, .btn-icon, .chip, .bottom-nav-btn').forEach(b => {
-                    b.addEventListener('click', addRipple);
-                });
+                document.querySelectorAll('.btn, .btn-icon, .chip, .bottom-nav-btn, .theme-toggle button').forEach(b => b.addEventListener('click', addRipple));
 
-                // Global keyboard shortcuts
                 document.addEventListener('keydown', e => {
-                    if (e.key === 'Escape') { if (dom.modalBackdrop.classList.contains('active'))
-                        closeModal(); }
+                    if (e.key === 'Escape') { if (dom.modalBackdrop.classList.contains('active')) closeModal(); }
                     if (e.ctrlKey || e.metaKey) {
-                        if (e.key === '1') { e.preventDefault();
-                            switchTab('personal'); }
-                        if (e.key === '2') { e.preventDefault();
-                            switchTab('family'); }
-                        if (e.key === 'e' || e.key === 'E') { e.preventDefault();
-                            openExportOptions(); }
-                        if (e.key === 'k' || e.key === 'K') { e.preventDefault();
-                            openCalculator(); }
-                        if (e.key === 's' || e.key === 'S') { e.preventDefault();
-                            openSettings(); }
-                        if (e.key === 'i' || e.key === 'I') { e.preventDefault();
-                            promptInstall(); }
+                        if (e.key === '1') { e.preventDefault(); switchTab('personal'); }
+                        if (e.key === '2') { e.preventDefault(); switchTab('family'); }
+                        if (e.key === 'e' || e.key === 'E') { e.preventDefault(); openExportOptions(); }
+                        if (e.key === 'k' || e.key === 'K') { e.preventDefault(); openCalculator(); }
+                        if (e.key === 's' || e.key === 'S') { e.preventDefault(); openSettings(); }
+                        if (e.key === 'i' || e.key === 'I') { e.preventDefault(); promptInstall(); }
                     }
                 });
             }
 
-            // ==================== PWA ====================
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                const installBtn = document.getElementById('navInstall');
-                if (installBtn) installBtn.style.display = 'flex';
-            });
+            window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; document.getElementById('navInstall').style.display = 'flex'; });
+            window.addEventListener('appinstalled', () => { deferredPrompt = null; document.getElementById('navInstall').style.display = 'none'; toast('🎉 تم تثبيت التطبيق بنجاح!', 'success'); spawnConfetti(); });
 
-            window.addEventListener('appinstalled', () => {
-                deferredPrompt = null;
-                const installBtn = document.getElementById('navInstall');
-                if (installBtn) installBtn.style.display = 'none';
-                toast('🎉 تم تثبيت التطبيق بنجاح!', 'success');
-                spawnConfetti();
-            });
-
-            // Service Worker
             if ('serviceWorker' in navigator) {
-                const swCode = `
-                    const CACHE='expense-tracker-v5';
-                    self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll([self.location.href])).then(()=>self.skipWaiting()));});
-                    self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
-                    self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{if(res.ok){const clone=res.clone();caches.open(CACHE).then(c=>c.put(e.request,clone));}return res;})));});
-                `;
-                navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode], { type: 'application/javascript' })))
-                    .then(() => console.log('✅ Service Worker registered'))
-                    .catch(() => console.warn('SW registration skipped'));
+                const swCode = `const CACHE='expense-tracker-v5';self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll([self.location.href])).then(()=>self.skipWaiting()));});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{if(res.ok){const clone=res.clone();caches.open(CACHE).then(c=>c.put(e.request,clone));}return res;})));});`;
+                navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode],{type:'application/javascript'}))).then(()=>console.log('SW registered')).catch(()=>{});
             }
 
-            // Manifest
-            const manifestData = {
-                name: 'متعقب المصاريف | Expense Tracker',
-                short_name: 'متعقب المصاريف',
-                description: 'تطبيق متعقب المصاريف الشخصية والبيت والعائلة - بالجنيه المصري | Hazem K H Madi',
-                start_url: location.href,
-                display: 'standalone',
-                background_color: '#0d0f14',
-                theme_color: '#0d0f14',
-                orientation: 'portrait-primary',
-                icons: [{ src: 'data:image/svg+xml,' + encodeURIComponent(
-                        '<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192"><rect width="192" height="192" rx="32" fill="#0d0f14"/><text x="96" y="110" text-anchor="middle" font-size="80" fill="white">💷</text></svg>'
-                        ), sizes: '192x192', type: 'image/svg+xml' }],
-                lang: 'ar',
-                dir: 'rtl',
-                categories: ['finance', 'utilities'],
-            };
-            const manifestLink = document.createElement('link');
-            manifestLink.rel = 'manifest';
-            manifestLink.href = URL.createObjectURL(new Blob([JSON.stringify(manifestData)], { type: 'application/json' }));
-            document.head.appendChild(manifestLink);
+            const manifestData = {name:'متعقب المصاريف | Expense Tracker',short_name:'متعقب المصاريف',start_url:location.href,display:'standalone',background_color:'#0d0f14',theme_color:'#0d0f14',icons:[{src:'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192"><rect width="192" height="192" rx="32" fill="#0d0f14"/><text x="96" y="110" text-anchor="middle" font-size="80" fill="white">💷</text></svg>'),sizes:'192x192'}]};
+            const link = document.createElement('link'); link.rel='manifest'; link.href=URL.createObjectURL(new Blob([JSON.stringify(manifestData)],{type:'application/json'})); document.head.appendChild(link);
 
-            // ==================== INIT ====================
-            loadData();
-            applyTheme();
-            switchTab(state.activeTab);
-            renderAll();
-            bindEvents();
-
-            console.log('💷 متعقب المصاريف - الإصدار النهائي | Final Version');
-            console.log('👨‍💻 Built by Hazem K H Madi - Senior Product Designer');
-            console.log('🎨 Features: Light/Dark Mode | 5 Color Schemes | Google Play Integration | PWA | Export | Calculator');
-            console.log('⌨️ Keyboard Shortcuts: Ctrl+1/2 | Ctrl+E | Ctrl+K | Ctrl+S | Ctrl+I | Esc');
-            console.log('📱 Installable as PWA with full offline support');
-
-            // Expose for debugging
-            window.__tracker = { state, renderAll, saveData, loadData, applyTheme, toast, spawnConfetti };
+            loadData(); applyTheme(); switchTab(state.activeTab); renderAll(); bindEvents();
+            console.log('💷 Expense Tracker - Final Bug-Free Version | by Hazem K H Madi');
         })();
     </script>
 </body>
