@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميزانية يونيو 2026 المطورة</title>
+    <title>مدير الميزانية الذكي 2026</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#2c3e50">
     <link rel="apple-touch-icon" href="icon-192.png">
@@ -15,7 +15,7 @@
             --text-color: #333;
             --primary: #2c3e50;
             --accent: #27ae60;
-            --danger: #c0392b;
+            --danger: #e74c3c;
             --warning: #f39c12;
         }
 
@@ -48,7 +48,7 @@
         }
 
         .section-title {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             border-bottom: 2px solid var(--primary);
             padding-bottom: 8px;
             margin-bottom: 15px;
@@ -64,27 +64,53 @@
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
-        input {
+        input[type="number"], input[type="text"] {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
+            padding: 12px;
+            border: 1px solid #ddd;
             border-radius: 8px;
             box-sizing: border-box;
             font-size: 1rem;
         }
+        
+        input[type="number"] { text-align: center; }
 
-        .budget-input {
-            font-weight: bold;
-            background-color: #fcfcfc;
-            text-align: center;
-            font-size: 1.1rem;
-            color: var(--primary);
+        /* نموذج إضافة مصروف جديد */
+        .add-expense-form {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px dashed #ccc;
         }
+        
+        .form-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .form-row input[type="text"] { flex: 2; }
+        .form-row input[type="number"] { flex: 1; }
 
-        /* تصميم قائمة المصاريف الديناميكية */
+        .btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+        
+        .btn-add { background: var(--primary); color: white; }
+        .btn-add:hover { background: #1a252f; }
+
+        /* قائمة المصاريف الديناميكية */
         .expense-list {
             margin-top: 15px;
         }
@@ -92,45 +118,39 @@
         .expense-item {
             display: flex;
             align-items: center;
+            justify-content: space-between;
+            padding: 10px 5px;
+            border-bottom: 1px solid #eee;
             gap: 8px;
-            background: #f9f9f9;
-            padding: 8px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border-right: 4px solid var(--primary);
         }
 
-        .expense-item input[type="text"] {
-            flex: 2;
+        .expense-details {
+            display: flex;
+            flex-grow: 1;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .expense-item input[type="number"] {
-            flex: 1;
-            text-align: center;
+        .expense-name { font-weight: 500; font-size: 0.95rem; }
+        .expense-amount { font-weight: bold; color: #555; }
+
+        /* أزرار التحكم بالتعديل والحذف */
+        .action-btns {
+            display: flex;
+            gap: 5px;
         }
 
-        .btn-delete {
-            background: var(--danger);
-            color: white;
+        .btn-action {
+            padding: 6px 10px;
             border: none;
-            padding: 10px;
-            border-radius: 8px;
+            border-radius: 4px;
             cursor: pointer;
-            font-weight: bold;
+            font-size: 0.8rem;
+            color: white;
         }
 
-        .btn-add {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            width: 100%;
-            margin-top: 10px;
-            font-size: 0.95rem;
-        }
+        .btn-edit { background: var(--warning); }
+        .btn-delete { background: var(--danger); }
 
         .result-box {
             background: #ecf0f1;
@@ -150,13 +170,13 @@
             text-align: center;
             padding: 20px;
             border-radius: 15px;
-            font-size: 1.2rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            font-size: 1.1rem;
+            margin-top: 20px;
         }
 
         .total-card span {
             display: block;
-            font-size: 1.9rem;
+            font-size: 1.7rem;
             font-weight: bold;
             margin-top: 10px;
             color: #2ecc71;
@@ -180,48 +200,62 @@
 <body>
 
 <div class="container">
-    <h1>📊 مدير الميزانية الذكي (يونيو 2026)</h1>
+    <h1>📊 مدير الميزانية الشخصية المتطور</h1>
     <button id="installBtn">📲 تثبيت التطبيق على الهاتف</button>
 
-    <!-- قسم مصاريف البيت -->
+    <!-- قســم مصاريــف البيــت -->
     <div class="card">
-        <div class="section-title">🏠 مصاريف البيت</div>
+        <div class="section-title">🏠 مصاريف البيت (يونيو 6/2026)</div>
         
         <div class="input-group">
             <label>💰 إجمالي المبلغ المرصود للبيت:</label>
-            <input type="number" id="house_budget" class="budget-input" value="27000" oninput="calculateAndSave()">
+            <input type="number" id="house_budget" value="27000" oninput="updateHouseBudget(this.value)">
         </div>
 
-        <label>📝 بنود المصاريف الحالية (يمكنك التعديل مباشرة):</label>
+        <!-- استمارة إضافة مصروف بيت جديد -->
+        <div class="add-expense-form">
+            <div class="form-row">
+                <input type="text" id="new_house_name" placeholder="مثال: لحوم وخضار...">
+                <input type="number" id="new_house_amount" placeholder="المبلغ">
+            </div>
+            <button class="btn btn-add" onclick="addExpense('house')">➕ إضافة بند مصروف للبيت</button>
+        </div>
+
+        <!-- قائمة مصاريف البيت الديناميكية -->
         <div id="house_expenses_container" class="expense-list"></div>
-        
-        <button class="btn-add" onclick="addExpenseRow('house')">➕ إضافة بند مصروف جديد للبيت</button>
 
         <div class="result-box">
             المبلغ المتبقي من مصروف البيت: <span id="house_remaining" class="highlight-green">0</span> جنيه
         </div>
     </div>
 
-    <!-- قسم مصاريف حازم الشخصية -->
+    <!-- قســم مصاريــف حــازم -->
     <div class="card">
         <div class="section-title">🧑 مصاريف حازم الشخصية</div>
 
         <div class="input-group">
             <label>💰 إجمالي المبلغ المرصود لحازم:</label>
-            <input type="number" id="hazem_budget" class="budget-input" value="9000" oninput="calculateAndSave()">
+            <input type="number" id="hazem_budget" value="9000" oninput="updateHazemBudget(this.value)">
         </div>
 
-        <label>📝 بنود المصاريف الحالية (يمكنك التعديل مباشرة):</label>
+        <!-- استمارة إضافة مصروف شخصي جديد -->
+        <div class="add-expense-form">
+            <div class="form-row">
+                <input type="text" id="new_hazem_name" placeholder="مثال: اشتراك الجيم...">
+                <input type="number" id="new_hazem_amount" placeholder="المبلغ">
+            </div>
+            <button class="btn btn-add" onclick="addExpense('hazem')">➕ إضافة بند مصروف شخصي</button>
+        </div>
+
+        <!-- قائمة مصاريف حازم الديناميكية -->
         <div id="hazem_expenses_container" class="expense-list"></div>
-        
-        <button class="btn-add" onclick="addExpenseRow('hazem')">➕ إضافة بند مصروف جديد لحازم</button>
 
         <div class="result-box">
             المبلغ المتبقي من مصروف حازم: <span id="hazem_remaining" class="highlight-green">0</span> جنيه
         </div>
     </div>
 
-    <!-- الإجمالي الكلي في البنك وإنستاباي -->
+    <!-- الإجمالي الكلي المحفوظ بالبنك وانستاباي -->
     <div class="total-card">
         إجمالي المتبقي (البنك + إنستاباي) حتى الآن
         <span id="grand_total">0 جنيه</span>
@@ -229,134 +263,204 @@
 </div>
 
 <script>
-    // البيانات الافتراضية للتطبيق في أول فتحة له على الهاتف
+    // البيانات الافتراضية المأخوذة من هيكلك الأساسي في حال عدم وجود بيانات محفوظة بالهاتف
     const defaultHouseExpenses = [
-        { name: "المصروف الشهري المرصود لماما", amount: 3500 },
-        { name: "صابون غسيل وجسم ويدين وشامبو ومعجون", amount: 1000 },
-        { name: "أرز مصري وأرز بسمتي وخميرة", amount: 400 },
-        { name: "مواصلات مشوار حسام وفارس ذهاب وإياب", amount: 250 },
-        { name: "ديون البيت لشهر مايو 5/2026", amount: 1150 }
+        { id: 1, name: "المصروف الشهري المرصود لماما", amount: 3500 },
+        { id: 2, name: "صابون غسيل و جسم و يدين و شامبو و معجون و فرش أسنان", amount: 1000 },
+        { id: 3, name: "أرز مصري و أرز بسمتي و خميرة", amount: 400 },
+        { id: 4, name: "مواصلات مشوار حسام و فارس ذهاب و إياب", amount: 250 },
+        { id: 5, name: "ديون البيت لشهر مايو 5/2026", amount: 1150 }
     ];
 
     const defaultHazemExpenses = [
-        { name: "حلاقة", amount: 200 },
-        { name: "عطر", amount: 700 },
-        { name: "طلعات ومصاريف خارجية وجانبية", amount: 1100 }
+        { id: 1, name: "حلاقة", amount: 200 },
+        { id: 2, name: "عطر", amount: 700 },
+        { id: 3, name: "طلعات و مصاريف خارجية و جانبية", amount: 1100 }
     ];
 
-    // تحميل البيانات المحفوظة أو تعيين الافتراضية
-    window.onload = function() {
-        if (!localStorage.getItem('house_budget')) {
-            localStorage.setItem('house_budget', '27000');
-            localStorage.setItem('hazem_budget', '9000');
-            localStorage.setItem('house_expenses', JSON.stringify(defaultHouseExpenses));
-            localStorage.setItem('hazem_expenses', JSON.stringify(defaultHazemExpenses));
-        }
-
-        document.getElementById('house_budget').value = localStorage.getItem('house_budget');
-        document.getElementById('hazem_budget').value = localStorage.getItem('hazem_budget');
-
-        renderExpenses('house');
-        renderExpenses('hazem');
-        calculateAndSave();
+    // متغيرات الحالة العامة للتطبيق
+    let data = {
+        houseBudget: 27000,
+        hazemBudget: 9000,
+        houseExpenses: [],
+        hazemExpenses: []
     };
 
-    // دالة بناء وعرض أسطر المصاريف بناءً على البيانات المحفوظة
-    function renderExpenses(type) {
-        const container = document.getElementById(`${type}_expenses_container`);
-        container.innerHTML = '';
-        const expenses = JSON.parse(localStorage.getItem(`${type}_expenses`)) || [];
-
-        expenses.forEach((expense, index) => {
-            const row = document.createElement('div');
-            row.className = 'expense-item';
-            row.innerHTML = `
-                <input type="text" value="${expense.name}" placeholder="اسم البند" oninput="updateExpenseData('${type}', ${index}, 'name', this.value)">
-                <input type="number" value="${expense.amount}" placeholder="المبلغ" oninput="updateExpenseData('${type}', ${index}, 'amount', this.value)">
-                <button class="btn-delete" onclick="deleteExpenseRow('${type}', ${index})">🗑️</button>
-            `;
-            container.appendChild(row);
-        });
-    }
-
-    // إضافة سطر مصروف جديد فارغ
-    function addExpenseRow(type) {
-        const expenses = JSON.parse(localStorage.getItem(`${type}_expenses`)) || [];
-        expenses.push({ name: '', amount: 0 });
-        localStorage.setItem(`${type}_expenses`, JSON.stringify(expenses));
-        renderExpenses(type);
-        calculateAndSave();
-    }
-
-    // حذف سطر مصروف بالكامل
-    function deleteExpenseRow(type, index) {
-        const expenses = JSON.parse(localStorage.getItem(`${type}_expenses`)) || [];
-        expenses.splice(index, 1);
-        localStorage.setItem(`${type}_expenses`, JSON.stringify(expenses));
-        renderExpenses(type);
-        calculateAndSave();
-    }
-
-    // تعديل البيانات عند الكتابة المباشرة داخل الخانات
-    function updateExpenseData(type, index, field, value) {
-        const expenses = JSON.parse(localStorage.getItem(`${type}_expenses`)) || [];
-        if (field === 'amount') {
-            expenses[index][field] = parseFloat(value) || 0;
+    // تحميل البيانات عند بدء التشغيل
+    window.onload = function() {
+        if(localStorage.getItem('budget_app_data')) {
+            data = JSON.parse(localStorage.getItem('budget_app_data'));
         } else {
-            expenses[index][field] = value;
+            data.houseExpenses = defaultHouseExpenses;
+            data.hazemExpenses = defaultHazemExpenses;
+            saveDataToStorage();
         }
-        localStorage.setItem(`${type}_expenses`, JSON.stringify(expenses));
-        calculateAndSave(); // تحديث فوري للإجماليات أثناء الكتابة
+        
+        // تعيين قيم ميزانيات البداية في الخانات
+        document.getElementById('house_budget').value = data.houseBudget;
+        document.getElementById('hazem_budget').value = data.hazemBudget;
+        
+        renderApp();
+    };
+
+    // حفظ البيانات في كاش الهاتف المحلي
+    function saveDataToStorage() {
+        localStorage.setItem('budget_app_data', JSON.stringify(data));
     }
 
-    // الحساب الشامل وحفظ الميزانية الإجمالية
-    function calculateAndSave() {
-        const houseBudget = parseFloat(document.getElementById('house_budget').value) || 0;
-        const hazemBudget = parseFloat(document.getElementById('hazem_budget').value) || 0;
+    function updateHouseBudget(val) {
+        data.houseBudget = parseFloat(val) || 0;
+        saveDataToStorage();
+        calculateAndDisplay();
+    }
 
-        localStorage.setItem('house_budget', houseBudget);
-        localStorage.setItem('hazem_budget', hazemBudget);
+    function updateHazemBudget(val) {
+        data.hazemBudget = parseFloat(val) || 0;
+        saveDataToStorage();
+        calculateAndDisplay();
+    }
 
-        // حساب مصاريف البيت
-        const houseExpensesList = JSON.parse(localStorage.getItem('house_expenses')) || [];
-        const totalHouseExpenses = houseExpensesList.reduce((sum, item) => sum + (item.amount || 0), 0);
-        const houseRemaining = houseBudget - totalHouseExpenses;
+    // ميزة إضافة مصروف جديد
+    function addExpense(type) {
+        const nameInput = document.getElementById(`new_${type}_name`);
+        const amountInput = document.getElementById(`new_${type}_amount`);
+        
+        const name = nameInput.value.trim();
+        const amount = parseFloat(amountInput.value) || 0;
+        
+        if (name === "" || amount <= 0) {
+            alert("الرجاء إدخال اسم المصروف وقيمة صحيحة أكبر من الصفر.");
+            return;
+        }
 
-        // حساب مصاريف حازم
-        const hazemExpensesList = JSON.parse(localStorage.getItem('hazem_expenses')) || [];
-        const totalHazemExpenses = hazemExpensesList.reduce((sum, item) => sum + (item.amount || 0), 0);
-        const hazemRemaining = hazemBudget - totalHazemExpenses;
+        const newExpense = {
+            id: Date.now(), // معرف فريد باستخدام الوقت الحالي
+            name: name,
+            amount: amount
+        };
+
+        if(type === 'house') {
+            data.houseExpenses.push(newExpense);
+        } else {
+            data.hazemExpenses.push(newExpense);
+        }
+
+        saveDataToStorage();
+        renderApp();
+
+        // تصفير حقول الإدخال بعد الإضافة بنجاح
+        nameInput.value = "";
+        amountInput.value = "";
+    }
+
+    // ميزة حذف مصروف
+    function deleteExpense(type, id) {
+        if(confirm("هل أنت متأكد من رغبتك في حذف هذا البند؟")) {
+            if(type === 'house') {
+                data.houseExpenses = data.houseExpenses.filter(item => item.id !== id);
+            } else {
+                data.hazemExpenses = data.hazemExpenses.filter(item => item.id !== id);
+            }
+            saveDataToStorage();
+            renderApp();
+        }
+    }
+
+    // ميزة تعديل مصروف قائم
+    function editExpense(type, id) {
+        const list = type === 'house' ? data.houseExpenses : data.hazemExpenses;
+        const item = list.find(item => item.id === id);
+        
+        if(item) {
+            const newName = prompt("تعديل اسم البند:", item.name);
+            if (newName === null) return; // إلغاء العملية
+            
+            const newAmountStr = prompt("تعديل المبلغ (جنيه):", item.amount);
+            if (newAmountStr === null) return; // إلغاء العملية
+            
+            const newAmount = parseFloat(newAmountStr) || 0;
+
+            if(newName.trim() !== "" && newAmount > 0) {
+                item.name = newName.trim();
+                item.amount = newAmount;
+                saveDataToStorage();
+                renderApp();
+            } else {
+                alert("القيم المدخلة غير صالحة.");
+            }
+        }
+    }
+
+    // دالة لبناء عناصر القائمة وعرضها بالكامل بالواجهة
+    function renderApp() {
+        // بناء قائمة مصاريف البيت
+        const houseContainer = document.getElementById('house_expenses_container');
+        houseContainer.innerHTML = '';
+        data.houseExpenses.forEach(item => {
+            houseContainer.appendChild(createExpenseRow('house', item));
+        });
+
+        // بناء قائمة مصاريف حازم
+        const hazemContainer = document.getElementById('hazem_expenses_container');
+        hazemContainer.innerHTML = '';
+        data.hazemExpenses.forEach(item => {
+            hazemContainer.appendChild(createExpenseRow('hazem', item));
+        });
+
+        calculateAndDisplay();
+    }
+
+    // إنشاء سطر المصروف مع أزرار التحكم الخاصة به تكتيكياً
+    function createExpenseRow(type, item) {
+        const div = document.createElement('div');
+        div.className = 'expense-item';
+        
+        div.innerHTML = `
+            <div class="expense-details">
+                <span class="expense-name">• ${item.name}</span>
+                <span class="expense-amount">${item.amount} جنيه</span>
+            </div>
+            <div class="action-btns">
+                <button class="btn-action btn-edit" onclick="editExpense('${type}', ${item.id})">✏️</button>
+                <button class="btn-action btn-delete" onclick="deleteExpense('${type}', ${item.id})">❌</button>
+            </div>
+        `;
+        return div;
+    }
+
+    // الحساب الرياضي الفوري والعرض
+    function calculateAndDisplay() {
+        const totalHouseExpenses = data.houseExpenses.reduce((sum, item) => sum + item.amount, 0);
+        const houseRemaining = data.houseBudget - totalHouseExpenses;
+
+        const totalHazemExpenses = data.hazemExpenses.reduce((sum, item) => sum + item.amount, 0);
+        const hazemRemaining = data.hazemBudget - totalHazemExpenses;
 
         const grandTotal = houseRemaining + hazemRemaining;
 
-        // العرض في الواجهة
         document.getElementById('house_remaining').innerText = houseRemaining.toLocaleString('ar-EG');
         document.getElementById('hazem_remaining').innerText = hazemRemaining.toLocaleString('ar-EG');
         document.getElementById('grand_total').innerText = grandTotal.toLocaleString('ar-EG') + " جنيه";
     }
 
-    // تشغيل الـ PWA بدون إنترنت
+    // تفعيل الـ Service Worker
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js')
-        .then(() => console.log("Service Worker Active"))
-        .catch(err => console.log("Service Worker Error", err));
+        navigator.serviceWorker.register('sw.js').then(() => console.log("PWA Active"));
     }
 
-    // إعدادات زر التثبيت للأندرويد
+    // كود زر التثبيت للأندرويد
     let deferredPrompt;
-    const installBtn = document.getElementById('installBtn');
-
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        installBtn.style.display = 'block';
+        document.getElementById('installBtn').style.display = 'block';
     });
 
-    installBtn.addEventListener('click', async () => {
+    document.getElementById('installBtn').addEventListener('click', async () => {
         if (deferredPrompt) {
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === 'accepted') installBtn.style.display = 'none';
+            if (outcome === 'accepted') document.getElementById('installBtn').style.display = 'none';
             deferredPrompt = null;
         }
     });
