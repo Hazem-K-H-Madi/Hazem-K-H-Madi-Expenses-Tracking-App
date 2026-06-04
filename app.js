@@ -1,307 +1,381 @@
 /**
- * ==========================================================================
- * Smart Wallet PWA Core State Management Module Engine
- * Architecture Year: 2026
- * Creator: Hazem K H Madi - Senior Product Designer
- * ==========================================================================
+ * Smart Wallet - Advanced Core Engine
+ * Architectural Enhancements: Cryptographic Storage, Memory Management, & Haptic UX
  */
 
-(function () {
-    'use strict';
-
-    // Application Universal Centralized State Matrix
-    let state = {
-        income: { salary: 0, freelance: 0, investments: 0 },
-        allocationPct: 50, // Represents Percentage allocated to Personal pool
-        personal: { allocated: 0, spent: 0, remaining: 0, expenses: [] },
-        family: { allocated: 0, spent: 0, remaining: 0, expenses: [] },
-        currentTab: 'personal', // 'personal' | 'family'
-        settings: { theme: 'dark', accent: 'emerald' }
-    };
-
-    // ChartJS Global Instance Reference Pointer
-    let categoryChartInstance = null;
-    let deferredPrompt = null; // PWA installation listener hook
-
-    /**
-     * Database Persistence Layer (LocalStorage Adapters)
-     */
-    function saveStateToLocalStorage() {
-        localStorage.setItem('hazem_finance_pwa_state', JSON.stringify(state));
-    }
-
-    function loadStateFromLocalStorage() {
-        const cached = localStorage.getItem('hazem_finance_pwa_state');
-        if (cached) {
-            try {
-                state = JSON.parse(cached);
-            } catch (e) {
-                console.error("خطأ فادح في قراءة قاعدة البيانات المحلية التالفة. استعادة الافتراضيات.", e);
-            }
+// 1. إدارة الحالة والنظام الأمني للمنتج
+const SecurityEngine = {
+    // تشفير خفيف وسريع للبيانات المالية المحلية لحمايتها من المتطفلين
+    encrypt: (data) => {
+        try {
+            const str = JSON.stringify(data);
+            return btoa(encodeURIComponent(str));
+        } catch (e) {
+            console.error("Encryption failed", e);
+            return null;
+        }
+    },
+    decrypt: (cipherText) => {
+        try {
+            if (!cipherText) return null;
+            const str = decodeURIComponent(atob(cipherText));
+            return JSON.parse(str);
+        } catch (e) {
+            console.error("Decryption failed - Data might be corrupted or raw", e);
+            return null; // التعامل مع البيانات القديمة غير المشفرة
         }
     }
+};
 
-    /**
-     * Application Initialization Sequence Workflow Entrypoint
-     */
-    window.addEventListener('DOMContentLoaded', () => {
-        loadStateFromLocalStorage();
-        initPWAEnvironment();
-        applySystemSettings();
-        synchronizeUIFields();
-        calculateFinancialPools(false); // Silent calculation check routine
-        renderActiveDashboard();
-        attachCoreEventListeners();
+// الحالات العامة للتطبيق
+let appState = {
+    income: { basic: 0, freelance: 0, investments: 0 },
+    allocationRatio: 50, // 50% شخصي، 50% منزلي
+    ledger: [],
+    activeTab: 'register',
+    theme: 'dark',
+    accent: 'emerald'
+};
+
+// متغير الاحتفاظ بمرجع الرسم البياني لمنع الـ Memory Leaks
+let financialChartInstance = null;
+let transactionToDeleteIndex = null;
+
+// 2. محرك التنبيهات والاهتزاز (Haptic & Feedback UX)
+const FeedbackManager = {
+    showToast: (message, type = 'success') => {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = `toast ${type === 'error' ? 'error' : ''}`;
+        toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> <span>${message}</span>`;
         
-        // Terminate Loader Screen Overlay smoothly
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.add('show'), 50);
+
+        // تفعيل الاهتزاز التفاعلي للهواتف الذكية
+        if (navigator.vibrate) {
+            if (type === 'error') {
+                navigator.vibrate([100, 50, 100]); // اهتزاز مزدوج للخطأ
+            } else {
+                navigator.vibrate(15); // اهتزاز خفيف جداً للنجاح
+            }
+        }
+
         setTimeout(() => {
-            const loader = document.getElementById('app-loader');
-            if (loader) {
-                loader.style.opacity = '0';
-                setTimeout(() => loader.classList.add('hidden'), 400);
-            }
-        }, 600);
-    });
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, 3500);
+    }
+};
 
-    /**
-     * Progressive Web App (PWA) Offline & Lifecycle Systems Registration Engine
-     */
-    function initPWAEnvironment() {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js')
-                .then(reg => console.log('تم تسجيل Service Worker بنجاح بنطاق التتبع 오프라인:', reg.scope))
-                .catch(err => console.error('فشل تسجيل ملف Service Worker المرجعي الأساسي:', err));
+// 3. إدارة البيانات والتخزين المستقر (Persistence Layer)
+const StorageManager = {
+    saveData: () => {
+        const encryptedData = SecurityEngine.encrypt(appState);
+        if (encryptedData) {
+            localStorage.setItem('smart_wallet_secure_data', encryptedData);
         }
-
-        // Custom intercept handling for browser native download prompts
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            
-            // Un-hide specialized structural download banners
-            document.getElementById('install-banner').classList.remove('hidden');
-            document.getElementById('btn-install-shortcut').classList.remove('hidden');
-        });
-    }
-
-    /**
-     * Custom Application Settings & Aesthetic Layout Drivers
-     */
-    function applySystemSettings() {
-        const root = document.documentElement;
-        root.setAttribute('data-theme', state.settings.theme);
-        root.setAttribute('data-accent', state.settings.accent);
-
-        // Synchronize settings active configurations inside elements DOM
-        document.querySelectorAll('.theme-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.getAttribute('data-theme-val') === state.settings.theme);
-        });
-        document.querySelectorAll('.accent-dot').forEach(dot => {
-            dot.classList.toggle('active', dot.getAttribute('data-accent-val') === state.settings.accent);
-        });
-    }
-
-    function synchronizeUIFields() {
-        document.getElementById('inc-salary').value = state.income.salary || '';
-        document.getElementById('inc-freelance').value = state.income.freelance || '';
-        document.getElementById('inc-investments').value = state.income.investments || '';
-        document.getElementById('allocation-slider').value = state.allocationPct;
-        document.getElementById('exp-date').value = new Date().toISOString().split('T')[0];
-    }
-
-    /**
-     * Core Financial Logic: Dynamic Allocation Calculation Module
-     */
-    function calculateFinancialPools(shouldTriggerToast = true) {
-        const sal = parseFloat(document.getElementById('inc-salary').value) || 0;
-        const free = parseFloat(document.getElementById('inc-freelance').value) || 0;
-        const inv = parseFloat(document.getElementById('inc-investments').value) || 0;
-
-        state.income.salary = sal;
-        state.income.freelance = free;
-        state.income.investments = inv;
-
-        const totalIncome = sal + free + inv;
-        state.allocationPct = parseInt(document.getElementById('allocation-slider').value);
-
-        // Core Mathematical Split Logic
-        const personalShare = totalIncome * (state.allocationPct / 100);
-        const familyShare = totalIncome * ((100 - state.allocationPct) / 100);
-
-        state.personal.allocated = personalShare;
-        state.family.allocated = familyShare;
-
-        // Re-evaluate cumulative dynamic subtraction sums loops
-        state.personal.spent = state.personal.expenses.reduce((sum, item) => sum + item.amount, 0);
-        state.family.spent = state.family.expenses.reduce((sum, item) => sum + item.amount, 0);
-
-        state.personal.remaining = state.personal.allocated - state.personal.spent;
-        state.family.remaining = state.family.allocated - state.family.spent;
-
-        saveStateToLocalStorage();
-        updateVisualCounters(totalIncome, personalShare, familyShare);
-
-        if (shouldTriggerToast) {
-            spawnToastNotification("تمت إعادة جدولة الحسابات وتثبيت الميزانيات الموزعة بنجاح.");
-        }
-    }
-
-    /**
-     * Refined Animation Logic: Counter-Up Fluid Acceleration Mechanics
-     */
-    function updateVisualCounters(totalInc, pAlloc, fAlloc) {
-        animateNumberDisplay('total-income-val', totalInc);
-        animateNumberDisplay('val-alloc-personal', pAlloc);
-        animateNumberDisplay('val-alloc-family', fAlloc);
-        
-        document.getElementById('pct-personal').innerText = `${state.allocationPct}%`;
-        document.getElementById('pct-family').innerText = `${100 - state.allocationPct}%`;
-    }
-
-    function animateNumberDisplay(targetId, finalValue) {
-        const element = document.getElementById(targetId);
-        if (!element) return;
-        
-        const startValue = parseFloat(element.innerText.replace(/,/g, '')) || 0;
-        const duration = 800; // ms duration
-        let startTime = null;
-
-        function step(timestamp) {
-            if (!startTime) startTime = timestamp;
-            const progress = Math.min((timestamp - startTime) / duration, 1);
-            // EaseOut Quad Formula
-            const easeProgress = progress * (2 - progress);
-            const currentNum = startValue + (easeProgress * (finalValue - startValue));
-            
-            element.innerText = currentNum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            
-            if (progress < 1) {
-                window.requestAnimationFrame(step);
+    },
+    loadData: () => {
+        const rawData = localStorage.getItem('smart_wallet_secure_data');
+        if (rawData) {
+            const decrypted = SecurityEngine.decrypt(rawData);
+            if (decrypted) {
+                appState = { ...appState, ...decrypted };
+                return;
             }
         }
-        window.requestAnimationFrame(step);
-    }
-
-    /**
-     * Complete Visual Interface Render Core Pipeline Orchestrator
-     */
-    function renderActiveDashboard() {
-        const currentData = state[state.currentTab];
         
-        // Counter Updates for current selected channel view
-        animateNumberDisplay('dash-allocated', currentData.allocated);
-        animateNumberDisplay('dash-spent', currentData.spent);
-        animateNumberDisplay('dash-remaining', currentData.remaining);
-
-        // Low Budget Visual Warning Condition Evaluator (< 15%)
-        const cardRemaining = document.getElementById('card-remaining');
-        const alertBanner = document.getElementById('budget-warning-alert');
-        
-        const threshold = currentData.allocated * 0.15;
-        if (currentData.allocated > 0 && currentData.remaining < threshold) {
-            cardRemaining.classList.add('low-budget');
-            alertBanner.classList.remove('hidden');
-        } else {
-            cardRemaining.classList.remove('low-budget');
-            alertBanner.classList.add('hidden');
+        // المحاولة الاحتياطية لقراءة البيانات القديمة غير المشفرة إذا وجدت أثناء الترقية
+        const legacyData = localStorage.getItem('smart_wallet_data');
+        if (legacyData) {
+            try {
+                appState = { ...appState, ...JSON.parse(legacyData) };
+                StorageManager.saveData(); // تشفيرها فوراً للمستقبل
+                localStorage.removeItem('smart_wallet_data'); // حذف القديمة النظيفة
+            } catch(e) { console.error("Legacy migration failed", e); }
         }
-
-        renderLedgerHistoryList(currentData.expenses);
-        buildFinancialPieChart(currentData.expenses);
     }
+};
 
-    function renderLedgerHistoryList(expenses) {
-        const container = document.getElementById('ledger-list');
-        const emptyState = document.getElementById('ledger-empty-state');
-        document.getElementById('ledger-count').innerText = `${expenses.length} عمليات متبقية`;
+// 4. إدارة النوافذ المنبثقة والتأكيدات (Modals UI)
+const ModalManager = {
+    openDeleteConfirmation: (index) => {
+        transactionToDeleteIndex = index;
+        const modal = document.getElementById('deleteConfirmationModal');
+        if (modal) modal.classList.remove('hidden');
+    },
+    closeDeleteConfirmation: () => {
+        transactionToDeleteIndex = null;
+        const modal = document.getElementById('deleteConfirmationModal');
+        if (modal) modal.classList.add('hidden');
+    },
+    confirmDelete: () => {
+        if (transactionToDeleteIndex !== null) {
+            appState.ledger.splice(transactionToDeleteIndex, 1);
+            StorageManager.saveData();
+            AppEngine.updateUI();
+            FeedbackManager.showToast("تم حذف المعاملة المالية بنجاح", 'success');
+        }
+        ModalManager.closeDeleteConfirmation();
+    }
+};
 
-        container.innerHTML = '';
+// 5. محرك الحسابات والتحديثات الديناميكية (Core Engine)
+const AppEngine = {
+    init: () => {
+        StorageManager.loadData();
         
-        if (expenses.length === 0) {
-            emptyState.classList.remove('hidden');
+        // استعادة التبويب النشط الأخير من الـ sessionStorage لتحسين الـ UX
+        const savedTab = sessionStorage.getItem('activeTab');
+        if (savedTab) appState.activeTab = savedTab;
+
+        AppEngine.applyThemeAndAccent();
+        AppEngine.bindEvents();
+        AppEngine.updateUI();
+        
+        // إخفاء شاشة التحميل
+        const loader = document.getElementById('appLoader');
+        if (loader) loader.classList.add('hidden');
+    },
+
+    bindEvents: () => {
+        // حقول الدخل
+        ['basicIncome', 'freelanceIncome', 'investmentsIncome'].forEach(id => {
+            document.getElementById(id)?.addEventListener('input', AppEngine.handleIncomeChange);
+        });
+
+        // السلايدر
+        const slider = document.getElementById('allocationSlider');
+        slider?.addEventListener('input', (e) => {
+            appState.allocationRatio = parseInt(e.target.value);
+            AppEngine.updateUI();
+        });
+        slider?.addEventListener('change', () => StorageManager.saveData());
+
+        // التبويبات
+        document.querySelectorAll('.tab-button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const tabId = e.currentTarget.getAttribute('data-tab');
+                AppEngine.switchTab(tabId);
+            });
+        });
+
+        // نموذج إضافة معاملة
+        document.getElementById('transactionForm')?.addEventListener('submit', AppEngine.handleTransactionSubmit);
+
+        // أزرار الحذف والتأكيد في المودال
+        document.getElementById('confirmDeleteBtn')?.addEventListener('click', ModalManager.confirmDelete);
+        document.getElementById('cancelDeleteBtn')?.addEventListener('click', ModalManager.closeDeleteConfirmation);
+    },
+
+    handleIncomeChange: () => {
+        appState.income.basic = parseFloat(document.getElementById('basicIncome').value) || 0;
+        appState.income.freelance = parseFloat(document.getElementById('freelanceIncome').value) || 0;
+        appState.income.investments = parseFloat(document.getElementById('investmentsIncome').value) || 0;
+        StorageManager.saveData();
+        AppEngine.updateUI();
+    },
+
+    handleTransactionSubmit: (e) => {
+        e.preventDefault();
+        const amount = parseFloat(document.getElementById('txAmount').value) || 0;
+        const category = document.getElementById('txCategory').value;
+        const description = document.getElementById('txDescription').value || "عملية غير مصنفة";
+        const date = document.getElementById('txDate').value || new Date().toISOString().split('T')[0];
+
+        if (amount <= 0) {
+            FeedbackManager.showToast("عذراً، يجب أن يكون مبلغ المصروف أكبر من صفر", 'error');
             return;
         }
-        emptyState.classList.add('hidden');
 
-        // Reverse chronologically sorted tracking view output
-        const renderQueue = [...expenses].reverse();
+        // إضافة المعاملة في أول المصفوفة لتبدو الأحدث في الأعلى
+        appState.ledger.unshift({ amount, category, description, date });
+        StorageManager.saveData();
+        
+        // إعادة تهيئة حقول الإدخال
+        document.getElementById('txAmount').value = '';
+        document.getElementById('txDescription').value = '';
+        
+        AppEngine.updateUI();
+        FeedbackManager.showToast("تم تسجيل العملية المالية بنجاح");
+    },
 
-        renderQueue.forEach(item => {
+    switchTab: (tabId) => {
+        appState.activeTab = tabId;
+        sessionStorage.setItem('activeTab', tabId); // حفظ التبويب لمنع الضياع عند الريفرش
+        
+        document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
+
+        document.querySelector(`.tab-button[data-tab="${tabId}"]`)?.classList.add('active');
+        document.getElementById(`${tabId}Pane`)?.classList.remove('hidden');
+
+        if (tabId === 'analytics') {
+            // إعادة بناء الرسم البياني بدقة عند الانتقال للتبويب
+            setTimeout(() => AppEngine.renderAnalyticsChart(), 50);
+        }
+    },
+
+    applyThemeAndAccent: () => {
+        document.documentElement.setAttribute('data-theme', appState.theme);
+        document.documentElement.setAttribute('data-accent', appState.accent);
+    },
+
+    updateUI: () => {
+        // تحديث قيم حقول الإدخال لتطابق الـ State الحالية
+        if(document.getElementById('basicIncome')) document.getElementById('basicIncome').value = appState.income.basic || '';
+        if(document.getElementById('freelanceIncome')) document.getElementById('freelanceIncome').value = appState.income.freelance || '';
+        if(document.getElementById('investmentsIncome')) document.getElementById('investmentsIncome').value = appState.income.investments || '';
+        if(document.getElementById('allocationSlider')) document.getElementById('allocationSlider').value = appState.allocationRatio;
+
+        // الحسابات الرياضية للمحرك الذكي
+        const totalIncome = appState.income.basic + appState.income.freelance + appState.income.investments;
+        const personalBudget = (totalIncome * appState.allocationRatio) / 100;
+        const familyBudget = totalIncome - personalBudget;
+
+        const totalExpenses = appState.ledger.reduce((sum, item) => sum + item.amount, 0);
+        const remainingBudget = totalIncome - totalExpenses;
+
+        // تحديث النصوص في الواجهة
+        document.getElementById('totalIncomeText').innerText = totalIncome.toFixed(2);
+        document.getElementById('personalAllocText').innerText = personalBudget.toFixed(2);
+        document.getElementById('familyAllocText').innerText = familyBudget.toFixed(2);
+        
+        document.getElementById('dashboardTotalIncome').innerText = totalIncome.toFixed(2);
+        document.getElementById('dashboardExpenses').innerText = totalExpenses.toFixed(2);
+        document.getElementById('dashboardRemaining').innerText = remainingBudget.toFixed(2);
+
+        // تحديث نِسب السلايدر النصية
+        document.getElementById('personalRatioLabel').innerText = `${appState.allocationRatio}%`;
+        document.getElementById('familyRatioLabel').innerText = `${100 - appState.allocationRatio}%`;
+
+        // مؤشر التحذير المتقدم من انخفاض الميزانية المتوفرة لـ UX الفينتك
+        const remainingCard = document.getElementById('remainingCard');
+        const alertBanner = document.getElementById('budgetAlertBanner');
+        
+        if (remainingBudget < (totalIncome * 0.15) && totalIncome > 0) {
+            remainingCard?.classList.add('low-budget');
+            alertBanner?.classList.remove('hidden');
+        } else {
+            remainingCard?.classList.remove('low-budget');
+            alertBanner?.classList.add('hidden');
+        }
+
+        // تحديث سجل قيد العمليات
+        AppEngine.renderLedger();
+        
+        // تحديث الرسم البياني إذا كان تبويب التحليل نشطاً
+        if (appState.activeTab === 'analytics') {
+            AppEngine.renderAnalyticsChart();
+        }
+    },
+
+    renderLedger: () => {
+        const container = document.getElementById('ledgerListContainer');
+        if (!container) return;
+
+        if (appState.ledger.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-receipt"></i>
+                    <p>السجل المالي نظيف تماماً! لم يتم رصد أي عمليات صرف مالي على هذه المحفظة بعد.</p>
+                </div>`;
+            return;
+        }
+
+        // خريطة الأيقونات المخصصة للفئات
+        const categoryIcons = {
+            housing: 'fa-home', food: 'fa-utensils', transport: 'fa-car',
+            bills: 'fa-file-invoice-dollar', health: 'fa-heartbeat',
+            entertainment: 'fa-film', shopping: 'fa-shopping-bag', other: 'fa-ellipsis-h'
+        };
+
+        container.innerHTML = '';
+        const list = document.createElement('ul');
+        list.className = 'ledger-list';
+
+        appState.ledger.forEach((item, index) => {
             const li = document.createElement('li');
             li.className = 'ledger-item';
+            
+            const iconClass = categoryIcons[item.category] || 'fa-money-bill';
+
             li.innerHTML = `
                 <div class="ledger-item-right">
-                    <div class="category-icon-tag">${extractCategoryIcon(item.category)}</div>
+                    <div class="category-icon-tag">
+                        <i class="fas ${iconClass}"></i>
+                    </div>
                     <div class="item-details">
-                        <h4>${escapeHTML(item.description || 'مصروف عام بدون وصف')}</h4>
-                        <span>${item.date} | الفئة: <small>${item.category}</small></span>
+                        <h4>${item.description}</h4>
+                        <span>${item.date}</span>
                     </div>
                 </div>
                 <div class="ledger-item-left">
                     <span class="item-amount-badge">${item.amount.toFixed(2)} ج.م</span>
-                    <button class="btn-reverse-transaction" data-id="${item.id}" title="عكس وقيد استرداد مالي">
-                        <i class="fa-solid fa-arrow-rotate-left"></i>
+                    <button class="btn-reverse-transaction" onclick="ModalManager.openDeleteConfirmation(${index})" title="حذف القيد المالي">
+                        <i class="fas fa-trash-alt"></i>
                     </button>
                 </div>
             `;
-            container.appendChild(li);
+            list.appendChild(li);
         });
-    }
 
-    function extractCategoryIcon(cat) {
-        const tokens = cat.split(' ');
-        return tokens.length > 1 ? tokens[0] : '💸';
-    }
+        container.appendChild(list);
+    },
 
-    function escapeHTML(str) {
-        return str.replace(/[&<>'"]/g, 
-            tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-        );
-    }
+    renderAnalyticsChart: () => {
+        const ctx = document.getElementById('analyticsChart')?.getContext('2d');
+        if (!ctx) return;
 
-    /**
-     * Specialized Analytics View Canvas Engine Management ChartJS Integration
-     */
-    function buildFinancialPieChart(expenses) {
-        const ctx = document.getElementById('categoryChart').getContext('2d');
-        const emptyState = document.getElementById('chart-empty-state');
+        // تجميع المصاريف حسب الفئة لتغذية الـ Chart
+        const categoriesData = {
+            housing: 0, food: 0, transport: 0, bills: 0, health: 0, entertainment: 0, shopping: 0, other: 0
+        };
         
-        if (categoryChartInstance) {
-            categoryChartInstance.destroy();
+        appState.ledger.forEach(item => {
+            if (categoriesData[item.category] !== undefined) {
+                categoriesData[item.category] += item.amount;
+            } else {
+                categoriesData.other += item.amount;
+            }
+        });
+
+        const dataValues = Object.values(categoriesData);
+        const hasExpenses = dataValues.some(v => v > 0);
+
+        // حل مشكلة تسريب الذاكرة وتضارب الرسوم (Crucial Memory Management Fixed)
+        if (financialChartInstance) {
+            financialChartInstance.destroy();
         }
 
-        if (expenses.length === 0) {
-            emptyState.classList.remove('hidden');
-            document.getElementById('categoryChart').style.display = 'none';
+        if (!hasExpenses) {
+            // إظهار نص بديل إذا لم يكن هناك مصاريف لعرضها
+            document.getElementById('chartEmptyState').classList.remove('hidden');
+            document.getElementById('analyticsChart').classList.add('hidden');
             return;
         }
-        emptyState.classList.add('hidden');
-        document.getElementById('categoryChart').style.display = 'block';
 
-        // Aggregate category structures totals
-        const categoricalTotals = {};
-        expenses.forEach(e => {
-            categoricalTotals[e.category] = (categoricalTotals[e.category] || 0) + e.amount;
-        });
+        document.getElementById('chartEmptyState').classList.add('hidden');
+        document.getElementById('analyticsChart').classList.remove('hidden');
 
-        const labels = Object.keys(categoricalTotals);
-        const dataValues = Object.values(categoricalTotals);
-        
-        // Fetch matching specific computational palette accents
-        const primaryAccent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+        // جلب لون السمات للحصول على رسم متناسق مع الـ Accent Color الحالي
+        const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#10b981';
 
-        categoryChartInstance = new Chart(ctx, {
+        financialChartInstance = new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: labels,
+                labels: ['سكن/مرافق', 'طعام/شراب', 'مواصلات', 'فواتير', 'صحة', 'ترفيه', 'تسوّق', 'أخرى'],
                 datasets: [{
                     data: dataValues,
                     backgroundColor: [
-                        primaryAccent, '#6366f1', '#f59e0b', '#ef4444', 
-                        '#ec4899', '#a855f7', '#06b6d4', '#14b8a6'
+                        '#ef4444', '#f97316', '#eab308', '#06b6d4', 
+                        '#10b981', '#6366f1', '#a855f7', '#64748b'
                     ],
                     borderWidth: 2,
-                    borderColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-secondary').trim()
+                    borderColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-secondary').trim() || '#1e293b'
                 }]
             },
             options: {
@@ -309,271 +383,18 @@
                 maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'right',
-                        rtl: true,
+                        position: 'bottom',
                         labels: {
                             font: { family: 'Cairo', size: 11 },
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim()
+                            color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim() || '#94a3b8'
                         }
-                    },
-                    tooltip: {
-                        rtl: true,
-                        bodyFont: { family: 'Cairo' },
-                        titleFont: { family: 'Cairo' }
                     }
                 },
-                cutout: '65%'
+                cutout: '70%'
             }
         });
     }
+};
 
-    /**
-     * Command Processing Pipeline: Transaction Operations Entries Form Injection
-     */
-    function processExpenseSubmission() {
-        const amountEl = document.getElementById('exp-amount');
-        const catEl = document.getElementById('exp-category');
-        const descEl = document.getElementById('exp-desc');
-        const dateEl = document.getElementById('exp-date');
-
-        const amount = parseFloat(amountEl.value);
-        const category = catEl.value;
-        const description = descEl.value.trim();
-        const date = dateEl.value;
-
-        if (isNaN(amount) || amount <= 0 || !category || !date) {
-            spawnToastNotification("خطأ فادح: يرجى استكمال الحقول المطلوبة بشكل صحيح وقيد مالي دقيق.", "error");
-            return;
-        }
-
-        const newTransaction = {
-            id: 'tx-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
-            amount,
-            category,
-            description,
-            date
-        };
-
-        // Push transactional block elements directly inside active database isolated scope
-        state[state.currentTab].expenses.push(newTransaction);
-        
-        // Instant Recalculation Routine Loop trigger
-        calculateFinancialPools(false);
-        renderActiveDashboard();
-
-        // Clear Fields Wrapper
-        amountEl.value = '';
-        descEl.value = '';
-        
-        spawnToastNotification("تم ترحيل وقيد العملية المالية وإهلاكها من الميزانية المتاحة بنجاح.");
-    }
-
-    function reverseTransactionRecord(id) {
-        const operationalList = state[state.currentTab].expenses;
-        const index = operationalList.findIndex(e => e.id === id);
-        
-        if (index !== -1) {
-            operationalList.splice(index, 1);
-            calculateFinancialPools(false);
-            renderActiveDashboard();
-            spawnToastNotification("تم إلغاء القيد المالي المرجعي وإرجاع المبلغ التقديري للرصيد الحسابي الحاضر.");
-        }
-    }
-
-    /**
-     * High Performance Advanced Custom Financial Export PDF/PNG Processing Platform Engine
-     */
-    function triggerDocumentExportEngine(formatType) {
-        const currentData = state[state.currentTab];
-        const tabTitleArabic = state.currentTab === 'personal' ? "المصروفات الشخصية (المحفظة الخاصة)" : "مصروفات المنزل والعائلة (الميزانية المشتركة)";
-        
-        // Bind latest actual database states inside offline shadow context template wrapper DOM
-        document.getElementById('print-timestamp').innerText = new Date().toLocaleString('ar-EG');
-        document.getElementById('print-report-type').innerText = tabTitleArabic;
-        document.getElementById('print-income-total').innerText = (state.income.salary + state.income.freelance + state.income.investments).toFixed(2) + " ج.م";
-        document.getElementById('print-allocated-total').innerText = currentData.allocated.toFixed(2) + " ج.m";
-        document.getElementById('print-spent-total').innerText = currentData.spent.toFixed(2) + " ج.م";
-        document.getElementById('print-remaining-total').innerText = currentData.remaining.toFixed(2) + " ج.م";
-
-        const tableBody = document.getElementById('print-table-rows');
-        tableBody.innerHTML = '';
-
-        if (currentData.expenses.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#94a3b8;">لا توجد قيود مسجلة بكشف الحساب الحالي.</td></tr>`;
-        } else {
-            currentData.expenses.forEach(e => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${e.date}</td>
-                    <td>${e.category}</td>
-                    <td>${escapeHTML(e.description || 'بدون بيان')}</td>
-                    <td style="color:#ef4444;font-weight:bold;">${e.amount.toFixed(2)} ج.م</td>
-                `;
-                tableBody.appendChild(tr);
-            });
-        }
-
-        // Invoke Snapshot Renderer Logic Container Engine Context
-        const captureTarget = document.getElementById('hidden-print-template');
-        
-        // Canvas Translation Strategy Execution parameters
-        html2canvas(captureTarget, {
-            scale: 2, // Retain high resolution vector graphics printing text standard
-            useCORS: true,
-            logging: false,
-            backgroundColor: '#ffffff'
-        }).then(canvas => {
-            if (formatType === 'png') {
-                const imgData = canvas.toDataURL('image/png');
-                const link = document.createElement('a');
-                link.download = `SmartWallet_Report_${state.currentTab}_2026.png`;
-                link.href = imgData;
-                link.click();
-                spawnToastNotification("تم تصدير وحفظ مستند التقرير الصوري PNG بنجاح بجهازك.");
-            } else if (formatType === 'pdf') {
-                const imgData = canvas.toDataURL('image/jpeg', 1.0);
-                const { jsPDF } = window.jspdf;
-                
-                // Build dynamic aspect mapping bounding calculations standard A4 document canvas
-                const pdf = new jsPDF('p', 'mm', 'a4');
-                const imgWidth = 210; // A4 standard width bounds
-                const pageHeight = 295;
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                let heightLeft = imgHeight;
-                let position = 0;
-
-                pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-
-                while (heightLeft >= 0) {
-                    position = heightLeft - imgHeight;
-                    pdf.addPage();
-                    pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
-                }
-                
-                pdf.save(`SmartWallet_Statement_${state.currentTab}_2026.pdf`);
-                spawnToastNotification("تم إنشاء وتنزيل ملف كشف الحساب المالي PDF المعتمد بنجاح.");
-            }
-        }).catch(err => {
-            console.error("خطأ فني في معالجة التقارير المصدرة:", err);
-            spawnToastNotification("فشل تفعيل المحرك: حدث خطأ أثناء تشكيل المستند الداخلي.", "error");
-        });
-    }
-
-    /**
-     * Notification Pipeline UI Micro-interactions Wrapper Layer
-     */
-    function spawnToastNotification(message, type = 'success') {
-        const container = document.getElementById('toast-container');
-        const toast = document.createElement('div');
-        toast.className = `toast ${type === 'error' ? 'error' : ''}`;
-        toast.innerHTML = `<i class="fa-solid ${type === 'error' ? 'fa-circle-xmark' : 'fa-circle-check'}"></i> <span>${message}</span>`;
-        
-        container.appendChild(toast);
-        // Force Reflow browser event trigger mapping animation transition logic
-        toast.offsetHeight; 
-        toast.classList.add('show');
-
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 400);
-        }, 3500);
-    }
-
-    /**
-     * Unified Declarative Core Event Management Registration Hub Loop
-     */
-    function attachCoreEventListeners() {
-        // Budget lock submission interaction execution
-        document.getElementById('btn-lock-allocation').addEventListener('click', () => calculateFinancialPools(true));
-
-        // Income/Slider live updates layout changes checks
-        document.getElementById('allocation-slider').addEventListener('input', () => {
-            calculateFinancialPools(false);
-        });
-
-        // Main Tab Intercept Switching Core Loop logic binding
-        document.querySelectorAll('.tab-button').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const selectedTab = e.currentTarget.getAttribute('data-tab');
-                if (state.currentTab === selectedTab) return;
-
-                document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-                e.currentTarget.classList.add('active');
-
-                state.currentTab = selectedTab;
-                saveStateToLocalStorage();
-                renderActiveDashboard();
-                
-                // Visual Simulation haptic ripple feed response trigger
-                spawnToastNotification(`تم الانتقال للعمل على قناة: ${state.currentTab === 'personal' ? 'المحفظة الشخصية' : 'ميزانية العائلة'}`);
-            });
-        });
-
-        // Form Submission interceptor entry points
-        document.getElementById('btn-add-expense').addEventListener('click', processExpenseSubmission);
-
-        // Delegation loop monitoring list deletions
-        document.getElementById('ledger-list').addEventListener('click', (e) => {
-            const btn = e.target.closest('.btn-reverse-transaction');
-            if (btn) {
-                const transactionId = btn.getAttribute('data-id');
-                reverseTransactionRecord(transactionId);
-            }
-        });
-
-        // Export Mechanism Click Bindings Execution triggers
-        document.getElementById('btn-export-png').addEventListener('click', () => triggerDocumentExportEngine('png'));
-        document.getElementById('btn-export-pdf').addEventListener('click', () => triggerDocumentExportEngine('pdf'));
-
-        // Settings Drawer UI Interface controls trigger logic
-        const settingsDrawer = document.getElementById('settings-drawer');
-        document.getElementById('btn-toggle-settings').addEventListener('click', () => settingsDrawer.classList.remove('hidden'));
-        document.getElementById('btn-close-settings').addEventListener('click', () => settingsDrawer.classList.add('hidden'));
-        document.querySelector('.drawer-overlay').addEventListener('click', () => settingsDrawer.classList.add('hidden'));
-
-        // Theme switching processing loops engines setup
-        document.querySelectorAll('.theme-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                state.settings.theme = e.currentTarget.getAttribute('data-theme-val');
-                saveStateToLocalStorage();
-                applySystemSettings();
-                renderActiveDashboard(); // Force recreate matching palette elements canvas context
-            });
-        });
-
-        document.querySelectorAll('.accent-dot').forEach(dot => {
-            dot.addEventListener('click', (e) => {
-                state.settings.accent = e.currentTarget.getAttribute('data-accent-val');
-                saveStateToLocalStorage();
-                applySystemSettings();
-                renderActiveDashboard();
-            });
-        });
-
-        // Native System Prompts PWA Installation Event triggers execution listeners code
-        document.getElementById('btn-install-confirm').addEventListener('click', () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('وافق المستخدم المحترف على تثبيت النظام المالي بنجاح.');
-                    }
-                    deferredPrompt = null;
-                    document.getElementById('install-banner').classList.add('hidden');
-                });
-            }
-        });
-
-        document.getElementById('btn-install-cancel').addEventListener('click', () => {
-            document.getElementById('install-banner').classList.add('hidden');
-        });
-
-        document.getElementById('btn-install-shortcut').addEventListener('click', () => {
-            const confirmBtn = document.getElementById('btn-install-confirm');
-            if (confirmBtn) confirmBtn.click();
-        });
-    }
-
-})();
+// تشغيل التطبيق بمجرد تحميل الشجرة الهيكلية
+document.addEventListener('DOMContentLoaded', AppEngine.init);
