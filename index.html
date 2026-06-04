@@ -24,6 +24,67 @@
 </head>
 <body>
 
+    <!DOCTYPE html>
+<html lang="ar" direction="rtl" data-theme="dark" data-accent="emerald">
+<head>
+    </head>
+<body>
+
+    <div id="securityLockScreen" class="app-loader hidden" style="background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(20px); z-index: 999999; position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center;">
+        <div class="card" style="width: 90%; max-width: 340px; text-align: center; border: 1px solid var(--border-color); background: var(--bg-secondary);">
+            <div class="logo-icon" style="margin: 0 auto 1rem; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-shield-alt"></i></div>
+            <h3 style="font-weight: 700; margin-bottom: 0.5rem;">المحفظة مغلقة بأمان</h3>
+            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1.5rem;">يرجى إدخال الرمز السري الشخصي لفتح المحفظة واستعراض البيانات المالية</p>
+            <div class="form-group">
+                <input type="password" id="pinInput" placeholder="••••" maxlength="4" style="text-align: center; font-size: 1.8rem; letter-spacing: 0.5rem; padding: 0.5rem;" inputmode="numeric">
+            </div>
+            <button id="btnUnlockApp" class="btn-primary w-100 mt-3" style="font-weight: bold;">إلغاء قفل الواجهة</button>
+        </div>
+    </div>
+
+    <div class="app-container">
+        ```
+
+---
+
+### 2. أين تضع كود "قسم التحكم في النسخ الاحتياطي والأمان"؟
+
+هذا القسم يحتوي على الأزرار التي تظهر للمستخدم للتحكم في القفل وتصدير واستيراد البيانات. المكان المثالي والمصمم له تكتيكياً هو **داخل الدرج أو القائمة الجانبية (Settings Drawer)** لكي لا يزدحم الهيدر الرئيسي للتطبيق.
+
+**ابحث في ملفك عن الكلاس الخاص بالدرج الجانبي `class="drawer-content"` أو المكون الخاص بالإعدادات، وضعه في أسفله تماماً قبل إغلاق وسام الـ `</div>` الخاص بالقائمة، هكذا:**
+
+```html
+    <div id="settingsDrawer" class="drawer hidden">
+        <div class="drawer-overlay"></div>
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h3>إعدادات وتخصيص التطبيق</h3>
+                <button class="close-button">&times;</button>
+            </div>
+
+            <div class="setting-group" style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                <span class="setting-label" style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 0.5rem;">أمان الخصوصية والبيانات</span>
+                <button id="btnToggleSecurity" class="btn-secondary w-100" style="margin-bottom: 0.75rem; font-size: 0.8rem; justify-content: flex-start; gap: 0.5rem;">
+                    <i class="fas fa-lock"></i> تفعيل قفل PIN سري
+                </button>
+                
+                <span class="setting-label" style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 0.5rem;">الحفظ والتنقل الذكي (Backup)</span>
+                <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                    <button id="btnExportBackup" class="btn-secondary w-100" style="font-size: 0.75rem; padding: 0.6rem;" title="تحميل نسخة احتياطية مشفرة للهاتف">
+                        <i class="fas fa-download"></i> تصدير البيانات
+                    </button>
+                    <label class="btn-secondary w-100" style="font-size: 0.75rem; padding: 0.6rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;" title="رفع واستعادة ميزانية سابقة">
+                        <i class="fas fa-upload"></i> استيراد...
+                        <input type="file" id="btnImportBackup" accept=".json" style="display: none;">
+                    </label>
+                </div>
+            </div>
+
+        </div> </div> ```
+
+بمجرد وضع الكودين في هذين المكانين وحفظ الملف ورفعه لـ GitHub، سيتعرف ملف الـ `app.js` المحدث تلقائياً على العناصر من خلال الـ IDs الخاصة بها (`#securityLockScreen`, `#btnToggleSecurity`) ويبدأ في تشغيل منظومة الأمان والنسخ الاحتياطي فوراً وبثبات كامل!
+
+
     <div id="app-loader" class="app-loader">
         <div class="spinner"></div>
         <p>جاري تحميل النظام المالي الذكي...</p>
